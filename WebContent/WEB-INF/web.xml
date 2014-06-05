@@ -30,14 +30,4 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.js</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>sdfsd</display-name>
-    <servlet-name>sdfsd</servlet-name>
-    <servlet-class>com.example.controller.sdfsd</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>sdfsd</servlet-name>
-    <url-pattern>/sdfsd</url-pattern>
-  </servlet-mapping>
 </web-app>

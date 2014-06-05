@@ -11,21 +11,9 @@
 	   				http://www.springframework.org/schema/context
 	   				http://www.springframework.org/schema/context/spring-context.xsd
 	   				">
-	   				
-	   				<!--  needed for some post processors like
-	   				@Required
-	   				@PostConstruct
-	   				@Autowired
-	   				 -->
 	   				 
 	   				 <context:annotation-config/>
 	   			
-	   	<!-- 
-	   		This component scan perform its usual scan for all our @Service @Repository
-	   		and @Component in the specified package.
-	   		The exclude-filter is set up to skip @Controller
-	   		Spring reference document details the other exclude filter types
-	   	 -->
 	   		 
    		<context:component-scan base-package="com.example" use-default-filters="true">
    			<context:exclude-filter

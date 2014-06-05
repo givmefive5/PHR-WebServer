@@ -2,19 +2,15 @@ package com.example.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
-import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.dto.VerifyUserDTO;
 import com.example.model.User;
@@ -48,7 +44,7 @@ public class UserController {
 		return  gson.fromJson(reader, cls);
 	}
 	
-	@RequestMapping(value = "/verifyUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/verifyUser", method = RequestMethod.POST)
 	public void verifyUser(HttpServletRequest request, HttpServletResponse response){
 		try {
 			BufferedReader reader = request.getReader();
@@ -68,7 +64,7 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value="/getUserGivenUsername")
+	@RequestMapping(value="/user/getUserGivenUsername")
 	public void getUserGivenUsername(HttpServletRequest request, HttpServletResponse response){
 		try {
 			JSONObject jsonObj = getJSONObject(request.getReader());
