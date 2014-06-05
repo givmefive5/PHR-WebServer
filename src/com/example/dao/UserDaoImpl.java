@@ -1,12 +1,14 @@
 package com.example.dao;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import com.example.exceptions.DatabaseAccessException;
+import com.example.model.User;
 
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
@@ -14,37 +16,51 @@ public class UserDaoImpl implements UserDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	
-	private String hashPassword(String password) throws DatabaseAccessException{
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(password.getBytes());
-            byte[] bytes = md.digest();
-            StringBuilder sb = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++)
-            {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-            return sb.toString();
-		} catch (NoSuchAlgorithmException e) {
-			throw new DatabaseAccessException("Hashing failed", e);
-		}
-	}
 	
 	@Override
-	public boolean verifyUser(String username, String password) {
-		try {
-			String hashedPassword = hashPassword(password);
+	public Boolean verifyUser(String username, String password) {
 			String query = "SELECT COUNT(*) FROM user WHERE username = ? AND password = ?";
 			
-			int count = jdbcTemplate.queryForInt(query, new Object[]{username, hashedPassword});
+			int count = jdbcTemplate.queryForInt(query, new Object[]{username, password});
 			if(count > 0)
 				return true;
 			else
 				return false;
-		} catch (DatabaseAccessException e) {
-			System.out.println("Error nga eh");
-		}
-		return false;
 	}
+
+	@Override
+	public User getUserGivenUsername(String username) {
+		String query = "SELECT userId, username, password, role FROM user WHERE username = ?";
+		
+		@SuppressWarnings("unchecked")
+		List<User> user = (List<User>)jdbcTemplate.query(query, new Object[]{username}, new RowMapper() {
+													public Object mapRow(ResultSet rs, int rowNum)
+															throws SQLException {
+																long id = rs.getLong("userId");
+																String username = rs.getString("username");
+																String password = rs.getString("password");
+																String role = rs.getString("role");
+																User user = new User(id, username, password, role);
+																return user;
+															}
+													});
+		if(user.size() > 0){
+			return user.get(0);
+		}
+		return null;
+	}
+	
+	@Override
+	public Boolean userExists(String usernameToBeChecked) {
+		String query = "SELECT COUNT(*) FROM user WHERE username = ?";
+		
+		int count = jdbcTemplate.queryForInt(query, new Object[]{usernameToBeChecked});
+		if(count > 0)
+			return true;
+		else
+			return false;
+	}
+
+	
 
 }
