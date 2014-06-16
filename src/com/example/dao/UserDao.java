@@ -2,11 +2,6 @@ package com.example.dao;
 
 import com.example.model.User;
 
-public interface UserDao {
+public interface UserDao extends Dao<User, Long>{
 
-	public Boolean verifyUser(String username, String password);
-
-	public Boolean userExists(String usernameToBeChecked);
-
-	public User getUserGivenUsername(String username);
 }

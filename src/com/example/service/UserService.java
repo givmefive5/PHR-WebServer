@@ -4,10 +4,8 @@ import com.example.model.User;
 
 public interface UserService {
 
-	public Boolean verifyUser(String username, String password);
+	public void addUser(User user);
 
-	public Boolean userExists(String usernameToBeChecked);
-
-	public User getUserGivenUsername(String username);
+	public void deleteUser(User newUser);
 
 }

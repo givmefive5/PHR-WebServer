@@ -1,41 +1,78 @@
 package com.example.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class User {
 
-	private long userId;
+	private long id;
 	private String username;
 	private String password;
-	private String role;
-	public User(long userId, String username, String password, String role) {
+	private Role role;
+
+	public User() {
 		super();
-		this.userId = userId;
+	}
+
+	public User(long id, String username, String password, Role role) {
+		super();
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.role = role;
 	}
-	public long getUserId() {
-		return userId;
+
+	public User(String username, String password, Role role) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.role = role;
 	}
-	public void setUserId(long userId) {
-		this.userId = userId;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(nullable = false)
+	public long getId() {
+		return id;
 	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	@Column(nullable = false)
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
+	@Column(nullable = false)
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRole() {
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn
+	public Role getRole() {
 		return role;
 	}
-	public void setRole(String role) {
+
+	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
 }
