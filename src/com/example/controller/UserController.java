@@ -29,6 +29,7 @@ public class UserController {
 		try {
 			User userToAdd = JSONConverter.getGSONObjectFromReader(
 					request.getReader(), User.class);
+
 			userService.addUser(userToAdd);
 
 			JSONObject messageJson = JSONMessageCreator
@@ -45,11 +46,9 @@ public class UserController {
 	public void validateUser(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 
-		/*
-		 * User userToValidate = JSONConverter.getGSONObjectFromReader(
-		 * request.getReader(), User.class);
-		 */
-		User userToValidate = new User("matthew", "go");
+		User userToValidate = JSONConverter.getGSONObjectFromReader(
+				request.getReader(), User.class);
+
 		Boolean isValidUser = userService.isValidUser(userToValidate);
 		JSONObject messageJson = JSONMessageCreator
 				.createJSONMessage(isValidUser.toString());

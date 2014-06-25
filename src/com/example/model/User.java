@@ -1,10 +1,14 @@
 package com.example.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class User {
@@ -12,22 +16,35 @@ public class User {
 	private long id;
 	private String username;
 	private String password;
+	private String name;
+	private Date dateOfBirth;
 
 	public User() {
 		super();
-	}
-
-	public User(long id, String username, String password) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
 	}
 
 	public User(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
+	}
+
+	public User(String username, String password, String name, Date dateOfBirth) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public User(long id, String username, String password, String name,
+			Date dateOfBirth) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	@Id
@@ -57,6 +74,25 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Column(nullable = false)
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 }
