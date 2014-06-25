@@ -15,8 +15,7 @@ import com.example.exceptions.JSONConverterException;
 import com.example.exceptions.SNSException;
 import com.example.snsapi.FacebookAPI;
 import com.example.snsapi.FacebookAPIImpl;
-import com.example.tools.JSONConverter;
-import com.example.tools.JSONMessageCreator;
+import com.example.tools.GSONConverter;
 
 @Controller
 public class FacebookController {
@@ -27,7 +26,7 @@ public class FacebookController {
 	public void getFacebookPostsAndAnalyzeFromAPI(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 		try {
-			JSONObject jsonObj = JSONConverter.getJSONObjectFromReader(request
+			JSONObject jsonObj = GSONConverter.getJSONObjectFromReader(request
 					.getReader());
 			String username = jsonObj.getString("username");
 			String accessToken = jsonObj.getString("accessToken");
@@ -35,9 +34,11 @@ public class FacebookController {
 			response.getWriter().write("success");
 		} catch (JSONConverterException | IOException | JSONException
 				| SNSException e) {
-			JSONObject errorJson = JSONMessageCreator
-					.createJSONError(e.getMessage());
-			response.getWriter().write(errorJson.toString());
+			/*
+			 * JSONObject errorJson = JSONResponseCreator
+			 * .createJSONError(e.getMessage());
+			 * response.getWriter().write(errorJson.toString());
+			 */
 		}
 	}
 }

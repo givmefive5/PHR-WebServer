@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.exceptions.UsernameAlreadyExistsException;
 import com.example.model.User;
 import com.example.service.UserService;
-import com.example.tools.JSONConverter;
-import com.example.tools.JSONMessageCreator;
+import com.example.tools.GSONConverter;
+import com.example.tools.JSONResponseCreator;
 
 @Controller
 public class UserController {
@@ -27,18 +27,22 @@ public class UserController {
 	public void registerUser(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 		try {
-			User userToAdd = JSONConverter.getGSONObjectFromReader(
+			User userToAdd = GSONConverter.getGSONObjectFromReader(
 					request.getReader(), User.class);
 
 			userService.addUser(userToAdd);
 
-			JSONObject messageJson = JSONMessageCreator
-					.createJSONMessage("User has been successfully registered");
-			response.getWriter().write(messageJson.toString());
+			String message = "User " + userToAdd.getUsername()
+					+ " has been successfully registered";
+			JSONObject responseObj = JSONResponseCreator.createJSONResponse(
+					JSONResponseCreator.STATUS_SUCCESS, null, message);
+
+			response.getWriter().write(responseObj.toString());
 		} catch (UsernameAlreadyExistsException e) {
-			JSONObject errorJson = JSONMessageCreator
-					.createJSONError("username already exists");
-			response.getWriter().write(errorJson.toString());
+			String message = "Username to add already exists.";
+			JSONObject responseObj = JSONResponseCreator.createJSONResponse(
+					JSONResponseCreator.STATUS_ERROR, null, message);
+			response.getWriter().write(responseObj.toString());
 		}
 	}
 
@@ -46,12 +50,14 @@ public class UserController {
 	public void validateUser(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 
-		User userToValidate = JSONConverter.getGSONObjectFromReader(
+		User userToValidate = GSONConverter.getGSONObjectFromReader(
 				request.getReader(), User.class);
 
 		Boolean isValidUser = userService.isValidUser(userToValidate);
-		JSONObject messageJson = JSONMessageCreator
-				.createJSONMessage(isValidUser.toString());
-		response.getWriter().write(messageJson.toString());
+		JSONObject data = new JSONObject();
+		data.append("isValid", isValidUser.booleanValue());
+		JSONObject responseObj = JSONResponseCreator.createJSONResponse(
+				JSONResponseCreator.STATUS_SUCCESS, data, null);
+		response.getWriter().write(responseObj.toString());
 	}
 }
