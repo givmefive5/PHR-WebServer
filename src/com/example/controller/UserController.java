@@ -47,7 +47,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/validate")
-	public void validateUser(HttpServletRequest request,
+	public void validateUserLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 
 		User userToValidate = GSONConverter.getGSONObjectFromReader(
@@ -55,9 +55,10 @@ public class UserController {
 
 		Boolean isValidUser = userService.isValidUser(userToValidate);
 		JSONObject data = new JSONObject();
-		data.append("isValid", isValidUser.booleanValue());
+		data.put("isValid", isValidUser.booleanValue());
 		JSONObject responseObj = JSONResponseCreator.createJSONResponse(
 				JSONResponseCreator.STATUS_SUCCESS, data, null);
+		System.out.println(responseObj);
 		response.getWriter().write(responseObj.toString());
 	}
 }

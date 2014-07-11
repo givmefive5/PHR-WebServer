@@ -31,10 +31,13 @@ public class UserDAOHibernateImpl extends BaseDAOHibernateImpl<User, Long>
 		String hql = "from User where username = :username AND password = :password";
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		sessionFactory.getCurrentSession().clear();
+		System.out.println(userToValidate.getUsername() + " "
+				+ userToValidate.getPassword());
 		query.setParameter("username", userToValidate.getUsername());
 		query.setParameter("password", userToValidate.getPassword());
 
 		List<User> result = query.list();
+		System.out.println(result.size());
 		return !result.isEmpty();
 	}
 

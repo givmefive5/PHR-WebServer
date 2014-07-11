@@ -46,10 +46,12 @@ public final class GSONConverter {
 
 	}
 
-	public static String convertObjectToJSON(Object objectToBeConverted) {
+	public static JSONObject convertObjectToJSON(Object objectToBeConverted)
+			throws JSONException {
 		if (objectToBeConverted.getClass().equals(JSONObject.class))
-			return objectToBeConverted.toString();
+			return (JSONObject) objectToBeConverted;
 		Gson gson = new Gson();
-		return gson.toJson(objectToBeConverted);
+		return new JSONObject(gson.toJson(objectToBeConverted));
 	}
+
 }

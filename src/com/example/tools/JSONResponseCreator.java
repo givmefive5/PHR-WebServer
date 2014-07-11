@@ -11,18 +11,18 @@ public class JSONResponseCreator {
 	public static JSONObject createJSONResponse(String status, Object data,
 			String message) throws JSONException {
 		JSONObject json = new JSONObject();
-		json.append("status", status);
-		json.append("data", GSONConverter.convertObjectToJSON(data));
-		json.append("message", message);
+		json.put("status", status);
+		json.put("data", GSONConverter.convertObjectToJSON(data));
+		json.put("message", message);
 		return json;
 	}
 
 	public static JSONObject createJSONResponse(String status,
 			String jsonStringData, String message) throws JSONException {
 		JSONObject json = new JSONObject();
-		json.append("status", status);
-		json.append("data", jsonStringData);
-		json.append("message", message);
+		json.put("status", status);
+		json.put("data", jsonStringData);
+		json.put("message", message);
 		return json;
 	}
 
