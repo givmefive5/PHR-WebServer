@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.mobile.controller;
 
 import java.io.IOException;
 import java.util.List;
