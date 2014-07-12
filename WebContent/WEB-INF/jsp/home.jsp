@@ -8,5 +8,6 @@
 </head>
 <body>
 	HOME
+	<a href="info">To Patient Information</a>
 </body>
 </html>

@@ -42,8 +42,13 @@
 				    </div>
 				  </fieldset>
 				</form>
+				
+				<form method="GET" action="register">
+					<button class="btn" type="submit">Register</button>
+				</form>
 			</div>
 		</div>
 	</div>
+	
 </body>
 </html>

@@ -18,12 +18,12 @@ import com.example.tools.GSONConverter;
 import com.example.tools.JSONResponseCreator;
 
 @Controller
-public class UserController {
+public class PatientUserController {
 
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/user/register")
+	@RequestMapping(value = "/mobile/register")
 	public void registerUser(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 		try {
@@ -46,7 +46,7 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/user/validate")
+	@RequestMapping(value = "/mobile/validate")
 	public void validateUserLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 

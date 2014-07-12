@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class LoginController {
+public class HealthProfessionalUserController {
 
 	@RequestMapping(value = "/loginPageCreator")
 	public String loginPageCreator(HttpServletRequest request,
@@ -24,4 +24,8 @@ public class LoginController {
 		return "home";
 	}
 
+	@RequestMapping(value = "/register")
+	public String register() {
+		return "register";
+	}
 }
