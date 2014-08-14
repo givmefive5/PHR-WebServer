@@ -2,7 +2,7 @@ package com.example.dao;
 
 import com.example.model.User;
 
-public interface UserDao extends Dao<User, Long> {
+public interface UserDao {
 
 	public boolean userWithUsernameExists(String username);
 
