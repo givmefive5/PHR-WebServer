@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<jsp:forward page="loginPageCreator"></jsp:forward>
+	<jsp:forward page="validateLogin"></jsp:forward>
 </body>
 </html>

@@ -26,4 +26,11 @@ public class JSONResponseCreator {
 		return json;
 	}
 
+	public static JSONObject createJSONExceptionResponse(String message)
+			throws JSONException {
+		JSONObject json = new JSONObject();
+		json.put("status", "fail");
+		json.put("message", message);
+		return json;
+	}
 }

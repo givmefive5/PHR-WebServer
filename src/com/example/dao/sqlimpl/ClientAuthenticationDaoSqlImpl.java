@@ -7,32 +7,28 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.dao.UserDao;
+import com.example.dao.ClientAuthenticationDao;
 import com.example.exceptions.DataAccessException;
-import com.example.model.User;
 
-@Repository("userDao")
-public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
-
-	@Override
-	public boolean userWithUsernameExists(String username) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+@Repository("clientAuthenticationDao")
+public class ClientAuthenticationDaoSqlImpl extends BaseDaoSqlImpl implements
+		ClientAuthenticationDao {
 
 	@Override
-	public boolean isValidUser(User user) throws DataAccessException {
+	public boolean isAuthorizedClient(String clientID, String clientPassword)
+			throws DataAccessException {
+
 		int count = 0;
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT COUNT(*) FROM user "
-					+ "WHERE username = ? AND password = ?";
+			String query = "SELECT COUNT(*) FROM client "
+					+ "WHERE clientid = ? AND clientpassword = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, user.getUsername());
-			pstmt.setString(2, user.getPassword());
+			pstmt.setString(1, clientID);
+			pstmt.setString(2, clientPassword);
 
 			ResultSet rs = pstmt.executeQuery();
 
