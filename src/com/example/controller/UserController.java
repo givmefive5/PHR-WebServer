@@ -16,6 +16,7 @@ import com.example.dao.UserDao;
 import com.example.exceptions.ClientAuthenticationServiceException;
 import com.example.exceptions.JSONConverterException;
 import com.example.exceptions.UserServiceException;
+import com.example.exceptions.UsernameAlreadyExistsException;
 import com.example.model.User;
 import com.example.service.ClientAuthenticationService;
 import com.example.service.UserService;
@@ -95,25 +96,16 @@ public class UserController {
 					.isFromAuthorizedClient(json);
 			if (isAuthorized) {
 				JSONObject data = JSONParser.getData(json);
-				String username = data.getString("username");
-				String hashedPassword = data.getString("hashedPassword");
-				if (userService.isValidUser(new User(username, hashedPassword))) {
-					JSONObject dataJSON = new JSONObject();
+				System.out.println(data);
 
-					String accessToken = UUIDGenerator.generateUniqueString();
-					System.out.println(accessToken);
-					userService.assignAccessToken(username, accessToken);
+				User user = GSONConverter.getGSONObjectGivenJsonObject(json,
+						User.class);
+				userService.addUser(user);
 
-					dataJSON.put("userAccessToken", accessToken);
-					dataJSON.put("isValid", "true");
-					jsonResponse = JSONResponseCreator.createJSONResponse(
-							"success", dataJSON, null);
-				} else {
-					JSONObject dataJSON = new JSONObject();
-					dataJSON.put("isValid", "false");
-					jsonResponse = JSONResponseCreator.createJSONResponse(
-							"success", dataJSON, null);
-				}
+				JSONObject dataJSON = new JSONObject();
+				dataJSON.put("registered", "true");
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", dataJSON, null);
 			} else {
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
 						null, "Not an authorized client, access denied.");
@@ -125,9 +117,11 @@ public class UserController {
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
 			e.printStackTrace();
+		} catch (UsernameAlreadyExistsException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Duplicate Username Exception Occured!");
 		}
 
 		writer.write(jsonResponse.toString());
 	}
-
 }

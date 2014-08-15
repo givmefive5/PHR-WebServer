@@ -6,7 +6,8 @@ import com.example.model.User;
 
 public interface UserService {
 
-	public void addUser(User user) throws UsernameAlreadyExistsException;
+	public void addUser(User user) throws UsernameAlreadyExistsException,
+			UserServiceException;
 
 	public void deleteUser(User newUser);
 

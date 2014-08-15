@@ -17,9 +17,14 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 
 	@Override
-	public void addUser(User user) throws UsernameAlreadyExistsException {
-		// TODO Auto-generated method stub
-
+	public void addUser(User user) throws UsernameAlreadyExistsException,
+			UserServiceException {
+		try {
+			userDao.addUser(user);
+		} catch (DataAccessException e) {
+			throw new UserServiceException(
+					"An error has occurred during registration", e);
+		}
 	}
 
 	@Override
