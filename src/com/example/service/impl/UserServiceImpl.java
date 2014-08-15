@@ -38,8 +38,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void assignAccessToken(String username, String accessToken) {
-		userDao.assignAccessToken(username, accessToken);
+	public void assignAccessToken(String username, String accessToken)
+			throws UserServiceException {
+		try {
+			userDao.assignAccessToken(username, accessToken);
+		} catch (DataAccessException e) {
+			throw new UserServiceException("Error in assigning access token", e);
+		}
 	}
 
 }

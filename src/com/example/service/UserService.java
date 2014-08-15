@@ -12,6 +12,7 @@ public interface UserService {
 
 	public boolean isValidUser(User userToValidate) throws UserServiceException;
 
-	public void assignAccessToken(String username, String accessToken);
+	public void assignAccessToken(String username, String accessToken)
+			throws UserServiceException;
 
 }

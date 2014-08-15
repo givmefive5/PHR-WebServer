@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.dao.UserDao;
 import com.example.exceptions.ClientAuthenticationServiceException;
-import com.example.exceptions.DataAccessException;
 import com.example.exceptions.JSONConverterException;
 import com.example.exceptions.UserServiceException;
 import com.example.model.User;
@@ -37,13 +36,6 @@ public class UserController {
 	@Autowired
 	UserDao userDao;
 
-	@RequestMapping(value = "/dbtest")
-	public void test(HttpServletResponse response) throws DataAccessException,
-			IOException {
-		boolean x = userDao.isValidUser(new User("asdasdas", "asdasdas"));
-		response.getWriter().print(x);
-	}
-
 	@RequestMapping(value = "/user/validateLogin")
 	public void validateLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
@@ -62,6 +54,7 @@ public class UserController {
 					JSONObject dataJSON = new JSONObject();
 
 					String accessToken = UUIDGenerator.generateUniqueString();
+					System.out.println(accessToken);
 					userService.assignAccessToken(username, accessToken);
 
 					dataJSON.put("userAccessToken", accessToken);
@@ -89,4 +82,52 @@ public class UserController {
 
 		writer.write(jsonResponse.toString());
 	}
+
+	@RequestMapping(value = "/user/register")
+	public void register(HttpServletRequest request,
+			HttpServletResponse response) throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			boolean isAuthorized = clientAuthenticationService
+					.isFromAuthorizedClient(json);
+			if (isAuthorized) {
+				JSONObject data = JSONParser.getData(json);
+				String username = data.getString("username");
+				String hashedPassword = data.getString("hashedPassword");
+				if (userService.isValidUser(new User(username, hashedPassword))) {
+					JSONObject dataJSON = new JSONObject();
+
+					String accessToken = UUIDGenerator.generateUniqueString();
+					System.out.println(accessToken);
+					userService.assignAccessToken(username, accessToken);
+
+					dataJSON.put("userAccessToken", accessToken);
+					dataJSON.put("isValid", "true");
+					jsonResponse = JSONResponseCreator.createJSONResponse(
+							"success", dataJSON, null);
+				} else {
+					JSONObject dataJSON = new JSONObject();
+					dataJSON.put("isValid", "false");
+					jsonResponse = JSONResponseCreator.createJSONResponse(
+							"success", dataJSON, null);
+				}
+			} else {
+				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
+						null, "Not an authorized client, access denied.");
+			}
+
+		} catch (JSONConverterException | JSONException
+				| ClientAuthenticationServiceException | UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+
+		writer.write(jsonResponse.toString());
+	}
+
 }

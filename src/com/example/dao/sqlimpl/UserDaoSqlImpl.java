@@ -53,8 +53,25 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	}
 
 	@Override
-	public void assignAccessToken(String username, String accessToken) {
-		// TODO Auto-generated method stub
+	public void assignAccessToken(String username, String accessToken)
+			throws DataAccessException {
+
+		Connection conn = getConnection();
+
+		String query = "UPDATE user SET accessToken = ? WHERE username = ?";
+		PreparedStatement pstmt;
+
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, accessToken);
+			pstmt.setString(2, username);
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 
 	}
 
