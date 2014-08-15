@@ -52,7 +52,6 @@ public class UserController {
 		try {
 			JSONObject json = GSONConverter.getJSONObjectFromReader(request
 					.getReader());
-
 			boolean isAuthorized = clientAuthenticationService
 					.isFromAuthorizedClient(json);
 			if (isAuthorized) {
@@ -60,14 +59,20 @@ public class UserController {
 				String username = data.getString("username");
 				String hashedPassword = data.getString("hashedPassword");
 				if (userService.isValidUser(new User(username, hashedPassword))) {
-					JSONObject accessTokenJSON = new JSONObject();
+					JSONObject dataJSON = new JSONObject();
 
 					String accessToken = UUIDGenerator.generateUniqueString();
 					userService.assignAccessToken(username, accessToken);
 
-					accessTokenJSON.put("userAccessToken", accessToken);
-					json = JSONResponseCreator.createJSONResponse("success",
-							accessTokenJSON, null);
+					dataJSON.put("userAccessToken", accessToken);
+					dataJSON.put("isValid", "true");
+					jsonResponse = JSONResponseCreator.createJSONResponse(
+							"success", dataJSON, null);
+				} else {
+					JSONObject dataJSON = new JSONObject();
+					dataJSON.put("isValid", "false");
+					jsonResponse = JSONResponseCreator.createJSONResponse(
+							"success", dataJSON, null);
 				}
 			} else {
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
@@ -76,9 +81,9 @@ public class UserController {
 
 		} catch (JSONConverterException | JSONException
 				| ClientAuthenticationServiceException | UserServiceException e) {
-			jsonResponse = JSONResponseCreator
-					.createJSONResponse("fail", null,
-							"Process cannot be completed, an error has occured in the web server");
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
 			e.printStackTrace();
 		}
 
