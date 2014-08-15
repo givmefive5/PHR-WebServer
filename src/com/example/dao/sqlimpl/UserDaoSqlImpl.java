@@ -52,4 +52,10 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			return false;
 	}
 
+	@Override
+	public void assignAccessToken(String username, String accessToken) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

@@ -9,4 +9,6 @@ public interface UserDao {
 
 	public boolean isValidUser(User user) throws DataAccessException;
 
+	public void assignAccessToken(String username, String accessToken);
+
 }

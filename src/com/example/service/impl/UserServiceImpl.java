@@ -37,4 +37,9 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public void assignAccessToken(String username, String accessToken) {
+		userDao.assignAccessToken(username, accessToken);
+	}
+
 }
