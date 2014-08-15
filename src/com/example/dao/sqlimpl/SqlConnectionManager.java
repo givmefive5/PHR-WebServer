@@ -12,7 +12,7 @@ import com.mchange.v2.c3p0.DataSources;
 
 public class SqlConnectionManager {
 	final private String DRIVER_NAME = "com.mysql.jdbc.Driver";
-	final private String URL = "jdbc:mysql://localhost:3306/shoppingcart";
+	final private String URL = "jdbc:mysql://localhost:3306/phr";
 	final private String USER = "root";
 	final private String PASSWORD = "1234";
 	private DataSource dataSourceUnpooled;

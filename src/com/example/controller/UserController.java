@@ -11,9 +11,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.dao.UserDao;
 import com.example.exceptions.ClientAuthenticationServiceException;
+import com.example.exceptions.DataAccessException;
 import com.example.exceptions.JSONConverterException;
 import com.example.exceptions.UserServiceException;
 import com.example.model.User;
@@ -33,7 +34,17 @@ public class UserController {
 	@Autowired
 	ClientAuthenticationService clientAuthenticationService;
 
-	@RequestMapping(value = "/user/validateLogin", method = RequestMethod.GET)
+	@Autowired
+	UserDao userDao;
+
+	@RequestMapping(value = "/dbtest")
+	public void test(HttpServletResponse response) throws DataAccessException,
+			IOException {
+		boolean x = userDao.isValidUser(new User("asdasdas", "asdasdas"));
+		response.getWriter().print(x);
+	}
+
+	@RequestMapping(value = "/user/validateLogin")
 	public void validateLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 		PrintWriter writer = response.getWriter();
