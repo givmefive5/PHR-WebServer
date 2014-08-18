@@ -20,9 +20,10 @@ public class JSONParser {
 	}
 
 	public static JSONObject getData(JSONObject json) throws JSONException {
+		System.out.println(json);
+		System.out.println(json.get("data"));
 		JSONObject dataObject = new JSONObject(json.get("data").toString());
 		System.out.println(dataObject);
 		return dataObject;
 	}
-
 }

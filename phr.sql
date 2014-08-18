@@ -18,6 +18,32 @@ USE `phr`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `client`
+--
+
+DROP TABLE IF EXISTS `client`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `client` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `clientid` varchar(45) NOT NULL,
+  `clientpassword` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `clientid_UNIQUE` (`clientid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `client`
+--
+
+LOCK TABLES `client` WRITE;
+/*!40000 ALTER TABLE `client` DISABLE KEYS */;
+INSERT INTO `client` VALUES (1,'9543ED1349084DA816F103234217FED7A8627621','Y9xSazM4fHrkNd8tMKPkbjeqKAl4YE8QXGiJ');
+/*!40000 ALTER TABLE `client` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -30,8 +56,10 @@ CREATE TABLE `user` (
   `password` varchar(128) NOT NULL,
   `name` varchar(45) NOT NULL,
   `dateOfBirth` date NOT NULL,
+  `accessToken` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
+  UNIQUE KEY `username_UNIQUE` (`username`),
+  UNIQUE KEY `accessToken_UNIQUE` (`accessToken`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -41,7 +69,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (13,'givmefive5','1234','Matthew Go','1994-05-13');
+INSERT INTO `user` VALUES (13,'givmefive5','03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4','Matthew Go','1994-05-13','[B@307838a5');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +82,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-25 13:58:10
+-- Dump completed on 2014-08-18 15:36:20

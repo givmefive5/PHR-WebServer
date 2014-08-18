@@ -97,13 +97,16 @@ public class UserController {
 			if (isAuthorized) {
 				JSONObject data = JSONParser.getData(json);
 				System.out.println(data);
-
-				User user = GSONConverter.getGSONObjectGivenJsonObject(json,
+				User user = GSONConverter.getGSONObjectGivenJsonObject(data,
 						User.class);
 				userService.addUser(user);
 
 				JSONObject dataJSON = new JSONObject();
-				dataJSON.put("registered", "true");
+				String accessToken = UUIDGenerator.generateUniqueString();
+				System.out.println(accessToken);
+				userService.assignAccessToken(user.getUsername(), accessToken);
+
+				dataJSON.put("userAccessToken", accessToken);
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataJSON, null);
 			} else {
@@ -113,13 +116,16 @@ public class UserController {
 
 		} catch (JSONConverterException | JSONException
 				| ClientAuthenticationServiceException | UserServiceException e) {
+			e.printStackTrace();
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
 			e.printStackTrace();
 		} catch (UsernameAlreadyExistsException e) {
-			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
-					"Duplicate Username Exception Occured!");
+			JSONObject dataForResponse = new JSONObject();
+			dataForResponse.put("usernameAlreadyExists", "true");
+			jsonResponse = JSONResponseCreator.createJSONResponse("success",
+					dataForResponse, "Duplicate Username Exception Occured!");
 		}
 
 		writer.write(jsonResponse.toString());

@@ -52,4 +52,15 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public boolean isValidAccessToken(String accessToken)
+			throws UserServiceException {
+		try {
+			return userDao.isValidAccessToken(accessToken);
+		} catch (DataAccessException e) {
+			throw new UserServiceException("Error in validating access token",
+					e);
+		}
+	}
+
 }
