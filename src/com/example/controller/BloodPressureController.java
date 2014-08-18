@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.example.exceptions.ClientAuthenticationServiceException;
 import com.example.exceptions.JSONConverterException;
 import com.example.exceptions.UserServiceException;
+import com.example.model.BloodPressure;
+import com.example.service.BloodPressureService;
 import com.example.service.ClientAuthenticationService;
 import com.example.service.UserService;
 import com.example.tools.GSONConverter;
@@ -25,8 +27,8 @@ import com.example.tools.JSONResponseCreator;
 @Controller
 public class BloodPressureController {
 
-	// @Autowired
-	// BloodPressureService bloodPressureService;
+	@Autowired
+	BloodPressureService bloodPressureService;
 	@Autowired
 	ClientAuthenticationService clientAuthenticationService;
 	@Autowired
@@ -46,7 +48,13 @@ public class BloodPressureController {
 				JSONObject data = JSONParser.getData(json);
 				String accessToken = data.getString("accessToken");
 				if (userService.isValidAccessToken(accessToken)) {
-
+					int userID = userService.getUserIDGivenAccessToken();
+					BloodPressure bloodPressure = GSONConverter
+							.getGSONObjectGivenJsonObject(
+									data.getJSONObject("bloodPressure"),
+									BloodPressure.class);
+					bloodPressureService
+							.addBloodPressure(userID, bloodPressure);
 				} else {
 					JSONObject dataForResponse = new JSONObject();
 					data.put("isValidAccessToken", accessToken);

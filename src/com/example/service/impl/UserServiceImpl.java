@@ -63,4 +63,10 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public int getUserIDGivenAccessToken() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -1,8 +1,8 @@
-package com.example.service;
+package com.example.dao;
 
 import com.example.model.BloodPressure;
 
-public interface BloodPressureService {
+public interface BloodPressureDao {
 
 	void addBloodPressure(int userID, BloodPressure bloodPressure);
 

@@ -19,4 +19,6 @@ public interface UserService {
 	public boolean isValidAccessToken(String accessToken)
 			throws UserServiceException;
 
+	public int getUserIDGivenAccessToken();
+
 }
