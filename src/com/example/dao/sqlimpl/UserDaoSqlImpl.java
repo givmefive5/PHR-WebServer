@@ -77,6 +77,25 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 		if (usernameAlreadyExists(user.getUsername()))
 			throw new UsernameAlreadyExistsException(
 					"Username already exists, cannot perform registration successfully");
+		else {
+			try {
+				Connection conn = getConnection();
+				String query = "INSERT INTO user(username, password) VALUES (?, ?)";
+				PreparedStatement pstmt;
+
+				String hashedPassword = Hasher.hashString(user.getPassword());
+				pstmt = conn.prepareStatement(query);
+				pstmt.setString(1, user.getUsername());
+				pstmt.setString(2, hashedPassword);
+
+				pstmt.executeUpdate();
+
+			} catch (SQLException e) {
+				throw new DataAccessException(
+						"An error has occured while trying to access data from the database",
+						e);
+			}
+		}
 
 	}
 

@@ -109,7 +109,9 @@ public class UserController {
 				dataJSON.put("userAccessToken", accessToken);
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataJSON, null);
+				System.out.println("finished well");
 			} else {
+				System.out.println("Unauthorized?");
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
 						null, "Not an authorized client, access denied.");
 			}
