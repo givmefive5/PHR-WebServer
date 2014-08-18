@@ -1,8 +1,11 @@
 package com.example.dao.sqlimpl;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.dao.BloodPressureDao;
 import com.example.model.BloodPressure;
 
+@Repository("bloodPressureDao")
 public class BloodPressureDaoImpl implements BloodPressureDao {
 
 	@Override
