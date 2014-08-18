@@ -40,6 +40,16 @@ public class UserController {
 	@RequestMapping(value = "/user/validateLogin")
 	public void validateLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
+		
+		/*
+		 * get ip 
+		 * if valid proceed
+		 * 
+		 * else 
+		 * 
+		 * bawal magload in
+		 */
+		
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
