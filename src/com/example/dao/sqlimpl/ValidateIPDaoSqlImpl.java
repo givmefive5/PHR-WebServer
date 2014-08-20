@@ -12,7 +12,7 @@ import com.example.dao.ValidateIPDao;
 import com.example.exceptions.DataAccessException;
 
 @Repository("validateIPDao")
-public class ValidateIPDaoImpl extends BaseDaoSqlImpl implements ValidateIPDao {
+public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDao {
 
 	@Override
 	public int countIPRecords(String ip) throws DataAccessException {

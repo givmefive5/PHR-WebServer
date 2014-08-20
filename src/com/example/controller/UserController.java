@@ -12,17 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.dao.UserDao;
 import com.example.exceptions.ClientAuthenticationServiceException;
 import com.example.exceptions.JSONConverterException;
+import com.example.exceptions.LoggingException;
 import com.example.exceptions.UserServiceException;
 import com.example.exceptions.UsernameAlreadyExistsException;
+import com.example.model.Log;
 import com.example.model.User;
 import com.example.service.ClientAuthenticationService;
+import com.example.service.LogService;
 import com.example.service.UserService;
 import com.example.tools.GSONConverter;
+import com.example.tools.IPRetriever;
 import com.example.tools.JSONParser;
 import com.example.tools.JSONResponseCreator;
+import com.example.tools.TimestampHandler;
 import com.example.tools.UUIDGenerator;
 
 @Controller
@@ -35,21 +39,23 @@ public class UserController {
 	ClientAuthenticationService clientAuthenticationService;
 
 	@Autowired
-	UserDao userDao;
+	LogService logService;
 
 	@RequestMapping(value = "/user/validateLogin")
 	public void validateLogin(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, JSONException {
-		
+			HttpServletResponse response) throws IOException, JSONException,
+			LoggingException {
+		String ip = IPRetriever.getIPAddressFromRequest(request);
+		System.out.println(ip);
 		/*
-		 * get ip 
-		 * if valid proceed
+		 * get ip if valid proceed
 		 * 
-		 * else 
+		 * else
 		 * 
 		 * bawal magload in
 		 */
-		
+
+		Log log = null;
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -72,31 +78,51 @@ public class UserController {
 					dataJSON.put("isValid", "true");
 					jsonResponse = JSONResponseCreator.createJSONResponse(
 							"success", dataJSON, null);
+					log = new Log("User " + username + " has logged in.", ip,
+							TimestampHandler.getCurrentTimestamp());
 				} else {
 					JSONObject dataJSON = new JSONObject();
 					dataJSON.put("isValid", "false");
 					jsonResponse = JSONResponseCreator.createJSONResponse(
 							"success", dataJSON, null);
+					log = new Log(
+							"A user tried to log in with incorrect information",
+							ip, TimestampHandler.getCurrentTimestamp());
 				}
 			} else {
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
 						null, "Not an authorized client, access denied.");
+				log = new Log(
+						"Alert! Somebody tried to access the web server without the authorization IDs",
+						ip, TimestampHandler.getCurrentTimestamp());
 			}
 
-		} catch (JSONConverterException | JSONException
-				| ClientAuthenticationServiceException | UserServiceException e) {
+		} catch (JSONException | ClientAuthenticationServiceException
+				| UserServiceException e) {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
+			log = new Log("An error has occurred while processing a request.",
+					ip, TimestampHandler.getCurrentTimestamp());
 			e.printStackTrace();
+		} catch (JSONConverterException e) {
+			log = new Log(
+					"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
+					ip, TimestampHandler.getCurrentTimestamp());
 		}
 
 		writer.write(jsonResponse.toString());
+		logService.addLog(log);
 	}
 
 	@RequestMapping(value = "/user/register")
 	public void register(HttpServletRequest request,
-			HttpServletResponse response) throws JSONException, IOException {
+			HttpServletResponse response) throws JSONException, IOException,
+			LoggingException {
+		String ip = IPRetriever.getIPAddressFromRequest(request);
+		System.out.println(ip);
+
+		Log log = null;
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -119,27 +145,39 @@ public class UserController {
 				dataJSON.put("userAccessToken", accessToken);
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataJSON, null);
-				System.out.println("finished well");
+				log = new Log("User " + user.getUsername()
+						+ " has been successfully registered", ip,
+						TimestampHandler.getCurrentTimestamp());
 			} else {
-				System.out.println("Unauthorized?");
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
 						null, "Not an authorized client, access denied.");
+				log = new Log(
+						"Alert! Somebody tried to access the web server without the authorization IDs",
+						ip, TimestampHandler.getCurrentTimestamp());
 			}
 
-		} catch (JSONConverterException | JSONException
-				| ClientAuthenticationServiceException | UserServiceException e) {
+		} catch (JSONException | ClientAuthenticationServiceException
+				| UserServiceException e) {
 			e.printStackTrace();
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
-			e.printStackTrace();
+			log = new Log("An error has occurred while processing a request",
+					ip, TimestampHandler.getCurrentTimestamp());
 		} catch (UsernameAlreadyExistsException e) {
 			JSONObject dataForResponse = new JSONObject();
 			dataForResponse.put("usernameAlreadyExists", "true");
 			jsonResponse = JSONResponseCreator.createJSONResponse("success",
 					dataForResponse, "Duplicate Username Exception Occured!");
+			log = new Log("A user tried to register with a duplicate username",
+					ip, TimestampHandler.getCurrentTimestamp());
+		} catch (JSONConverterException e) {
+			log = new Log(
+					"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
+					ip, TimestampHandler.getCurrentTimestamp());
 		}
 
 		writer.write(jsonResponse.toString());
+		logService.addLog(log);
 	}
 }

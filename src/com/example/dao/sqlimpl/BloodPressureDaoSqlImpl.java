@@ -6,7 +6,7 @@ import com.example.dao.BloodPressureDao;
 import com.example.model.BloodPressure;
 
 @Repository("bloodPressureDao")
-public class BloodPressureDaoImpl implements BloodPressureDao {
+public class BloodPressureDaoSqlImpl implements BloodPressureDao {
 
 	@Override
 	public void addBloodPressure(int userID, BloodPressure bloodPressure) {
