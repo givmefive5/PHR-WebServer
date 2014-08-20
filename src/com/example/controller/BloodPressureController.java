@@ -57,7 +57,7 @@ public class BloodPressureController {
 							.addBloodPressure(userID, bloodPressure);
 				} else {
 					JSONObject dataForResponse = new JSONObject();
-					data.put("isValidAccessToken", accessToken);
+					data.put("isValidAccessToken", "false");
 					jsonResponse = JSONResponseCreator
 							.createJSONResponse("fail", dataForResponse,
 									"Access token is invalid, please ask user to log in again.");
