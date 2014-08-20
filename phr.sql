@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `phr` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `phr`;
--- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
 --
 -- Host: localhost    Database: phr
 -- ------------------------------------------------------
--- Server version	5.5.25
+-- Server version	5.6.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -41,6 +41,31 @@ LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
 INSERT INTO `client` VALUES (1,'9543ED1349084DA816F103234217FED7A8627621','Y9xSazM4fHrkNd8tMKPkbjeqKAl4YE8QXGiJ');
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `logs`
+--
+
+DROP TABLE IF EXISTS `logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message` varchar(100) NOT NULL,
+  `ip` varchar(45) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `logs`
+--
+
+LOCK TABLES `logs` WRITE;
+/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -106,4 +131,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-18 17:21:13
+-- Dump completed on 2014-08-20 21:02:39
