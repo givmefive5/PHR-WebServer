@@ -25,6 +25,8 @@ public class ClientAuthenticationServiceImpl implements
 		try {
 			String clientID = JSONParser.getClientID(json);
 			String clientPassword = JSONParser.getClientPassword(json);
+			System.out.println("Client ID: " + clientID);
+			System.out.println("Client Password: " + clientPassword);
 			return clientAuthenticationDao.isAuthorizedClient(clientID,
 					clientPassword);
 		} catch (DataAccessException | JSONException e) {

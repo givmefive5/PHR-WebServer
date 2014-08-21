@@ -63,6 +63,7 @@ public class UserController {
 			try {
 				JSONObject json = GSONConverter.getJSONObjectFromReader(request
 						.getReader());
+				System.out.println(json);
 				boolean isAuthorized = clientAuthenticationService
 						.isFromAuthorizedClient(json);
 				if (isAuthorized) {
