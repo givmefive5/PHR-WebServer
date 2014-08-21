@@ -18,6 +18,36 @@ USE `phr`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `bloodpressure`
+--
+
+DROP TABLE IF EXISTS `bloodpressure`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bloodpressure` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `systolic` varchar(100) NOT NULL,
+  `diastolic` varchar(100) NOT NULL,
+  `date` varchar(100) NOT NULL,
+  `time` varchar(100) NOT NULL,
+  `status` varchar(100) DEFAULT NULL,
+  `userID` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userID_idx` (`userID`),
+  CONSTRAINT `userID` FOREIGN KEY (`userID`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bloodpressure`
+--
+
+LOCK TABLES `bloodpressure` WRITE;
+/*!40000 ALTER TABLE `bloodpressure` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bloodpressure` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `client`
 --
 
@@ -56,7 +86,7 @@ CREATE TABLE `logs` (
   `ip` varchar(45) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,6 +95,7 @@ CREATE TABLE `logs` (
 
 LOCK TABLES `logs` WRITE;
 /*!40000 ALTER TABLE `logs` DISABLE KEYS */;
+INSERT INTO `logs` VALUES (1,'Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker','0:0:0:0:0:0:0:1','2014-08-21 10:04:49'),(2,'A user tried to log in with incorrect information','127.0.0.1','2014-08-21 10:06:03'),(3,'An error has occurred while processing a request.','127.0.0.1','2014-08-21 10:06:34');
 /*!40000 ALTER TABLE `logs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +112,7 @@ CREATE TABLE `user` (
   `password` varchar(128) NOT NULL,
   `name` varchar(45) NOT NULL,
   `dateOfBirth` date NOT NULL,
-  `accessToken` varchar(45) NOT NULL,
+  `accessToken` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `accessToken_UNIQUE` (`accessToken`)
@@ -110,7 +141,7 @@ CREATE TABLE `validateip` (
   `ip` varchar(100) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`idvalidateIp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,6 +150,7 @@ CREATE TABLE `validateip` (
 
 LOCK TABLES `validateip` WRITE;
 /*!40000 ALTER TABLE `validateip` DISABLE KEYS */;
+INSERT INTO `validateip` VALUES (1,'127.0.0.1','2014-08-21 10:06:03');
 /*!40000 ALTER TABLE `validateip` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -131,4 +163,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-20 21:02:39
+-- Dump completed on 2014-08-21 18:07:43

@@ -12,16 +12,16 @@ import com.example.dao.ValidateIPDao;
 import com.example.exceptions.DataAccessException;
 
 @Repository("validateIPDao")
-public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDao {
+public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements
+		ValidateIPDao {
 
 	@Override
 	public int countIPRecords(String ip) throws DataAccessException {
 		int count = 0;
-		
+
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT COUNT(*) FROM validateip "
-					+ "WHERE ip = ?";
+			String query = "SELECT COUNT(*) FROM validateip " + "WHERE ip = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -43,14 +43,15 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 	}
 
 	@Override
-	public Timestamp getLatestIPRecordDate(String ip) throws DataAccessException {
-		
+	public Timestamp getLatestIPRecordDate(String ip)
+			throws DataAccessException {
+
 		Timestamp timestamp;
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT date FROM validateip WHERE ip = ? "
 					+ "ORDER BY date DESC LIMIT 1";
-			
+
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -71,9 +72,10 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 	}
 
 	@Override
-	public void addIPEntry(String ip, Timestamp timestamp) throws DataAccessException {
+	public void addIPEntry(String ip, Timestamp timestamp)
+			throws DataAccessException {
 		// TODO Auto-generated method stub
-		
+
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO validateIp(ip, date) VALUES (?, ?)";
@@ -82,7 +84,7 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, ip);
 			pstmt.setTimestamp(2, timestamp);
-			
+
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -90,13 +92,11 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 	}
 
 	@Override
 	public void clearAllIPRecords(String ip) throws DataAccessException {
-		// TODO Auto-generated method stub
-		
 		try {
 			Connection conn = getConnection();
 			String query = "DELETE FROM validateip WHERE ip = ?";
@@ -112,7 +112,7 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 	}
 
 }

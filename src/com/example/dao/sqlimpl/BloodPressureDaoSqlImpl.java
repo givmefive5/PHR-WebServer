@@ -31,19 +31,15 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 					bloodPressure.getSystolic()).toString());
 			String encryptedDiastolic = EncryptionHandler.encrypt(new Integer(
 					bloodPressure.getDiastolic()).toString());
-			String encryptedDate = EncryptionHandler.encrypt(bloodPressure
-					.getDate());
-			String encryptedTime = EncryptionHandler.encrypt(bloodPressure
-					.getTime());
 			String encryptedStatus = EncryptionHandler.encrypt(bloodPressure
 					.getStatus());
 
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, encryptedSystolic);
 			pstmt.setString(2, encryptedDiastolic);
-			pstmt.setString(3, encryptedDate);
+			pstmt.setString(3, bloodPressure.getDate());
 
-			pstmt.setString(4, encryptedTime);
+			pstmt.setString(4, bloodPressure.getTime());
 			pstmt.setString(5, encryptedStatus);
 
 			pstmt.setInt(6, userDao.getUserIdGivenUsername(username));
