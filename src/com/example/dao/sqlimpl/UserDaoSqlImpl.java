@@ -158,4 +158,34 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 		return (count == 1) ? true : false;
 	}
 
+	@Override
+	public int getUserIdGivenUsername(String username)
+			throws DataAccessException {
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id FROM user " + "WHERE username = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, username);
+
+			ResultSet rs = pstmt.executeQuery();
+			int id;
+			if (rs.next()) {
+				id = rs.getInt(1);
+				pstmt.close();
+				conn.close();
+				return id;
+			} else {
+				pstmt.close();
+				conn.close();
+				throw new DataAccessException("Missing userID");
+			}
+
+		} catch (SQLException | DataAccessException e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+	}
 }

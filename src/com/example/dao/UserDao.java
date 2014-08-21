@@ -17,4 +17,7 @@ public interface UserDao {
 	public boolean isValidAccessToken(String accessToken, String username)
 			throws DataAccessException;
 
+	public int getUserIdGivenUsername(String username)
+			throws DataAccessException;
+
 }

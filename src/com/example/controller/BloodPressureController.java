@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.example.exceptions.BloodPressureServiceException;
 import com.example.exceptions.ClientAuthenticationServiceException;
 import com.example.exceptions.JSONConverterException;
 import com.example.exceptions.UserServiceException;
@@ -68,7 +69,8 @@ public class BloodPressureController {
 			}
 
 		} catch (JSONConverterException | ClientAuthenticationServiceException
-				| JSONException | UserServiceException e) {
+				| JSONException | UserServiceException
+				| BloodPressureServiceException e) {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());

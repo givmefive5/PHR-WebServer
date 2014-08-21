@@ -30,4 +30,13 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.js</url-pattern>
   </servlet-mapping>
+  <filter>
+    <display-name>AuthorizationFilter</display-name>
+    <filter-name>AuthorizationFilter</filter-name>
+    <filter-class>com.example.filter.AuthorizationFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthorizationFilter</filter-name>
+    <url-pattern>/AuthorizationFilter</url-pattern>
+  </filter-mapping>
 </web-app>
