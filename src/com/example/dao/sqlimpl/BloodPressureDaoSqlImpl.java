@@ -9,7 +9,7 @@ import com.example.model.BloodPressure;
 public class BloodPressureDaoSqlImpl implements BloodPressureDao {
 
 	@Override
-	public void addBloodPressure(int userID, BloodPressure bloodPressure) {
+	public void addBloodPressure(String username, BloodPressure bloodPressure) {
 		// TODO Auto-generated method stub
 
 	}

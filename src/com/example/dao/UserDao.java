@@ -14,7 +14,7 @@ public interface UserDao {
 	public void addUser(User user) throws UsernameAlreadyExistsException,
 			DataAccessException;
 
-	public boolean isValidAccessToken(String accessToken)
+	public boolean isValidAccessToken(String accessToken, String username)
 			throws DataAccessException;
 
 }

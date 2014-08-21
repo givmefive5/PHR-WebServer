@@ -47,14 +47,14 @@ public class BloodPressureController {
 			if (isAuthorized) {
 				JSONObject data = JSONParser.getData(json);
 				String accessToken = data.getString("accessToken");
-				if (userService.isValidAccessToken(accessToken)) {
-					int userID = userService.getUserIDGivenAccessToken();
+				String username = data.getString("username");
+				if (userService.isValidAccessToken(accessToken, username)) {
 					BloodPressure bloodPressure = GSONConverter
 							.getGSONObjectGivenJsonObject(
 									data.getJSONObject("bloodPressure"),
 									BloodPressure.class);
-					bloodPressureService
-							.addBloodPressure(userID, bloodPressure);
+					bloodPressureService.addBloodPressure(username,
+							bloodPressure);
 				} else {
 					JSONObject dataForResponse = new JSONObject();
 					data.put("isValidAccessToken", "false");

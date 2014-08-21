@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean isValidAccessToken(String accessToken)
+	public boolean isValidAccessToken(String accessToken, String username)
 			throws UserServiceException {
 		try {
-			return userDao.isValidAccessToken(accessToken);
+			return userDao.isValidAccessToken(accessToken, username);
 		} catch (DataAccessException e) {
 			throw new UserServiceException("Error in validating access token",
 					e);

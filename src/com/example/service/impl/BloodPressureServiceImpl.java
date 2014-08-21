@@ -14,8 +14,8 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	BloodPressureDao bloodPressureDao;
 
 	@Override
-	public void addBloodPressure(int userID, BloodPressure bloodPressure) {
-		bloodPressureDao.addBloodPressure(userID, bloodPressure);
+	public void addBloodPressure(String username, BloodPressure bloodPressure) {
+		bloodPressureDao.addBloodPressure(username, bloodPressure);
 	}
 
 }

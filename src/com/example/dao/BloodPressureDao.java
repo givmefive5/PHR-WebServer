@@ -4,6 +4,6 @@ import com.example.model.BloodPressure;
 
 public interface BloodPressureDao {
 
-	void addBloodPressure(int userID, BloodPressure bloodPressure);
+	void addBloodPressure(String username, BloodPressure bloodPressure);
 
 }

@@ -127,7 +127,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	}
 
 	@Override
-	public boolean isValidAccessToken(String accessToken)
+	public boolean isValidAccessToken(String accessToken, String username)
 			throws DataAccessException {
 		int count = 0;
 
@@ -135,11 +135,13 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT COUNT(*) FROM user " + "WHERE username = ?";
+			String query = "SELECT COUNT(*) FROM user "
+					+ "WHERE accessToken = ? AND username = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, hashedAccessToken);
+			pstmt.setString(2, username);
 
 			ResultSet rs = pstmt.executeQuery();
 
