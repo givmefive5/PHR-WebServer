@@ -65,68 +65,76 @@ public class UserController {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 
-		// if (validateIPService.isValidIP(ip)) {
-		try {
-			JSONObject json = GSONConverter.getJSONObjectFromReader(request
-					.getReader());
-			boolean isAuthorized = clientAuthenticationService
-					.isFromAuthorizedClient(json);
-			if (isAuthorized) {
-				JSONObject data = JSONParser.getData(json);
-				String username = data.getString("username");
-				String hashedPassword = data.getString("hashedPassword");
-				if (userService.isValidUser(new User(username, hashedPassword))) {
-					JSONObject dataJSON = new JSONObject();
+		if (validateIPService.isValidIP(ip)) {
+			try {
+				JSONObject json = GSONConverter.getJSONObjectFromReader(request
+						.getReader());
+				boolean isAuthorized = clientAuthenticationService
+						.isFromAuthorizedClient(json);
+				if (isAuthorized) {
+					JSONObject data = JSONParser.getData(json);
+					String username = data.getString("username");
+					String hashedPassword = data.getString("hashedPassword");
+					if (userService.isValidUser(new User(username,
+							hashedPassword))) {
+						JSONObject dataJSON = new JSONObject();
 
-					String accessToken = UUIDGenerator.generateUniqueString();
-					System.out.println(accessToken);
-					userService.assignAccessToken(username, accessToken);
+						String accessToken = UUIDGenerator
+								.generateUniqueString();
+						System.out.println(accessToken);
+						userService.assignAccessToken(username, accessToken);
 
-					dataJSON.put("userAccessToken", accessToken);
-					dataJSON.put("isValid", "true");
-					jsonResponse = JSONResponseCreator.createJSONResponse(
-							"success", dataJSON, null);
-					log = new Log("User " + username + " has logged in.", ip,
-							TimestampHandler.getCurrentTimestamp());
+						dataJSON.put("userAccessToken", accessToken);
+						dataJSON.put("isValid", "true");
+						jsonResponse = JSONResponseCreator.createJSONResponse(
+								"success", dataJSON, null);
+						log = new Log("User " + username + " has logged in.",
+								ip, TimestampHandler.getCurrentTimestamp());
+					} else {
+						JSONObject dataJSON = new JSONObject();
+						dataJSON.put("isValid", "false");
+						jsonResponse = JSONResponseCreator.createJSONResponse(
+								"success", dataJSON, null);
+						log = new Log(
+								"A user tried to log in with incorrect information",
+								ip, TimestampHandler.getCurrentTimestamp());
+					}
 				} else {
-					JSONObject dataJSON = new JSONObject();
-					dataJSON.put("isValid", "false");
 					jsonResponse = JSONResponseCreator.createJSONResponse(
-							"success", dataJSON, null);
+							"fail", null,
+							"Not an authorized client, access denied.");
 					log = new Log(
-							"A user tried to log in with incorrect information",
+							"Alert! Somebody tried to access the web server without the authorization IDs",
 							ip, TimestampHandler.getCurrentTimestamp());
 				}
-			} else {
+
+			} catch (JSONException | ClientAuthenticationServiceException
+					| UserServiceException e) {
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
-						null, "Not an authorized client, access denied.");
+						null,
+						"Process cannot be completed, an error has occured in the web server + "
+								+ e.getMessage());
 				log = new Log(
-						"Alert! Somebody tried to access the web server without the authorization IDs",
+						"An error has occurred while processing a request.",
+						ip, TimestampHandler.getCurrentTimestamp());
+				e.printStackTrace();
+			} catch (JSONConverterException e) {
+				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
+						null,
+						"Process cannot be completed, an error has occured in the web server + "
+								+ e.getMessage());
+				log = new Log(
+						"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
 						ip, TimestampHandler.getCurrentTimestamp());
 			}
-
-		} catch (JSONException | ClientAuthenticationServiceException
-				| UserServiceException e) {
-			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
-					"Process cannot be completed, an error has occured in the web server + "
-							+ e.getMessage());
-			log = new Log("An error has occurred while processing a request.",
-					ip, TimestampHandler.getCurrentTimestamp());
-			e.printStackTrace();
-		} catch (JSONConverterException e) {
-			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
-					"Process cannot be completed, an error has occured in the web server + "
-							+ e.getMessage());
-			log = new Log(
-					"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
-					ip, TimestampHandler.getCurrentTimestamp());
+		} else {
+			JSONObject data = new JSONObject();
+			data.put("isBlocked", "true");
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", data,
+					"Your IP is currently blocked, please try again later");
+			log = new Log("Somebody tried to login while he is blocked", ip,
+					TimestampHandler.getCurrentTimestamp());
 		}
-		// } else {
-		// jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
-		// "Your IP is currently blocked, please try again later");
-		// log = new Log("Somebody tried to login while he is blocked", ip,
-		// TimestampHandler.getCurrentTimestamp());
-		// }
 
 		writer.write(jsonResponse.toString());
 		logService.addLog(log);
