@@ -53,19 +53,12 @@ public class UserController {
 			LoggingException, DataAccessException, ValidateIPServiceException {
 		String ip = IPRetriever.getIPAddressFromRequest(request);
 		System.out.println(ip);
-		/*
-		 * get ip if valid proceed
-		 * 
-		 * else
-		 * 
-		 * bawal magload in
-		 */
-
+	
 		Log log = null;
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 
-		// if (validateIPService.isValidIP(ip)) {
+		if (validateIPService.isValidIP(ip)) {
 		try {
 			JSONObject json = GSONConverter.getJSONObjectFromReader(request
 					.getReader());
@@ -88,6 +81,7 @@ public class UserController {
 							"success", dataJSON, null);
 					log = new Log("User " + username + " has logged in.", ip,
 							TimestampHandler.getCurrentTimestamp());
+					validateIPService.clearAllIPRecords(ip);
 				} else {
 					JSONObject dataJSON = new JSONObject();
 					dataJSON.put("isValid", "false");
@@ -96,6 +90,7 @@ public class UserController {
 					log = new Log(
 							"A user tried to log in with incorrect information",
 							ip, TimestampHandler.getCurrentTimestamp());
+					 validateIPService.addIPEntry(ip, TimestampHandler.getCurrentTimestamp());
 				}
 			} else {
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
@@ -120,15 +115,16 @@ public class UserController {
 			log = new Log(
 					"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
 					ip, TimestampHandler.getCurrentTimestamp());
-		}
-		// } else {
-		// JSONObject data = new JSONObject();
-		// data.put("isBlocked", "true");
-		// jsonResponse = JSONResponseCreator.createJSONResponse("fail", data,
-		// "Your IP is currently blocked, please try again later");
-		// log = new Log("Somebody tried to login while he is blocked", ip,
-		// TimestampHandler.getCurrentTimestamp());
-		// }
+			}
+		 } else {
+			 JSONObject data = new JSONObject();
+			 data.put("isBlocked", "true");
+			 jsonResponse = JSONResponseCreator.createJSONResponse("fail", data,
+			 "Your IP is currently blocked, please try again later");
+			 log = new Log("Somebody tried to login while he is blocked", ip,
+			 TimestampHandler.getCurrentTimestamp());
+			 validateIPService.addIPEntry(ip, TimestampHandler.getCurrentTimestamp());
+		 }
 
 		writer.write(jsonResponse.toString());
 		logService.addLog(log);

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Timestamp;
 
 import org.springframework.stereotype.Repository;
 
@@ -43,9 +43,9 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 	}
 
 	@Override
-	public Date getLatestIPRecordDate(String ip) throws DataAccessException {
+	public Timestamp getLatestIPRecordDate(String ip) throws DataAccessException {
 		
-		Date date;
+		Timestamp timestamp;
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT date FROM validateip WHERE ip = ? "
@@ -59,7 +59,7 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 			ResultSet rs = pstmt.executeQuery();
 
 			rs.next();
-			date = rs.getDate(1);
+			timestamp = rs.getTimestamp(1);
 			pstmt.close();
 			conn.close();
 		} catch (SQLException | DataAccessException e) {
@@ -67,11 +67,11 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		return null;
+		return timestamp;
 	}
 
 	@Override
-	public void addIPEntry(String ip, Date date) throws DataAccessException {
+	public void addIPEntry(String ip, Timestamp timestamp) throws DataAccessException {
 		// TODO Auto-generated method stub
 		
 		try {
@@ -81,8 +81,8 @@ public class ValidateIPDaoSqlImpl extends BaseDaoSqlImpl implements ValidateIPDa
 
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, ip);
-			pstmt.setDate(2, (java.sql.Date) date);
-
+			pstmt.setTimestamp(2, timestamp);
+			
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
