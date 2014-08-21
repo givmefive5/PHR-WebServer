@@ -15,10 +15,9 @@ public class ValidateIPServiceimpl implements ValidateIPService {
 
 	@Autowired
 	ValidateIPDao validateIPDao;
-	
-	
-	private void clearAllIPRecords(String ip) throws ValidateIPServiceException{
-		
+
+	private void clearAllIPRecords(String ip) throws ValidateIPServiceException {
+
 		try {
 			validateIPDao.clearAllIPRecords(ip);
 		} catch (DataAccessException e) {
@@ -26,27 +25,28 @@ public class ValidateIPServiceimpl implements ValidateIPService {
 					"An error occured while clearing ip records", e);
 		}
 	}
-	
+
 	@Override
-	public boolean isValidIP(String ip) throws DataAccessException, ValidateIPServiceException {
+	public boolean isValidIP(String ip) throws DataAccessException,
+			ValidateIPServiceException {
 		int count = validateIPDao.countIPRecords(ip);
-		
+
 		try {
-			if(count < 5)
+			if (count < 5)
 				return true;
-			else{
+			else {
 				Date date = validateIPDao.getLatestIPRecordDate(ip);
-				if(new Date().compareTo(new Date(date.getTime() + 60 * 60 * 1000)) > 0){
-				    clearAllIPRecords(ip);
+				if (new Date().compareTo(new Date(
+						date.getTime() + 60 * 60 * 1000)) > 0) {
+					clearAllIPRecords(ip);
 					return true;
-					}
-				else{
-					//validateIPDao.addIPEntry(ip, new Date());
+				} else {
+					// validateIPDao.addIPEntry(ip, new Date());
 					return false;
 				}
 			}
 		} catch (DataAccessException e) {
-			throw new DataAccessException (
+			throw new DataAccessException(
 					"An error occured while validating ip", e);
 		}
 	}

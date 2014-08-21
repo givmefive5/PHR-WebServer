@@ -13,15 +13,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.exceptions.ClientAuthenticationServiceException;
+import com.example.exceptions.DataAccessException;
 import com.example.exceptions.JSONConverterException;
 import com.example.exceptions.LoggingException;
 import com.example.exceptions.UserServiceException;
 import com.example.exceptions.UsernameAlreadyExistsException;
+import com.example.exceptions.ValidateIPServiceException;
 import com.example.model.Log;
 import com.example.model.User;
 import com.example.service.ClientAuthenticationService;
 import com.example.service.LogService;
 import com.example.service.UserService;
+import com.example.service.ValidateIPService;
 import com.example.tools.GSONConverter;
 import com.example.tools.IPRetriever;
 import com.example.tools.JSONParser;
@@ -41,10 +44,13 @@ public class UserController {
 	@Autowired
 	LogService logService;
 
+	@Autowired
+	ValidateIPService validateIPService;
+
 	@RequestMapping(value = "/user/validateLogin")
 	public void validateLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException,
-			LoggingException {
+			LoggingException, DataAccessException, ValidateIPServiceException {
 		String ip = IPRetriever.getIPAddressFromRequest(request);
 		System.out.println(ip);
 		/*
@@ -58,6 +64,8 @@ public class UserController {
 		Log log = null;
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
+
+		// if (validateIPService.isValidIP(ip)) {
 		try {
 			JSONObject json = GSONConverter.getJSONObjectFromReader(request
 					.getReader());
@@ -113,6 +121,13 @@ public class UserController {
 					"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
 					ip, TimestampHandler.getCurrentTimestamp());
 		}
+		// } else {
+		// jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+		// "Your IP is currently blocked, please try again later");
+		// log = new Log("Somebody tried to login while he is blocked", ip,
+		// TimestampHandler.getCurrentTimestamp());
+		// }
+
 		writer.write(jsonResponse.toString());
 		logService.addLog(log);
 	}
