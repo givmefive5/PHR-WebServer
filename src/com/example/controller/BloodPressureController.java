@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.exceptions.BloodPressureServiceException;
 import com.example.exceptions.ClientAuthenticationServiceException;
@@ -35,7 +34,7 @@ public class BloodPressureController {
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/tracker/addBloodPressure", method = RequestMethod.GET)
+	@RequestMapping(value = "/tracker/addBloodPressure")
 	public void addBloodPressure(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 		PrintWriter writer = response.getWriter();
@@ -56,14 +55,17 @@ public class BloodPressureController {
 									BloodPressure.class);
 					bloodPressureService.addBloodPressure(username,
 							bloodPressure);
+					jsonResponse = JSONResponseCreator.createJSONResponse(
+							"success", null, "Process has been completed");
 				} else {
 					JSONObject dataForResponse = new JSONObject();
-					data.put("isValidAccessToken", "false");
+					dataForResponse.put("isValidAccessToken", "false");
 					jsonResponse = JSONResponseCreator
-							.createJSONResponse("fail", dataForResponse,
+							.createJSONResponse("success", dataForResponse,
 									"Access token is invalid, please ask user to log in again.");
 				}
 			} else {
+				System.out.println("Unauthorized Client");
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
 						null, "Not an authorized client, access denied.");
 			}
@@ -76,7 +78,7 @@ public class BloodPressureController {
 							+ e.getMessage());
 			e.printStackTrace();
 		}
-
+		System.out.println(jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
 }

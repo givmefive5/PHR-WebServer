@@ -21,6 +21,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 		try {
 			bloodPressureDao.addBloodPressure(username, bloodPressure);
 		} catch (DataAccessException e) {
+			e.printStackTrace();
 			throw new BloodPressureServiceException(
 					"Error has occurred while adding a blood pressure entry", e);
 		}
