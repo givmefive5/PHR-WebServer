@@ -106,11 +106,13 @@ public class UserController {
 					ip, TimestampHandler.getCurrentTimestamp());
 			e.printStackTrace();
 		} catch (JSONConverterException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
 			log = new Log(
 					"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
 					ip, TimestampHandler.getCurrentTimestamp());
 		}
-
 		writer.write(jsonResponse.toString());
 		logService.addLog(log);
 	}
@@ -172,6 +174,9 @@ public class UserController {
 			log = new Log("A user tried to register with a duplicate username",
 					ip, TimestampHandler.getCurrentTimestamp());
 		} catch (JSONConverterException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
 			log = new Log(
 					"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
 					ip, TimestampHandler.getCurrentTimestamp());
