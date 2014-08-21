@@ -18,13 +18,14 @@ public class LogDaoSqlImpl extends BaseDaoSqlImpl implements LogDao {
 		if (log != null) {
 			try {
 				Connection conn = getConnection();
-				String query = "INSERT INTO logs(message, ip, time) VALUES (?, ?, ?)";
+				String query = "INSERT INTO logs(message, ip, time, loggingLayer) VALUES (?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
 				pstmt.setString(1, log.getMessage());
 				pstmt.setString(2, log.getIp());
 				pstmt.setTimestamp(3, log.getTimestamp());
+				pstmt.setString(4, log.getLoggingLayer());
 
 				pstmt.executeUpdate();
 

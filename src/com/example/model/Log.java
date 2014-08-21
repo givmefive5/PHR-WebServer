@@ -7,12 +7,15 @@ public class Log {
 	public String message;
 	public String ip;
 	public Timestamp timestamp;
+	public String loggingLayer;
 
-	public Log(String message, String ip, Timestamp timestamp) {
+	public Log(String message, String ip, Timestamp timestamp,
+			String loggingLayer) {
 		super();
 		this.message = message;
 		this.ip = ip;
 		this.timestamp = timestamp;
+		this.loggingLayer = loggingLayer;
 	}
 
 	public String getMessage() {
@@ -37,6 +40,14 @@ public class Log {
 
 	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getLoggingLayer() {
+		return loggingLayer;
+	}
+
+	public void setLoggingLayer(String loggingLayer) {
+		this.loggingLayer = loggingLayer;
 	}
 
 }

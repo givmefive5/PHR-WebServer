@@ -84,7 +84,8 @@ public class UserController {
 						jsonResponse = JSONResponseCreator.createJSONResponse(
 								"success", dataJSON, null);
 						log = new Log("User " + username + " has logged in.",
-								ip, TimestampHandler.getCurrentTimestamp());
+								ip, TimestampHandler.getCurrentTimestamp(),
+								"UserController");
 						validateIPService.clearAllIPRecords(ip);
 					} else {
 						JSONObject dataJSON = new JSONObject();
@@ -92,8 +93,9 @@ public class UserController {
 						jsonResponse = JSONResponseCreator.createJSONResponse(
 								"success", dataJSON, null);
 						log = new Log(
-								"A user tried to log in with incorrect information",
-								ip, TimestampHandler.getCurrentTimestamp());
+								"INFO: A user tried to log in with incorrect information",
+								ip, TimestampHandler.getCurrentTimestamp(),
+								"UserController");
 						validateIPService.addIPEntry(ip,
 								TimestampHandler.getCurrentTimestamp());
 					}
@@ -102,8 +104,9 @@ public class UserController {
 							"fail", null,
 							"Not an authorized client, access denied.");
 					log = new Log(
-							"Alert! Somebody tried to access the web server without the authorization IDs",
-							ip, TimestampHandler.getCurrentTimestamp());
+							"ALERT: Somebody tried to access the web server without the authorization IDs",
+							ip, TimestampHandler.getCurrentTimestamp(),
+							"UserController");
 				}
 
 			} catch (JSONException | ClientAuthenticationServiceException
@@ -113,8 +116,9 @@ public class UserController {
 						"Process cannot be completed, an error has occured in the web server + "
 								+ e.getMessage());
 				log = new Log(
-						"An error has occurred while processing a request.",
-						ip, TimestampHandler.getCurrentTimestamp());
+						"ERROR: An error has occurred while processing a request.",
+						ip, TimestampHandler.getCurrentTimestamp(),
+						"UserController");
 				e.printStackTrace();
 			} catch (JSONConverterException e) {
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
@@ -122,8 +126,9 @@ public class UserController {
 						"Process cannot be completed, an error has occured in the web server + "
 								+ e.getMessage());
 				log = new Log(
-						"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
-						ip, TimestampHandler.getCurrentTimestamp());
+						"ALERT: Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
+						ip, TimestampHandler.getCurrentTimestamp(),
+						"UserController");
 			}
 		} else {
 			System.out.println("false");
@@ -131,8 +136,9 @@ public class UserController {
 			data.put("isBlocked", "true");
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", data,
 					"Your IP is currently blocked, please try again later");
-			log = new Log("Somebody tried to login while he is blocked", ip,
-					TimestampHandler.getCurrentTimestamp());
+			log = new Log("ALERT: Somebody tried to login while he is blocked",
+					ip, TimestampHandler.getCurrentTimestamp(),
+					"UserController");
 		}
 
 		writer.write(jsonResponse.toString());
@@ -169,15 +175,17 @@ public class UserController {
 				dataJSON.put("userAccessToken", accessToken);
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataJSON, null);
-				log = new Log("User " + user.getUsername()
+				log = new Log("INFO: User " + user.getUsername()
 						+ " has been successfully registered", ip,
-						TimestampHandler.getCurrentTimestamp());
+						TimestampHandler.getCurrentTimestamp(),
+						"UserController");
 			} else {
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
 						null, "Not an authorized client, access denied.");
 				log = new Log(
-						"Alert! Somebody tried to access the web server without the authorization IDs",
-						ip, TimestampHandler.getCurrentTimestamp());
+						"ALERT: Somebody tried to access the web server without the authorization IDs",
+						ip, TimestampHandler.getCurrentTimestamp(),
+						"UserController");
 			}
 
 		} catch (JSONException | ClientAuthenticationServiceException
@@ -186,22 +194,27 @@ public class UserController {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
-			log = new Log("An error has occurred while processing a request",
-					ip, TimestampHandler.getCurrentTimestamp());
+			log = new Log(
+					"ERROR: An error has occurred while processing a register request",
+					ip, TimestampHandler.getCurrentTimestamp(),
+					"UserController");
 		} catch (UsernameAlreadyExistsException e) {
 			JSONObject dataForResponse = new JSONObject();
 			dataForResponse.put("usernameAlreadyExists", "true");
 			jsonResponse = JSONResponseCreator.createJSONResponse("success",
 					dataForResponse, "Duplicate Username Exception Occured!");
-			log = new Log("A user tried to register with a duplicate username",
-					ip, TimestampHandler.getCurrentTimestamp());
+			log = new Log(
+					"INFO: A user tried to register with a duplicate username",
+					ip, TimestampHandler.getCurrentTimestamp(),
+					"UserController");
 		} catch (JSONConverterException e) {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
-					"Process cannot be completed, an error has occured in the web server + "
+					"ERROR: Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
 			log = new Log(
-					"Alert! Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
-					ip, TimestampHandler.getCurrentTimestamp());
+					"ALERT: Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
+					ip, TimestampHandler.getCurrentTimestamp(),
+					"UserController");
 		}
 
 		writer.write(jsonResponse.toString());
