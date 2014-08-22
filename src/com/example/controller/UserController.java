@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.exceptions.ClientAuthenticationServiceException;
 import com.example.exceptions.DataAccessException;
@@ -47,7 +48,7 @@ public class UserController {
 	@Autowired
 	ValidateIPService validateIPService;
 
-	@RequestMapping(value = "/user/validateLogin")
+	@RequestMapping(value = "/user/validateLogin", method = RequestMethod.POST)
 	public void validateLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException,
 			LoggingException, DataAccessException, ValidateIPServiceException {
@@ -146,7 +147,7 @@ public class UserController {
 		logService.addLog(log);
 	}
 
-	@RequestMapping(value = "/user/register")
+	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
 	public void register(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException,
 			LoggingException {
