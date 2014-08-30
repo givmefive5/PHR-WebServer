@@ -53,7 +53,7 @@ public class UserController {
 			HttpServletResponse response) throws IOException, JSONException,
 			LoggingException, DataAccessException, ValidateIPServiceException {
 		String ip = IPRetriever.getIPAddressFromRequest(request);
-		System.out.println(ip);
+		System.out.println("IP Address: " + ip);
 
 		Log log = null;
 		PrintWriter writer = response.getWriter();
@@ -78,7 +78,10 @@ public class UserController {
 
 						String accessToken = UUIDGenerator
 								.generateUniqueString();
-						System.out.println(accessToken);
+						System.out
+								.println("Assigned Access Token to Username: "
+										+ username + " with Access Token: "
+										+ accessToken);
 						userService.assignAccessToken(username, accessToken);
 
 						dataJSON.put("userAccessToken", accessToken);
@@ -152,7 +155,7 @@ public class UserController {
 			HttpServletResponse response) throws JSONException, IOException,
 			LoggingException {
 		String ip = IPRetriever.getIPAddressFromRequest(request);
-		System.out.println(ip);
+		System.out.println("IP Address: " + ip);
 
 		Log log = null;
 		PrintWriter writer = response.getWriter();
@@ -162,18 +165,19 @@ public class UserController {
 					.getReader());
 			boolean isAuthorized = clientAuthenticationService
 					.isFromAuthorizedClient(json);
+			System.out.println("Request JSON Object Received: " + json);
 			if (isAuthorized) {
 				JSONObject data = JSONParser.getData(json);
-				System.out.println(data);
 				User user = GSONConverter.getGSONObjectGivenJsonObject(data,
 						User.class);
 				userService.addUser(user);
 
 				JSONObject dataJSON = new JSONObject();
 				String accessToken = UUIDGenerator.generateUniqueString();
-				System.out.println(accessToken);
 				userService.assignAccessToken(user.getUsername(), accessToken);
-
+				System.out.println("Assigned Access Token to Username: "
+						+ user.getUsername() + ". Access Token = "
+						+ accessToken);
 				dataJSON.put("userAccessToken", accessToken);
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataJSON, null);
@@ -210,6 +214,8 @@ public class UserController {
 					ip, TimestampHandler.getCurrentTimestamp(),
 					"UserController");
 		} catch (JSONConverterException e) {
+			System.out
+					.println("A request without a JSON Object was received and rejected");
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"ERROR: Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
@@ -218,7 +224,8 @@ public class UserController {
 					ip, TimestampHandler.getCurrentTimestamp(),
 					"UserController");
 		}
-
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 		logService.addLog(log);
 	}

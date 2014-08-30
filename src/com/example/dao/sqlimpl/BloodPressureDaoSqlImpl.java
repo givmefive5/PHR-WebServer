@@ -45,7 +45,6 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(6, userDao.getUserIdGivenUsername(username));
 
 			pstmt.executeUpdate();
-			System.out.println("Updated");
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

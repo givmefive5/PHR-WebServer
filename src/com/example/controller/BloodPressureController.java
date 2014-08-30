@@ -48,8 +48,7 @@ public class BloodPressureController {
 			LoggingException {
 
 		String ip = IPRetriever.getIPAddressFromRequest(request);
-		System.out.println(ip);
-
+		System.out.println("IP Address: " + ip);
 		Log log = null;
 
 		PrintWriter writer = response.getWriter();
@@ -57,12 +56,16 @@ public class BloodPressureController {
 		try {
 			JSONObject json = GSONConverter.getJSONObjectFromReader(request
 					.getReader());
+			System.out.println("JSON From Request: " + json);
 			boolean isAuthorized = clientAuthenticationService
 					.isFromAuthorizedClient(json);
 			if (isAuthorized) {
 				JSONObject data = JSONParser.getData(json);
 				String accessToken = data.getString("accessToken");
+				System.out.println("Access Token from Request JSON: "
+						+ accessToken);
 				String username = data.getString("username");
+				System.out.println("Username from Request JSON: " + username);
 				if (userService.isValidAccessToken(accessToken, username)) {
 					BloodPressure bloodPressure = GSONConverter
 							.getGSONObjectGivenJsonObject(
@@ -88,7 +91,8 @@ public class BloodPressureController {
 							"BloodPressureController");
 				}
 			} else {
-				System.out.println("Unauthorized Client");
+				System.out
+						.println("An Unauthorized Client Tried to Access The Web Server");
 				jsonResponse = JSONResponseCreator.createJSONResponse("fail",
 						null, "Not an authorized client, access denied.");
 				log = new Log(
@@ -97,18 +101,29 @@ public class BloodPressureController {
 						"BloodPressureController");
 			}
 
-		} catch (JSONConverterException | ClientAuthenticationServiceException
-				| JSONException | UserServiceException
-				| BloodPressureServiceException e) {
+		} catch (JSONException | ClientAuthenticationServiceException
+				| BloodPressureServiceException | UserServiceException e) {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
-					"ERROR: Process cannot be completed, an error has occured in the web server + "
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			log = new Log(
+					"ERROR: An error has occurred while processing a request.",
+					ip, TimestampHandler.getCurrentTimestamp(),
+					"BloodPressureServiceController");
+			e.printStackTrace();
+		} catch (JSONConverterException e) {
+			System.out
+					.println("A request without a JSON Object was received and rejected");
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
 			log = new Log(
 					"ALERT: Somebody tried to access the web server without passing a JSONObject. Potential Attacker",
 					ip, TimestampHandler.getCurrentTimestamp(),
 					"BloodPressureController");
 		}
-		System.out.println(jsonResponse);
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 		logService.addLog(log);
 	}

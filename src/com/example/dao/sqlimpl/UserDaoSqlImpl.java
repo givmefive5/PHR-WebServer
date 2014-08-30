@@ -50,8 +50,6 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			throws DataAccessException {
 
 		String hashedAccessToken = Hasher.hashString(accessToken);
-		System.out.println("Assigning: Original : " + accessToken);
-		System.out.println("Assigning: Hashed: " + hashedAccessToken);
 		Connection conn = getConnection();
 
 		String query = "UPDATE user SET accessToken = ? WHERE username = ?";
@@ -135,8 +133,6 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 		String hashedAccessToken = Hasher.hashString(accessToken);
 
 		try {
-			System.out.println("Checking: Original : " + accessToken);
-			System.out.println("Checking: Hashed : " + hashedAccessToken);
 			Connection conn = getConnection();
 			String query = "SELECT COUNT(*) FROM user "
 					+ "WHERE accessToken = ? AND username = ?";

@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<jsp:forward page="/user/validateLogin"></jsp:forward>
+	<form method="POST" action="user/validateLogin">
+		<input type="submit"/>
+	</form>
 </body>
 </html>

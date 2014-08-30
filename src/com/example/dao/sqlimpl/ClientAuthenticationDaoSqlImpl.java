@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.dao.ClientAuthenticationDao;
 import com.example.exceptions.DataAccessException;
+import com.example.tools.Hasher;
 
 @Repository("clientAuthenticationDao")
 public class ClientAuthenticationDaoSqlImpl extends BaseDaoSqlImpl implements
@@ -19,6 +20,8 @@ public class ClientAuthenticationDaoSqlImpl extends BaseDaoSqlImpl implements
 			throws DataAccessException {
 
 		int count = 0;
+		String hashedClientID = Hasher.hashString(clientID);
+		String hashedClientPassword = Hasher.hashString(clientPassword);
 
 		try {
 			Connection conn = getConnection();
@@ -27,8 +30,8 @@ public class ClientAuthenticationDaoSqlImpl extends BaseDaoSqlImpl implements
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, clientID);
-			pstmt.setString(2, clientPassword);
+			pstmt.setString(1, hashedClientID);
+			pstmt.setString(2, hashedClientPassword);
 
 			ResultSet rs = pstmt.executeQuery();
 
