@@ -1,257 +1,389 @@
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+CREATE DATABASE  IF NOT EXISTS `healthgem` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `healthgem`;
+-- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
+--
+-- Host: localhost    Database: healthgem
+-- ------------------------------------------------------
+-- Server version	5.6.17
 
-CREATE SCHEMA IF NOT EXISTS `healthgem` DEFAULT CHARACTER SET utf8 ;
-USE `healthgem` ;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- -----------------------------------------------------
--- Table `healthgem`.`activitylist`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`activitylist` (
-  `activityID` INT(11) NOT NULL,
-  `name` VARCHAR(100) NULL DEFAULT NULL,
-  `MET` VARCHAR(100) NULL DEFAULT NULL,
-  PRIMARY KEY (`activityID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+--
+-- Table structure for table `activitylist`
+--
 
+DROP TABLE IF EXISTS `activitylist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activitylist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `MET` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Table `healthgem`.`activitytracker`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`activitytracker` (
-  `id` INT(11) NOT NULL,
-  `datetime` DATETIME NULL DEFAULT NULL,
-  `activityID` INT(11) NULL DEFAULT NULL,
-  `calorieBurnedPerHour` INT(11) NULL DEFAULT NULL,
-  `status` VARCHAR(200) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  `fbPostID` INT(11) NULL DEFAULT NULL,
-  `userID` INT(11) NULL DEFAULT NULL,
+--
+-- Dumping data for table `activitylist`
+--
+
+LOCK TABLES `activitylist` WRITE;
+/*!40000 ALTER TABLE `activitylist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `activitylist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `activitytracker`
+--
+
+DROP TABLE IF EXISTS `activitytracker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activitytracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` datetime DEFAULT NULL,
+  `activityID` int(11) DEFAULT NULL,
+  `calorieBurnedPerHour` int(11) DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  `fbPostID` int(11) DEFAULT NULL,
+  `userID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `userID` (`userID` ASC),
-  INDEX `activityID` (`activityID` ASC),
-  CONSTRAINT `activityID`
-    FOREIGN KEY (`activityID`)
-    REFERENCES `healthgem`.`activitylist` (`activityID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `userID` (`userID`),
+  KEY `activityID` (`activityID`),
+  CONSTRAINT `activityID` FOREIGN KEY (`activityID`) REFERENCES `activitylist` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `activitytracker`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`bloodpressuretracker`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`bloodpressuretracker` (
-  `id` INT(11) NOT NULL,
-  `datetime` DATETIME NULL DEFAULT NULL,
-  `systolic` VARCHAR(100) NULL DEFAULT NULL,
-  `diastolic` VARCHAR(100) NULL DEFAULT NULL,
-  `status` VARCHAR(200) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  `fbPostID` INT(11) NULL DEFAULT NULL,
-  `userID` INT(11) NULL DEFAULT NULL,
+LOCK TABLES `activitytracker` WRITE;
+/*!40000 ALTER TABLE `activitytracker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `activitytracker` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bloodpressuretracker`
+--
+
+DROP TABLE IF EXISTS `bloodpressuretracker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bloodpressuretracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` datetime DEFAULT NULL,
+  `systolic` varchar(100) DEFAULT NULL,
+  `diastolic` varchar(100) DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  `fbPostID` int(11) DEFAULT NULL,
+  `userID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `bpUserID` (`userID` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `bpUserID` (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `bloodpressuretracker`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`useraccountandinfo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`useraccountandinfo` (
-  `userID` INT(11) NOT NULL,
-  `username` VARCHAR(100) NULL DEFAULT NULL,
-  `password` VARCHAR(100) NULL DEFAULT NULL,
-  `firstName` VARCHAR(100) NULL DEFAULT NULL,
-  `middleName` VARCHAR(100) NULL DEFAULT NULL,
-  `lastName` VARCHAR(100) NULL DEFAULT NULL,
-  `birthdate` DATE NULL DEFAULT NULL,
-  `gender` VARCHAR(45) NULL DEFAULT NULL,
-  `heightInInches` INT(50) NULL DEFAULT NULL,
-  `contactNumber` INT(50) NULL DEFAULT NULL,
-  `emailAddress` VARCHAR(100) NULL DEFAULT NULL,
-  `fbEmailAddress` VARCHAR(45) NULL DEFAULT NULL,
-  `fbAccessToken` VARCHAR(100) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  PRIMARY KEY (`userID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+LOCK TABLES `bloodpressuretracker` WRITE;
+/*!40000 ALTER TABLE `bloodpressuretracker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bloodpressuretracker` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `bloodsugartracker`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`bloodsugartracker`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`bloodsugartracker` (
-  `id` INT(11) NOT NULL,
-  `datetime` DATETIME NULL DEFAULT NULL,
-  `bloodSugar` DECIMAL(11,0) NULL DEFAULT NULL,
-  `status` VARCHAR(200) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  `fbPostID` INT(11) NULL DEFAULT NULL,
-  `userID` INT(11) NULL DEFAULT NULL,
+DROP TABLE IF EXISTS `bloodsugartracker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bloodsugartracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` datetime DEFAULT NULL,
+  `bloodSugar` decimal(11,0) DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  `fbPostID` int(11) DEFAULT NULL,
+  `userID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `bloodsugarUserID` (`userID` ASC),
-  CONSTRAINT `bloodsugarUserID`
-    FOREIGN KEY (`userID`)
-    REFERENCES `healthgem`.`useraccountandinfo` (`userID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `bloodsugarUserID` (`userID`),
+  CONSTRAINT `bloodsugarUserID` FOREIGN KEY (`userID`) REFERENCES `useraccountandinfo` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `bloodsugartracker`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`checkuptracker`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`checkuptracker` (
-  `id` INT(11) NOT NULL,
-  `datetime` DATETIME NULL DEFAULT NULL,
-  `purpose` VARCHAR(100) NULL DEFAULT NULL,
-  `doctorsName` VARCHAR(100) NULL DEFAULT NULL,
-  `location` VARCHAR(100) NULL DEFAULT NULL,
-  `notes` VARCHAR(100) NULL DEFAULT NULL,
-  `status` VARCHAR(200) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  `fbPostID` INT(11) NULL DEFAULT NULL,
-  `userID` INT(11) NULL DEFAULT NULL,
+LOCK TABLES `bloodsugartracker` WRITE;
+/*!40000 ALTER TABLE `bloodsugartracker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bloodsugartracker` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `checkuptracker`
+--
+
+DROP TABLE IF EXISTS `checkuptracker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `checkuptracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` datetime DEFAULT NULL,
+  `purpose` varchar(100) DEFAULT NULL,
+  `doctorsName` varchar(100) DEFAULT NULL,
+  `location` varchar(100) DEFAULT NULL,
+  `notes` varchar(100) DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  `fbPostID` int(11) DEFAULT NULL,
+  `userID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `checkupUserID` (`userID` ASC),
-  CONSTRAINT `checkupUserID`
-    FOREIGN KEY (`userID`)
-    REFERENCES `healthgem`.`useraccountandinfo` (`userID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `checkupUserID` (`userID`),
+  CONSTRAINT `checkupUserID` FOREIGN KEY (`userID`) REFERENCES `useraccountandinfo` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `checkuptracker`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`restaurantlist`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`restaurantlist` (
-  `restaurantID` INT(11) NOT NULL,
-  `name` VARCHAR(100) NULL DEFAULT NULL,
-  PRIMARY KEY (`restaurantID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+LOCK TABLES `checkuptracker` WRITE;
+/*!40000 ALTER TABLE `checkuptracker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `checkuptracker` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `foodlist`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`foodlist`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`foodlist` (
-  `foodID` INT(11) NOT NULL,
-  `name` VARCHAR(100) NULL DEFAULT NULL,
-  `calorie` VARCHAR(100) NULL DEFAULT NULL,
-  `servingUnit` VARCHAR(100) NULL DEFAULT NULL,
-  `servingSize` INT(11) NULL DEFAULT NULL,
-  `restaurantID` INT(11) NULL DEFAULT NULL,
-  `fromFatsecret` BINARY(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`foodID`),
-  INDEX `restaurantID` (`restaurantID` ASC),
-  CONSTRAINT `restaurantID`
-    FOREIGN KEY (`restaurantID`)
-    REFERENCES `healthgem`.`restaurantlist` (`restaurantID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `healthgem`.`foodtracker`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`foodtracker` (
-  `id` INT(11) NOT NULL,
-  `datetime` DATETIME NULL DEFAULT NULL,
-  `foodID` INT(11) NULL DEFAULT NULL,
-  `servingCount` INT(11) NULL DEFAULT NULL,
-  `status` VARCHAR(200) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  `fbPostID` INT(11) NULL DEFAULT NULL,
-  `userID` INT(11) NULL DEFAULT NULL,
+DROP TABLE IF EXISTS `foodlist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `foodlist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `calorie` varchar(100) DEFAULT NULL,
+  `servingUnit` varchar(100) DEFAULT NULL,
+  `servingSize` int(11) DEFAULT NULL,
+  `restaurantID` int(11) DEFAULT NULL,
+  `fromFatsecret` binary(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `foodID` (`foodID` ASC),
-  INDEX `userID` (`userID` ASC),
-  CONSTRAINT `userID`
-    FOREIGN KEY (`userID`)
-    REFERENCES `healthgem`.`useraccountandinfo` (`userID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `foodID`
-    FOREIGN KEY (`foodID`)
-    REFERENCES `healthgem`.`foodlist` (`foodID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `restaurantID` (`restaurantID`),
+  CONSTRAINT `restaurantID` FOREIGN KEY (`id`) REFERENCES `restaurantlist` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `foodlist`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`notestracker`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`notestracker` (
-  `id` INT(11) NOT NULL,
-  `datetime` DATETIME NULL DEFAULT NULL,
-  `title` VARCHAR(100) NULL DEFAULT NULL,
-  `notes` VARCHAR(200) NULL DEFAULT NULL,
-  `status` VARCHAR(200) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  `fbPostID` INT(11) NULL DEFAULT NULL,
-  `userID` INT(11) NULL DEFAULT NULL,
+LOCK TABLES `foodlist` WRITE;
+/*!40000 ALTER TABLE `foodlist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `foodlist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `foodtracker`
+--
+
+DROP TABLE IF EXISTS `foodtracker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `foodtracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` datetime DEFAULT NULL,
+  `foodID` int(11) DEFAULT NULL,
+  `servingCount` int(11) DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  `fbPostID` int(11) DEFAULT NULL,
+  `userID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `notesUserID` (`userID` ASC),
-  CONSTRAINT `notesUserID`
-    FOREIGN KEY (`userID`)
-    REFERENCES `healthgem`.`useraccountandinfo` (`userID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `foodID` (`foodID`),
+  KEY `userID` (`userID`),
+  CONSTRAINT `foodID` FOREIGN KEY (`foodID`) REFERENCES `foodlist` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `userID` FOREIGN KEY (`userID`) REFERENCES `useraccountandinfo` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `foodtracker`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`verifytable`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`verifytable` (
-  `verifyID` INT(11) NOT NULL,
-  `datetime` DATETIME NULL DEFAULT NULL,
-  `status` VARCHAR(200) NULL DEFAULT NULL,
-  `extractedWord` VARCHAR(100) NULL DEFAULT NULL,
-  `category` VARCHAR(100) NULL DEFAULT NULL,
-  `fbPostID` INT(11) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  PRIMARY KEY (`verifyID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+LOCK TABLES `foodtracker` WRITE;
+/*!40000 ALTER TABLE `foodtracker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `foodtracker` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `notestracker`
+--
 
--- -----------------------------------------------------
--- Table `healthgem`.`weighttracker`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `healthgem`.`weighttracker` (
-  `id` INT(11) NOT NULL,
-  `datetime` DATETIME NULL DEFAULT NULL,
-  `weightInPounds` INT(20) NULL DEFAULT NULL,
-  `status` VARCHAR(200) NULL DEFAULT NULL,
-  `photo` VARCHAR(100) NULL DEFAULT NULL,
-  `fbPostID` INT(11) NULL DEFAULT NULL,
-  `userID` INT(11) NULL DEFAULT NULL,
+DROP TABLE IF EXISTS `notestracker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notestracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` datetime DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `notes` varchar(200) DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  `fbPostID` int(11) DEFAULT NULL,
+  `userID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `weightUserID` (`userID` ASC),
-  CONSTRAINT `weightUserID`
-    FOREIGN KEY (`userID`)
-    REFERENCES `healthgem`.`useraccountandinfo` (`userID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+  KEY `notesUserID` (`userID`),
+  CONSTRAINT `notesUserID` FOREIGN KEY (`userID`) REFERENCES `useraccountandinfo` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `notestracker`
+--
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+LOCK TABLES `notestracker` WRITE;
+/*!40000 ALTER TABLE `notestracker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notestracker` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `restaurantlist`
+--
+
+DROP TABLE IF EXISTS `restaurantlist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `restaurantlist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `restaurantlist`
+--
+
+LOCK TABLES `restaurantlist` WRITE;
+/*!40000 ALTER TABLE `restaurantlist` DISABLE KEYS */;
+/*!40000 ALTER TABLE `restaurantlist` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `useraccountandinfo`
+--
+
+DROP TABLE IF EXISTS `useraccountandinfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `useraccountandinfo` (
+  `userID` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `firstName` varchar(100) DEFAULT NULL,
+  `middleName` varchar(100) DEFAULT NULL,
+  `lastName` varchar(100) DEFAULT NULL,
+  `birthdate` date DEFAULT NULL,
+  `gender` varchar(45) DEFAULT NULL,
+  `heightInInches` int(50) DEFAULT NULL,
+  `contactNumber` int(50) DEFAULT NULL,
+  `emailAddress` varchar(100) DEFAULT NULL,
+  `fbEmailAddress` varchar(45) DEFAULT NULL,
+  `fbAccessToken` varchar(100) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`userID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `useraccountandinfo`
+--
+
+LOCK TABLES `useraccountandinfo` WRITE;
+/*!40000 ALTER TABLE `useraccountandinfo` DISABLE KEYS */;
+INSERT INTO `useraccountandinfo` VALUES (1,'admin','1234',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `useraccountandinfo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `verifytable`
+--
+
+DROP TABLE IF EXISTS `verifytable`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `verifytable` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` datetime DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `extractedWord` varchar(100) DEFAULT NULL,
+  `category` varchar(100) DEFAULT NULL,
+  `fbPostID` int(11) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `verifytable`
+--
+
+LOCK TABLES `verifytable` WRITE;
+/*!40000 ALTER TABLE `verifytable` DISABLE KEYS */;
+/*!40000 ALTER TABLE `verifytable` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `weighttracker`
+--
+
+DROP TABLE IF EXISTS `weighttracker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `weighttracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datetime` datetime DEFAULT NULL,
+  `weightInPounds` int(20) DEFAULT NULL,
+  `status` varchar(200) DEFAULT NULL,
+  `photo` varchar(100) DEFAULT NULL,
+  `fbPostID` int(11) DEFAULT NULL,
+  `userID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `weightUserID` (`userID`),
+  CONSTRAINT `weightUserID` FOREIGN KEY (`userID`) REFERENCES `useraccountandinfo` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `weighttracker`
+--
+
+LOCK TABLES `weighttracker` WRITE;
+/*!40000 ALTER TABLE `weighttracker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `weighttracker` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-09-10 16:06:54
