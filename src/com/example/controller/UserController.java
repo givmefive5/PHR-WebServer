@@ -51,7 +51,7 @@ public class UserController {
 				String accessToken = UUIDGenerator.generateUniqueString();
 				System.out.println("Assigned Access Token to Username: "
 						+ username + " with Access Token: " + accessToken);
-				userService.assignAccessToken(username, accessToken);
+				// userService.assignAccessToken(username, accessToken);
 
 				dataJSON.put("userAccessToken", accessToken);
 				dataJSON.put("isValid", "true");

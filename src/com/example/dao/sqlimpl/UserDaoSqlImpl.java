@@ -22,7 +22,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT COUNT(*) FROM user "
+			String query = "SELECT COUNT(*) FROM useraccountandinfo "
 					+ "WHERE username = ? AND password = ?";
 			PreparedStatement pstmt;
 
@@ -52,7 +52,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 		String hashedAccessToken = Hasher.hashString(accessToken);
 		Connection conn = getConnection();
 
-		String query = "UPDATE user SET accessToken = ? WHERE username = ?";
+		String query = "UPDATE useraccountandinfo SET accessToken = ? WHERE username = ?";
 		PreparedStatement pstmt;
 
 		try {

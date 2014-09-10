@@ -9,7 +9,7 @@ import com.example.exceptions.DataAccessException;
 public abstract class BaseDaoSqlImpl {
 
 	protected Connection getConnection() throws DataAccessException {
-		String url = "jdbc:mysql://localhost:3306/phr";
+		String url = "jdbc:mysql://localhost:3306/healthgem";
 		String username = "root";
 		String password = "";
 		Connection conn;
