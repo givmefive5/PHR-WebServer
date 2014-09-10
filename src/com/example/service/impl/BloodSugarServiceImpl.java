@@ -1,31 +1,29 @@
 package com.example.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import com.example.dao.BloodPressureDao;
+import com.example.dao.BloodSugarDao;
 import com.example.dao.UserDao;
-import com.example.exceptions.TrackerServiceException;
 import com.example.exceptions.DataAccessException;
-import com.example.model.BloodPressure;
-import com.example.service.BloodPressureService;
+import com.example.exceptions.TrackerServiceException;
+import com.example.model.BloodSugar;
+import com.example.service.BloodSugarService;
 
-@Service("bloodPressureService")
-public class BloodPressureServiceImpl implements BloodPressureService {
+public class BloodSugarServiceImpl implements BloodSugarService {
 
 	@Autowired
-	BloodPressureDao bloodPressureDao;
+	BloodSugarDao bloodSugarDao;
 
 	@Autowired
 	UserDao userDao;
 
 	@Override
-	public void addBloodPressure(String username, BloodPressure bloodPressure)
+	public void addBloodSugar(String username, BloodSugar bloodSugar)
 			throws TrackerServiceException {
 		try {
 			int userID = userDao.getUserIdGivenUsername(username);
-			bloodPressure.setUserID(userID);
-			bloodPressureDao.addBloodPressure(bloodPressure);
+			bloodSugar.setUserID(userID);
+			bloodSugarDao.addBloodSugar(bloodSugar);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new TrackerServiceException(
@@ -34,17 +32,18 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	}
 
 	@Override
-	public Integer getEntryID(BloodPressure bloodPressure)
+	public Integer getIdFromDatabase(BloodSugar bloodSugar)
 			throws TrackerServiceException {
-		if (bloodPressure.getUserID() != null)
-			return bloodPressure.getEntryID();
+		if (bloodSugar.getUserID() != null)
+			return bloodSugar.getEntryID();
 		else
 			try {
-				return bloodPressureDao.getIdFromDatabase(bloodPressure);
+				return bloodSugarDao.getIdFromDatabase(bloodSugar);
 			} catch (DataAccessException e) {
 				throw new TrackerServiceException(
 						"Error has occurred while adding a blood pressure entry",
 						e);
 			}
 	}
+
 }

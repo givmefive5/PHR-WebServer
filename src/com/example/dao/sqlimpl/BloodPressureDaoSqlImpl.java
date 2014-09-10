@@ -2,47 +2,32 @@ package com.example.dao.sqlimpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.dao.BloodPressureDao;
-import com.example.dao.UserDao;
 import com.example.exceptions.DataAccessException;
 import com.example.model.BloodPressure;
-import com.example.tools.EncryptionHandler;
 
 @Repository("bloodPressureDao")
 public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 		BloodPressureDao {
 
-	@Autowired
-	UserDao userDao;
-
 	@Override
-	public void addBloodPressure(String username, BloodPressure bloodPressure)
+	public void addBloodPressure(BloodPressure bloodPressure)
 			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO bloodpressure(systolic, diastolic, date, time, status, userID) VALUES (?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, datetime, status, userID) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			String encryptedSystolic = EncryptionHandler.encrypt(new Integer(
-					bloodPressure.getSystolic()).toString());
-			String encryptedDiastolic = EncryptionHandler.encrypt(new Integer(
-					bloodPressure.getDiastolic()).toString());
-			String encryptedStatus = EncryptionHandler.encrypt(bloodPressure
-					.getStatus());
-
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, encryptedSystolic);
-			pstmt.setString(2, encryptedDiastolic);
-			pstmt.setString(3, bloodPressure.getDate());
-
-			pstmt.setString(4, bloodPressure.getTime());
-			pstmt.setString(5, encryptedStatus);
-
-			pstmt.setInt(6, userDao.getUserIdGivenUsername(username));
+			pstmt.setInt(1, bloodPressure.getSystolic());
+			pstmt.setInt(2, bloodPressure.getDiastolic());
+			pstmt.setDate(3, bloodPressure.getDateAdded());
+			pstmt.setString(5, bloodPressure.getStatus());
+			pstmt.setInt(6, bloodPressure.getUserID());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -52,4 +37,28 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 		}
 	}
 
+	@Override
+	public Integer getIdFromDatabase(BloodPressure bloodPressure)
+			throws DataAccessException {
+
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id FROM bloodpressuretracker WHERE"
+					+ "userID = ?, datetime = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, bloodPressure.getUserID());
+			pstmt.setDate(2, bloodPressure.getDateAdded());
+
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			return rs.getInt(1);
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+
+	}
 }

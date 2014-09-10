@@ -1,11 +1,13 @@
 package com.example.service;
 
-import com.example.exceptions.BloodPressureServiceException;
+import com.example.exceptions.TrackerServiceException;
 import com.example.model.BloodPressure;
 
 public interface BloodPressureService {
 
-	void addBloodPressure(String username, BloodPressure bloodPressure)
-			throws BloodPressureServiceException;
+	public void addBloodPressure(String username, BloodPressure bloodPressure)
+			throws TrackerServiceException;
 
+	public Integer getEntryID(BloodPressure bloodPressure)
+			throws TrackerServiceException;
 }

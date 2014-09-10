@@ -5,7 +5,10 @@ import com.example.model.BloodPressure;
 
 public interface BloodPressureDao {
 
-	void addBloodPressure(String username, BloodPressure bloodPressure)
+	public void addBloodPressure(BloodPressure bloodPressure)
+			throws DataAccessException;
+
+	public Integer getIdFromDatabase(BloodPressure bloodPressure)
 			throws DataAccessException;
 
 }

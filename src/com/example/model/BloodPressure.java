@@ -1,22 +1,25 @@
 package com.example.model;
 
-public class BloodPressure {
-	// in millimeters of mercury
-	int id;
+import java.sql.Date;
+
+public class BloodPressure extends TrackerEntry {
+
 	int systolic;
 	int diastolic;
-	String date;
-	String time;
-	String status;
 
-	public BloodPressure(int systolic, int diastolic, String date, String time,
-			String status) {
-		super();
+	public BloodPressure(Integer entryID, Integer userID, Integer fbPostID,
+			Date dateAdded, String status, String encodedImage, int systolic,
+			int diastolic) {
+		super(entryID, userID, fbPostID, dateAdded, status, encodedImage);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
-		this.date = date;
-		this.time = time;
-		this.status = status;
+	}
+
+	public BloodPressure(Date dateAdded, String status, String encodedImage,
+			int systolic, int diastolic) {
+		super(dateAdded, status, encodedImage);
+		this.systolic = systolic;
+		this.diastolic = diastolic;
 	}
 
 	public int getSystolic() {
@@ -33,30 +36,6 @@ public class BloodPressure {
 
 	public void setDiastolic(int diastolic) {
 		this.diastolic = diastolic;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String time) {
-		this.time = time;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 }
