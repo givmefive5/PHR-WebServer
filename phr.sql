@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `activitytracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activitytracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
   `activityID` int(11) DEFAULT NULL,
   `calorieBurnedPerHour` int(11) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
@@ -82,7 +82,7 @@ DROP TABLE IF EXISTS `bloodpressuretracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bloodpressuretracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
   `systolic` varchar(100) DEFAULT NULL,
   `diastolic` varchar(100) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE `bloodpressuretracker` (
   `userID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `bpUserID` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,6 +100,7 @@ CREATE TABLE `bloodpressuretracker` (
 
 LOCK TABLES `bloodpressuretracker` WRITE;
 /*!40000 ALTER TABLE `bloodpressuretracker` DISABLE KEYS */;
+INSERT INTO `bloodpressuretracker` VALUES (7,'2014-09-11 00:00:00','0','0','ww',NULL,NULL,1);
 /*!40000 ALTER TABLE `bloodpressuretracker` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,7 +113,7 @@ DROP TABLE IF EXISTS `bloodsugartracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bloodsugartracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
   `bloodSugar` decimal(11,0) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,
@@ -142,7 +143,7 @@ DROP TABLE IF EXISTS `checkuptracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `checkuptracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
   `purpose` varchar(100) DEFAULT NULL,
   `doctorsName` varchar(100) DEFAULT NULL,
   `location` varchar(100) DEFAULT NULL,
@@ -205,7 +206,7 @@ DROP TABLE IF EXISTS `foodtracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `foodtracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
   `foodID` int(11) DEFAULT NULL,
   `servingCount` int(11) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
@@ -238,7 +239,7 @@ DROP TABLE IF EXISTS `notestracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notestracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
   `title` varchar(100) DEFAULT NULL,
   `notes` varchar(200) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
@@ -305,6 +306,7 @@ CREATE TABLE `useraccountandinfo` (
   `fbEmailAddress` varchar(45) DEFAULT NULL,
   `fbAccessToken` varchar(100) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,
+  `userAccessToken` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -315,7 +317,7 @@ CREATE TABLE `useraccountandinfo` (
 
 LOCK TABLES `useraccountandinfo` WRITE;
 /*!40000 ALTER TABLE `useraccountandinfo` DISABLE KEYS */;
-INSERT INTO `useraccountandinfo` VALUES (1,'admin','1234',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `useraccountandinfo` VALUES (1,'admin','1234',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'4e443873-82b1-428a-b8e6-3cf4c3e1378e');
 /*!40000 ALTER TABLE `useraccountandinfo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,7 +330,7 @@ DROP TABLE IF EXISTS `verifytable`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `verifytable` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `extractedWord` varchar(100) DEFAULT NULL,
   `category` varchar(100) DEFAULT NULL,
@@ -356,7 +358,7 @@ DROP TABLE IF EXISTS `weighttracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `weighttracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datetime` datetime DEFAULT NULL,
+  `dateAdded` datetime DEFAULT NULL,
   `weightInPounds` int(20) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,
@@ -386,4 +388,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-10 16:06:54
+-- Dump completed on 2014-09-11 23:02:28

@@ -49,15 +49,14 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	public void assignAccessToken(String username, String accessToken)
 			throws DataAccessException {
 
-		String hashedAccessToken = Hasher.hashString(accessToken);
 		Connection conn = getConnection();
 
-		String query = "UPDATE useraccountandinfo SET accessToken = ? WHERE username = ?";
+		String query = "UPDATE useraccountandinfo SET userAccessToken = ? WHERE username = ?";
 		PreparedStatement pstmt;
 
 		try {
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, hashedAccessToken);
+			pstmt.setString(1, accessToken);
 			pstmt.setString(2, username);
 			pstmt.executeUpdate();
 
@@ -79,7 +78,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 		else {
 			try {
 				Connection conn = getConnection();
-				String query = "INSERT INTO user(username, password) VALUES (?, ?)";
+				String query = "INSERT INTO useraccountandinfo(username, password) VALUES (?, ?)";
 				PreparedStatement pstmt;
 
 				String hashedPassword = Hasher.hashString(user.getPassword());
@@ -104,7 +103,8 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 		int count = 0;
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT COUNT(*) FROM user " + "WHERE username = ?";
+			String query = "SELECT COUNT(*) FROM useraccountandinfo "
+					+ "WHERE username = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -130,16 +130,14 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			throws DataAccessException {
 		int count = 0;
 
-		String hashedAccessToken = Hasher.hashString(accessToken);
-
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT COUNT(*) FROM user "
-					+ "WHERE accessToken = ? AND username = ?";
+			String query = "SELECT COUNT(*) FROM useraccountandinfo "
+					+ "WHERE userAccessToken = ? AND username = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, hashedAccessToken);
+			pstmt.setString(1, accessToken);
 			pstmt.setString(2, username);
 
 			ResultSet rs = pstmt.executeQuery();
@@ -162,7 +160,8 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id FROM user " + "WHERE username = ?";
+			String query = "SELECT userID FROM useraccountandinfo "
+					+ "WHERE username = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);

@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.dao.BloodPressureDao;
 import com.example.dao.UserDao;
-import com.example.exceptions.TrackerServiceException;
 import com.example.exceptions.DataAccessException;
+import com.example.exceptions.TrackerServiceException;
 import com.example.model.BloodPressure;
 import com.example.service.BloodPressureService;
 
@@ -36,7 +36,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	@Override
 	public Integer getEntryID(BloodPressure bloodPressure)
 			throws TrackerServiceException {
-		if (bloodPressure.getUserID() != null)
+		if (bloodPressure.getEntryID() != null)
 			return bloodPressure.getEntryID();
 		else
 			try {

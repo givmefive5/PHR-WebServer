@@ -19,15 +19,15 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, datetime, status, userID) VALUES (?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, dateAdded, status, userID) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, bloodPressure.getSystolic());
 			pstmt.setInt(2, bloodPressure.getDiastolic());
 			pstmt.setDate(3, bloodPressure.getDateAdded());
-			pstmt.setString(5, bloodPressure.getStatus());
-			pstmt.setInt(6, bloodPressure.getUserID());
+			pstmt.setString(4, bloodPressure.getStatus());
+			pstmt.setInt(5, bloodPressure.getUserID());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -43,8 +43,8 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id FROM bloodpressuretracker WHERE"
-					+ "userID = ?, datetime = ?";
+			String query = "SELECT id FROM bloodpressuretracker WHERE "
+					+ "userID = ? AND dateAdded = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
