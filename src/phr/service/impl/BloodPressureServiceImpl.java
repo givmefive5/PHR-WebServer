@@ -1,5 +1,7 @@
 package phr.service.impl;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 		try {
 			int userID = userDao.getUserIdGivenUsername(username);
 			bloodPressure.setUserID(userID);
-			bloodPressureDao.addBloodPressure(bloodPressure);
+			bloodPressureDao.add(bloodPressure);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new TrackerServiceException(
@@ -48,13 +50,20 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	}
 
 	@Override
-	public Integer getEntryID(BloodPressure bloodPressure)
+	public ArrayList<BloodPressure> getAll(String username)
+			throws TrackerServiceException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getEntryId(BloodPressure bloodPressure)
 			throws TrackerServiceException {
 		if (bloodPressure.getEntryID() != null)
 			return bloodPressure.getEntryID();
 		else
 			try {
-				return bloodPressureDao.getIdFromDatabase(bloodPressure);
+				return bloodPressureDao.getEntryId(bloodPressure);
 			} catch (DataAccessException e) {
 				throw new TrackerServiceException(
 						"Error has occurred while adding a blood pressure entry",

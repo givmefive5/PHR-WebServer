@@ -3,6 +3,7 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +16,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 		BloodPressureDao {
 
 	@Override
-	public void addBloodPressure(BloodPressure bloodPressure)
-			throws DataAccessException {
+	public void add(BloodPressure bloodPressure) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, dateAdded, status, userID) VALUES (?, ?, ?, ?, ?)";
@@ -38,7 +38,26 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public Integer getIdFromDatabase(BloodPressure bloodPressure)
+	public void edit(BloodPressure object) throws DataAccessException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(BloodPressure object) throws DataAccessException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ArrayList<BloodPressure> getAll(String username)
+			throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getEntryId(BloodPressure bloodPressure)
 			throws DataAccessException {
 
 		try {
@@ -52,8 +71,11 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setDate(2, bloodPressure.getDateAdded());
 
 			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			return rs.getInt(1);
+
+			if (rs.next())
+				return rs.getInt(1);
+			else
+				return null;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -61,4 +83,5 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 		}
 
 	}
+
 }

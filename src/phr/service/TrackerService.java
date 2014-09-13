@@ -1,5 +1,7 @@
 package phr.service;
 
+import java.util.ArrayList;
+
 import phr.exceptions.TrackerServiceException;
 
 public interface TrackerService<T> {
@@ -10,4 +12,8 @@ public interface TrackerService<T> {
 
 	public void delete(String username, T object)
 			throws TrackerServiceException;
+
+	public ArrayList<T> getAll(String username) throws TrackerServiceException;
+
+	public Integer getEntryId(T object) throws TrackerServiceException;
 }

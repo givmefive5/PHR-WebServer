@@ -1,5 +1,7 @@
 package phr.service.impl;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import phr.dao.BloodSugarDao;
@@ -18,30 +20,51 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	UserDao userDao;
 
 	@Override
-	public void addBloodSugar(String username, BloodSugar bloodSugar)
+	public void add(String username, BloodSugar bloodSugar)
 			throws TrackerServiceException {
 		try {
 			int userID = userDao.getUserIdGivenUsername(username);
 			bloodSugar.setUserID(userID);
-			bloodSugarDao.addBloodSugar(bloodSugar);
+			bloodSugarDao.add(bloodSugar);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new TrackerServiceException(
-					"Error has occurred while adding a blood pressure entry", e);
+					"Error has occurred while adding a blood sugar entry", e);
 		}
 	}
 
 	@Override
-	public Integer getIdFromDatabase(BloodSugar bloodSugar)
+	public void edit(String username, BloodSugar object)
+			throws TrackerServiceException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(String username, BloodSugar object)
+			throws TrackerServiceException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ArrayList<BloodSugar> getAll(String username)
+			throws TrackerServiceException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getEntryId(BloodSugar bloodSugar)
 			throws TrackerServiceException {
 		if (bloodSugar.getUserID() != null)
 			return bloodSugar.getEntryID();
 		else
 			try {
-				return bloodSugarDao.getIdFromDatabase(bloodSugar);
+				return bloodSugarDao.getEntryId(bloodSugar);
 			} catch (DataAccessException e) {
 				throw new TrackerServiceException(
-						"Error has occurred while adding a blood pressure entry",
+						"Error has occurred while adding a blood sugar entry",
 						e);
 			}
 	}
