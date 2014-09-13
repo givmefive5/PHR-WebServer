@@ -49,7 +49,7 @@ public class BloodPressureController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("bloodPressure"),
 								BloodPressure.class);
-				bloodPressureService.addBloodPressure(username, bloodPressure);
+				bloodPressureService.add(username, bloodPressure);
 				int entryID = bloodPressureService.getEntryID(bloodPressure);
 
 				JSONObject dataForResponse = new JSONObject();

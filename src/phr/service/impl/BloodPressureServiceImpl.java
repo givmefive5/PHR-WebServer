@@ -20,7 +20,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	UserDao userDao;
 
 	@Override
-	public void addBloodPressure(String username, BloodPressure bloodPressure)
+	public void add(String username, BloodPressure bloodPressure)
 			throws TrackerServiceException {
 		try {
 			int userID = userDao.getUserIdGivenUsername(username);
@@ -31,6 +31,20 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 			throw new TrackerServiceException(
 					"Error has occurred while adding a blood pressure entry", e);
 		}
+	}
+
+	@Override
+	public void edit(String username, BloodPressure object)
+			throws TrackerServiceException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(String username, BloodPressure object)
+			throws TrackerServiceException {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -47,4 +61,5 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 						e);
 			}
 	}
+
 }

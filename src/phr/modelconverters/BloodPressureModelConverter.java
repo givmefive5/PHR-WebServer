@@ -3,13 +3,19 @@ package phr.modelconverters;
 import phr.mobile.models.MobileBloodPressure;
 import phr.web.models.BloodPressure;
 
-public class BloodPressureModelConverter {
+public class BloodPressureModelConverter extends
+		ModelConverter<BloodPressure, MobileBloodPressure> {
 
-	public static MobileBloodPressure convertWebToMobile(BloodPressure bp){
+	@Override
+	public MobileBloodPressure convertFromWebToMobile(BloodPressure webModel) {
+		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public static BloodPressure convertMobileToWeb(MobileBloodPressure mbp){
+
+	@Override
+	public BloodPressure convertFromMobileToWeb(MobileBloodPressure mobileModel) {
+		// TODO Auto-generated method stub
 		return null;
 	}
+
 }
