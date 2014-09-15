@@ -1,4 +1,4 @@
-package phr.dao.sqlimpl;
+package phr.sns.datamining.daoimpl;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import phr.corpus.models.Activity;
 import phr.corpus.models.Food;
 import phr.corpus.models.Restaurant;
 import phr.corpus.models.SportsEstablishment;
-import phr.dao.HealthCorpusDao;
+import phr.sns.datamining.dao.HealthCorpusDao;
 
 @Repository("healthCorpusDao")
 public class HealthCorpusDaoImpl implements HealthCorpusDao {

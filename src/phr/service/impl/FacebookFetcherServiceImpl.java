@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import phr.dao.FacebookFetcherDao;
 import phr.service.FacebookFetcherService;
+import phr.sns.datamining.dao.FacebookFetcherDao;
 import phr.web.models.FBPost;
 import facebook4j.FacebookException;
 

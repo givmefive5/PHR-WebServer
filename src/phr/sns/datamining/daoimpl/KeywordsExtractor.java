@@ -1,4 +1,4 @@
-package phr.dao.sqlimpl;
+package phr.sns.datamining.daoimpl;
 
 import java.util.ArrayList;
 

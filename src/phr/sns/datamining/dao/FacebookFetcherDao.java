@@ -1,4 +1,4 @@
-package phr.dao;
+package phr.sns.datamining.dao;
 
 import java.io.IOException;
 import java.util.ArrayList;

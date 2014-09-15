@@ -45,4 +45,10 @@ public class ImageHandler {
 		String encodedImage = new String(base64.encode(baos.toByteArray()));
 		return encodedImage;
 	}
+
+	public static String saveImage_ReturnFilePath(String encodedImage) {
+		String filePath = null;
+		// TO-DO
+		return filePath;
+	}
 }

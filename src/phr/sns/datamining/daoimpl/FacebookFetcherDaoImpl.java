@@ -1,4 +1,4 @@
-package phr.dao.sqlimpl;
+package phr.sns.datamining.daoimpl;
 
 import java.awt.Image;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
 
-import phr.dao.FacebookFetcherDao;
+import phr.sns.datamining.dao.FacebookFetcherDao;
 import phr.tools.ImageHandler;
 import phr.web.models.FBPost;
 import phr.web.models.PostType;
