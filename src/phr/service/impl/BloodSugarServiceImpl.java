@@ -3,6 +3,7 @@ package phr.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import phr.dao.BloodSugarDao;
 import phr.dao.UserDao;
@@ -12,6 +13,7 @@ import phr.service.BloodSugarService;
 import phr.web.models.BloodSugar;
 import phr.web.models.User;
 
+@Service("bloodSugarService")
 public class BloodSugarServiceImpl implements BloodSugarService {
 
 	@Autowired
