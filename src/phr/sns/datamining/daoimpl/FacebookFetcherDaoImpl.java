@@ -1,11 +1,12 @@
 package phr.sns.datamining.daoimpl;
 
 import java.awt.Image;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
 
+import phr.exceptions.DataAccessException;
+import phr.exceptions.ImageHandlerException;
 import phr.sns.datamining.dao.FacebookFetcherDao;
 import phr.tools.ImageHandler;
 import phr.web.models.FBPost;
@@ -20,12 +21,14 @@ import facebook4j.auth.AccessToken;
 @Repository("facebookFetcherDao")
 public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
+	ImageHandler imageHandler = new ImageHandler();
+
 	private static final String appID = "458502710946706";
 	private static final String appSecret = "c41ccfbd5ff58c87342f4df5911d2d88";
 
 	@Override
 	public ArrayList<FBPost> getAllPosts(String userAccessToken)
-			throws FacebookException, IOException {
+			throws DataAccessException {
 		Facebook facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId(appID, appSecret);
 		String permissions = "email,user_groups,user_status,read_stream";
@@ -40,15 +43,15 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			ResponseList<Post> feed = facebook.getPosts();
 			posts = getPostsList(feed);
 
-		} catch (FacebookException e) {
-			e.printStackTrace();
-			throw e;
+		} catch (FacebookException | ImageHandlerException e) {
+			throw new DataAccessException(
+					"An error has occured while retrieving posts", e);
 		}
 		return posts;
 	}
 
 	private ArrayList<FBPost> getPostsList(ResponseList<Post> feed)
-			throws IOException {
+			throws ImageHandlerException {
 
 		ArrayList<FBPost> posts = new ArrayList<>();
 
@@ -57,9 +60,9 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				FBPost post;
 				String encodedImage = null;
 				if (p.getPicture() != null) {
-					Image imageFromPost = ImageHandler.getImageFromURL(p
+					Image imageFromPost = imageHandler.getImageFromURL(p
 							.getPicture());
-					encodedImage = ImageHandler
+					encodedImage = imageHandler
 							.encodeImageToBase64(imageFromPost);
 				}
 				String[] extractedWords;

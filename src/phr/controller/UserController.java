@@ -1,5 +1,6 @@
 package phr.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import phr.exceptions.DataAccessException;
+import phr.exceptions.ImageHandlerException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.service.UserService;
 import phr.tools.GSONConverter;
+import phr.tools.ImageHandler;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
 import phr.tools.UUIDGenerator;
@@ -29,6 +32,23 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+
+	ImageHandler imageHandler = new ImageHandler();
+
+	@RequestMapping(value = "/test", method = RequestMethod.POST)
+	public void test(HttpServletRequest request) {
+		System.out.println(request.getServletContext().getContextPath());
+		String imageSource = "tower_bridge_at_night-1920x1080.jpg";
+		String encodedImage;
+		try {
+			encodedImage = imageHandler.getEncodedImageFromFile(imageSource);
+			System.out.println(encodedImage);
+		} catch (FileNotFoundException | ImageHandlerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	@RequestMapping(value = "/user/validateLogin", method = RequestMethod.POST)
 	public void validateLogin(HttpServletRequest request,

@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form method="POST" action="user/validateLogin">
+	<form method="POST" action="test">
 		<input type="submit"/>
 	</form>
 </body>

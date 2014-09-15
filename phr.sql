@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `healthgem` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `healthgem`;
--- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
 --
 -- Host: localhost    Database: healthgem
 -- ------------------------------------------------------
--- Server version	5.6.17
+-- Server version	5.6.19
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -359,7 +359,7 @@ DROP TABLE IF EXISTS `weighttracker`;
 CREATE TABLE `weighttracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dateAdded` datetime DEFAULT NULL,
-  `weightInPounds` int(20) DEFAULT NULL,
+  `weightInPounds` double DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,
   `fbPostID` int(11) DEFAULT NULL,
@@ -388,4 +388,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-11 23:02:28
+-- Dump completed on 2014-09-15 14:58:10

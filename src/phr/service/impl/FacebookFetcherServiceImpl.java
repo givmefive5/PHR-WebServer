@@ -1,15 +1,15 @@
 package phr.service.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import phr.exceptions.DataAccessException;
+import phr.exceptions.SNSException;
 import phr.service.FacebookFetcherService;
 import phr.sns.datamining.dao.FacebookFetcherDao;
 import phr.web.models.FBPost;
-import facebook4j.FacebookException;
 
 @Service("facebookFetcherService")
 public class FacebookFetcherServiceImpl implements FacebookFetcherService {
@@ -19,9 +19,13 @@ public class FacebookFetcherServiceImpl implements FacebookFetcherService {
 
 	@Override
 	public ArrayList<FBPost> getAllPosts(String userAccessToken)
-			throws FacebookException, IOException {
+			throws SNSException {
 		// TODO Auto-generated method stub
-		return facebookFetcherDao.getAllPosts(userAccessToken);
+		try {
+			return facebookFetcherDao.getAllPosts(userAccessToken);
+		} catch (DataAccessException e) {
+			throw new SNSException("An error has occured", e);
+		}
 	}
 
 	@Override

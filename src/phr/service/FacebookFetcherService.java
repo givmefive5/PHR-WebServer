@@ -1,15 +1,14 @@
 package phr.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
+import phr.exceptions.SNSException;
 import phr.web.models.FBPost;
-import facebook4j.FacebookException;
 
 public interface FacebookFetcherService {
 
 	public ArrayList<FBPost> getAllPosts(String userAccessToken)
-			throws FacebookException, IOException;
+			throws SNSException;
 
 	public ArrayList<FBPost> getFoodRelatedPosts(String userAccessToken);
 

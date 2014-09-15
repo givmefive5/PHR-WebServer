@@ -1,15 +1,14 @@
 package phr.sns.datamining.dao;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
+import phr.exceptions.DataAccessException;
 import phr.web.models.FBPost;
-import facebook4j.FacebookException;
 
 public interface FacebookFetcherDao {
 
 	public ArrayList<FBPost> getAllPosts(String userAccessToken)
-			throws FacebookException, IOException;
+			throws DataAccessException;
 
 	public ArrayList<FBPost> getFoodRelatedPosts(String userAccessToken);
 
