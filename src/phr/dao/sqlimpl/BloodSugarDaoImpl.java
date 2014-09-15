@@ -2,10 +2,13 @@ package phr.dao.sqlimpl;
 
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Repository;
+
 import phr.dao.BloodSugarDao;
 import phr.exceptions.DataAccessException;
 import phr.web.models.BloodSugar;
 
+@Repository("bloodSugar")
 public class BloodSugarDaoImpl implements BloodSugarDao {
 
 	@Override
