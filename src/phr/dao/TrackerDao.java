@@ -12,6 +12,8 @@ public interface TrackerDao<T> {
 
 	public void delete(T object) throws DataAccessException;
 
+	public T get(Integer entryID) throws DataAccessException;
+
 	public ArrayList<T> getAll(String username) throws DataAccessException;
 
 	public Integer getEntryId(T object) throws DataAccessException;

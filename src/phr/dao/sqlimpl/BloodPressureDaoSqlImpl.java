@@ -52,6 +52,12 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
+	public BloodPressure get(Integer entryID) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public ArrayList<BloodPressure> getAll(String username)
 			throws DataAccessException {
 		// TODO Auto-generated method stub

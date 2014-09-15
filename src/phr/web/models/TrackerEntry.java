@@ -9,63 +9,63 @@ public abstract class TrackerEntry {
 	FBPost fbPost;
 	Date dateAdded;
 	String status;
-	String encodedImage;
+	String imageFilePath;
 
 	public TrackerEntry(Integer entryID, User user, FBPost fbPost,
-			Date dateAdded, String status, String encodedImage) {
+			Date dateAdded, String status, String imageFilePath) {
 		super();
 		this.entryID = entryID;
 		this.user = user;
 		this.fbPost = fbPost;
 		this.dateAdded = dateAdded;
 		this.status = status;
-		this.encodedImage = encodedImage;
+		this.imageFilePath = imageFilePath;
 	}
 
 	public TrackerEntry(User user, FBPost fbPost, Date dateAdded,
-			String status, String encodedImage) {
+			String status, String imageFilePath) {
 		super();
 		this.user = user;
 		this.fbPost = fbPost;
 		this.dateAdded = dateAdded;
 		this.status = status;
-		this.encodedImage = encodedImage;
+		this.imageFilePath = imageFilePath;
 	}
 
 	public TrackerEntry(Integer entryID, FBPost fbPost, Date dateAdded,
-			String status, String encodedImage) {
+			String status, String imageFilePath) {
 		super();
 		this.entryID = entryID;
 		this.fbPost = fbPost;
 		this.dateAdded = dateAdded;
 		this.status = status;
-		this.encodedImage = encodedImage;
+		this.imageFilePath = imageFilePath;
 	}
 
 	public TrackerEntry(Integer entryID, User user, Date dateAdded,
-			String status, String encodedImage) {
+			String status, String imageFilePath) {
 		super();
 		this.entryID = entryID;
 		this.user = user;
 		this.dateAdded = dateAdded;
 		this.status = status;
-		this.encodedImage = encodedImage;
+		this.imageFilePath = imageFilePath;
 	}
 
 	public TrackerEntry(FBPost fbPost, Date dateAdded, String status,
-			String encodedImage) {
+			String imageFilePath) {
 		super();
 		this.fbPost = fbPost;
 		this.dateAdded = dateAdded;
 		this.status = status;
-		this.encodedImage = encodedImage;
+		this.imageFilePath = imageFilePath;
 	}
 
-	public TrackerEntry(Date dateAdded, String status, String encodedImage) {
+	public TrackerEntry(Date dateAdded, String status, String imageFilePath) {
 		super();
 		this.dateAdded = dateAdded;
 		this.status = status;
-		this.encodedImage = encodedImage;
+		this.imageFilePath = imageFilePath;
 	}
 
 	public Integer getEntryID() {
@@ -108,12 +108,12 @@ public abstract class TrackerEntry {
 		this.status = status;
 	}
 
-	public String getEncodedImage() {
-		return encodedImage;
+	public String getImageFilePath() {
+		return imageFilePath;
 	}
 
-	public void setEncodedImage(String encodedImage) {
-		this.encodedImage = encodedImage;
+	public void setImageFilePath(String imageFilePath) {
+		this.imageFilePath = imageFilePath;
 	}
 
 	public int getUserID() {

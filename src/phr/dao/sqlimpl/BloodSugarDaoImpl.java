@@ -30,6 +30,12 @@ public class BloodSugarDaoImpl implements BloodSugarDao {
 	}
 
 	@Override
+	public BloodSugar get(Integer entryID) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public ArrayList<BloodSugar> getAll(String username)
 			throws DataAccessException {
 		// TODO Auto-generated method stub

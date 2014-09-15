@@ -30,6 +30,12 @@ public class WeightDaoImpl implements WeightDao {
 	}
 
 	@Override
+	public Weight get(Integer entryID) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public ArrayList<Weight> getAll(String username) throws DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
