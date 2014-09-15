@@ -10,6 +10,7 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.TrackerServiceException;
 import phr.service.BloodSugarService;
 import phr.web.models.BloodSugar;
+import phr.web.models.User;
 
 public class BloodSugarServiceImpl implements BloodSugarService {
 
@@ -24,7 +25,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 			throws TrackerServiceException {
 		try {
 			int userID = userDao.getUserIdGivenUsername(username);
-			bloodSugar.setUserID(userID);
+			bloodSugar.setUser(new User(userID));
 			bloodSugarDao.add(bloodSugar);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -57,7 +58,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	@Override
 	public Integer getEntryId(BloodSugar bloodSugar)
 			throws TrackerServiceException {
-		if (bloodSugar.getUserID() != null)
+		if (bloodSugar.getUser() != null)
 			return bloodSugar.getEntryID();
 		else
 			try {

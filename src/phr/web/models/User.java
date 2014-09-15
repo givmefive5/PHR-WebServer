@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
 @Entity
 public class User {
 
-	private long id;
+	private int id;
 	private String username;
 	private String password;
 	private String name;
@@ -21,6 +21,11 @@ public class User {
 
 	public User() {
 		super();
+	}
+
+	public User(int id) {
+		super();
+		this.id = id;
 	}
 
 	public User(String username, String password) {
@@ -37,7 +42,7 @@ public class User {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public User(long id, String username, String password, String name,
+	public User(int id, String username, String password, String name,
 			Date dateOfBirth) {
 		super();
 		this.id = id;
@@ -50,11 +55,11 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(nullable = false)
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

@@ -11,6 +11,7 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.TrackerServiceException;
 import phr.service.BloodPressureService;
 import phr.web.models.BloodPressure;
+import phr.web.models.User;
 
 @Service("bloodPressureService")
 public class BloodPressureServiceImpl implements BloodPressureService {
@@ -26,7 +27,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 			throws TrackerServiceException {
 		try {
 			int userID = userDao.getUserIdGivenUsername(username);
-			bloodPressure.setUserID(userID);
+			bloodPressure.setUser(new User(userID));
 			bloodPressureDao.add(bloodPressure);
 		} catch (DataAccessException e) {
 			e.printStackTrace();

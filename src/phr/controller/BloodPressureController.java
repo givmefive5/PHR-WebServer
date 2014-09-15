@@ -50,7 +50,7 @@ public class BloodPressureController {
 								data.getJSONObject("bloodPressure"),
 								BloodPressure.class);
 				bloodPressureService.add(username, bloodPressure);
-				int entryID = bloodPressureService.getEntryID(bloodPressure);
+				int entryID = bloodPressureService.getEntryId(bloodPressure);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);

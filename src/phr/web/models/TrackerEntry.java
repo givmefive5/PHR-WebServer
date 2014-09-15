@@ -5,18 +5,57 @@ import java.sql.Date;
 public abstract class TrackerEntry {
 
 	Integer entryID;
-	Integer userID;
-	Integer fbPostID;
+	User user;
+	FBPost fbPost;
 	Date dateAdded;
 	String status;
 	String encodedImage;
 
-	public TrackerEntry(Integer entryID, Integer userID, Integer fbPostID,
+	public TrackerEntry(Integer entryID, User user, FBPost fbPost,
 			Date dateAdded, String status, String encodedImage) {
 		super();
 		this.entryID = entryID;
-		this.userID = userID;
-		this.fbPostID = fbPostID;
+		this.user = user;
+		this.fbPost = fbPost;
+		this.dateAdded = dateAdded;
+		this.status = status;
+		this.encodedImage = encodedImage;
+	}
+
+	public TrackerEntry(User user, FBPost fbPost, Date dateAdded,
+			String status, String encodedImage) {
+		super();
+		this.user = user;
+		this.fbPost = fbPost;
+		this.dateAdded = dateAdded;
+		this.status = status;
+		this.encodedImage = encodedImage;
+	}
+
+	public TrackerEntry(Integer entryID, FBPost fbPost, Date dateAdded,
+			String status, String encodedImage) {
+		super();
+		this.entryID = entryID;
+		this.fbPost = fbPost;
+		this.dateAdded = dateAdded;
+		this.status = status;
+		this.encodedImage = encodedImage;
+	}
+
+	public TrackerEntry(Integer entryID, User user, Date dateAdded,
+			String status, String encodedImage) {
+		super();
+		this.entryID = entryID;
+		this.user = user;
+		this.dateAdded = dateAdded;
+		this.status = status;
+		this.encodedImage = encodedImage;
+	}
+
+	public TrackerEntry(FBPost fbPost, Date dateAdded, String status,
+			String encodedImage) {
+		super();
+		this.fbPost = fbPost;
 		this.dateAdded = dateAdded;
 		this.status = status;
 		this.encodedImage = encodedImage;
@@ -37,20 +76,20 @@ public abstract class TrackerEntry {
 		this.entryID = entryID;
 	}
 
-	public Integer getUserID() {
-		return userID;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserID(Integer userID) {
-		this.userID = userID;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public Integer getFbPostID() {
-		return fbPostID;
+	public FBPost getFbPost() {
+		return fbPost;
 	}
 
-	public void setFbPostID(Integer fbPostID) {
-		this.fbPostID = fbPostID;
+	public void setFbPost(FBPost fbPost) {
+		this.fbPost = fbPost;
 	}
 
 	public Date getDateAdded() {
@@ -77,4 +116,7 @@ public abstract class TrackerEntry {
 		this.encodedImage = encodedImage;
 	}
 
+	public int getUserID() {
+		return user.getId();
+	}
 }
