@@ -2,22 +2,30 @@ package phr.mobile.models;
 
 import java.sql.Date;
 
+import phr.web.models.FBPost;
+
 public class MobileBloodPressure extends MobileTrackerEntry {
 
 	int systolic;
 	int diastolic;
-	
-	public MobileBloodPressure(Integer entryID, Integer fbPostID,
-			Date dateAdded, String status, String encodedImage, int systolic,
-			int diastolic) {
-		super(entryID, fbPostID, dateAdded, status, encodedImage);
+
+	public MobileBloodPressure(Integer entryID, FBPost fbPost, Date dateAdded,
+			String status, String encodedImage, int systolic, int diastolic) {
+		super(entryID, fbPost, dateAdded, status, encodedImage);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 	}
 
-	public MobileBloodPressure(Integer fbPostID, Date dateAdded, String status,
+	public MobileBloodPressure(FBPost fbPost, Date dateAdded, String status,
 			String encodedImage, int systolic, int diastolic) {
-		super(fbPostID, dateAdded, status, encodedImage);
+		super(fbPost, dateAdded, status, encodedImage);
+		this.systolic = systolic;
+		this.diastolic = diastolic;
+	}
+
+	public MobileBloodPressure(Integer entryID, Date dateAdded, String status,
+			String encodedImage, int systolic, int diastolic) {
+		super(entryID, dateAdded, status, encodedImage);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 	}

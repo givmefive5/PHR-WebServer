@@ -39,14 +39,16 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 	@Override
 	public void edit(BloodPressure object) throws DataAccessException {
-		// TODO Auto-generated method stub
-
+		// find entry with id object.getEntryID();
+		// Set all fields of that entry to the values in the object.
+		// Throw EntryNotFoundException if the entryID was not found from DB
 	}
 
 	@Override
 	public void delete(BloodPressure object) throws DataAccessException {
-		// TODO Auto-generated method stub
-
+		// find entry with id object.getEntryID();
+		// Delete that entry from db.
+		// Throw EntryNotFoundException if the entryID was not found from DB
 	}
 
 	@Override

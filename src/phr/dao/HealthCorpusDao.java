@@ -2,13 +2,18 @@ package phr.dao;
 
 import java.util.List;
 
+import phr.corpus.models.Activity;
+import phr.corpus.models.Food;
+import phr.corpus.models.Restaurant;
+import phr.corpus.models.SportsEstablishment;
+
 public interface HealthCorpusDao {
 
-	List<String> getFoodWords();
+	List<Food> getFoodWords();
 
-	List<String> getActivityWords();
+	List<Activity> getActivityWords();
 
-	List<String> getRestaurantNames();
+	List<Restaurant> getRestaurantNames();
 
-	List<String> getSportsEstablishmentNames();
+	List<SportsEstablishment> getSportsEstablishmentNames();
 }
