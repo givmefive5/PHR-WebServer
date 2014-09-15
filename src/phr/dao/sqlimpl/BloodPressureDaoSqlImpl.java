@@ -19,7 +19,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	public void add(BloodPressure bloodPressure) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, dateAdded, status, userID) VALUES (?, ?, ?, ?, ?)";
+			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -28,6 +28,9 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setDate(3, bloodPressure.getDateAdded());
 			pstmt.setString(4, bloodPressure.getStatus());
 			pstmt.setInt(5, bloodPressure.getUserID());
+			if (bloodPressure.getFbPost() != null)
+				pstmt.setInt(6, bloodPressure.getFbPost().getId());
+			pstmt.setString(7, bloodPressure.getImageFilePath());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {

@@ -2,15 +2,6 @@ package phr.web.models;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-@Entity
 public class User {
 
 	private int id;
@@ -52,9 +43,6 @@ public class User {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
 	public int getId() {
 		return id;
 	}
@@ -63,7 +51,6 @@ public class User {
 		this.id = id;
 	}
 
-	@Column(nullable = false)
 	public String getUsername() {
 		return username;
 	}
@@ -72,7 +59,6 @@ public class User {
 		this.username = username;
 	}
 
-	@Column(nullable = false)
 	public String getPassword() {
 		return password;
 	}
@@ -81,7 +67,6 @@ public class User {
 		this.password = password;
 	}
 
-	@Column(nullable = false)
 	public String getName() {
 		return name;
 	}
@@ -90,8 +75,6 @@ public class User {
 		this.name = name;
 	}
 
-	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
 	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}

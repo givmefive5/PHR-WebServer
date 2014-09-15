@@ -4,20 +4,40 @@ import java.util.Date;
 
 public class FBPost {
 
+	public Integer id;
 	public String status;
 	public Date datetime;
 	public PostType postType;
-	public String encodedImage;
+	public String imageFilePath;
 	public String[] extractedWords;
 
+	public FBPost(Integer id, String status, Date datetime, PostType postType,
+			String imageFilePath, String[] extractedWords) {
+		super();
+		this.id = id;
+		this.status = status;
+		this.datetime = datetime;
+		this.postType = postType;
+		this.imageFilePath = imageFilePath;
+		this.extractedWords = extractedWords;
+	}
+
 	public FBPost(String status, Date datetime, PostType postType,
-			String encodedImage, String[] extractedWords) {
+			String imageFilePath, String[] extractedWords) {
 		super();
 		this.status = status;
 		this.datetime = datetime;
 		this.postType = postType;
-		this.encodedImage = encodedImage;
+		this.imageFilePath = imageFilePath;
 		this.extractedWords = extractedWords;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getStatus() {
@@ -44,12 +64,12 @@ public class FBPost {
 		this.postType = postType;
 	}
 
-	public String getEncodedImage() {
-		return encodedImage;
+	public String getImageFilePath() {
+		return imageFilePath;
 	}
 
-	public void setEncodedImage(String encodedImage) {
-		this.encodedImage = encodedImage;
+	public void setImageFilePath(String imageFilePath) {
+		this.imageFilePath = imageFilePath;
 	}
 
 	public String[] getExtractedWords() {
