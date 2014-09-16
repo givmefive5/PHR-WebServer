@@ -19,6 +19,7 @@ import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.service.UserService;
 import phr.tools.GSONConverter;
+import phr.tools.ImageHandler;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
 import phr.tools.UUIDGenerator;
@@ -29,6 +30,13 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+
+	ImageHandler imageHandler = new ImageHandler();
+
+	@RequestMapping("/test")
+	public void test() {
+		imageHandler.saveImage_ReturnFilePath(null);
+	}
 
 	@RequestMapping(value = "/user/validateLogin", method = RequestMethod.POST)
 	public void validateLogin(HttpServletRequest request,

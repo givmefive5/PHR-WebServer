@@ -83,15 +83,19 @@ public class ImageHandler {
 	}
 
 	public String saveImage_ReturnFilePath(String encodedImage) {
-		String filePath = null;
-		return filePath;
+		long time = TimestampHandler.getCurrentTimestamp().getTime();
+
+		System.out.println(Math.floor(Math.log10(time) + 1));
+		System.out.println(UUIDGenerator.generateUniqueString().length());
+		return null;
 	}
 
 	public String getEncodedImageFromFile(String imageSource)
 			throws FileNotFoundException, ImageHandlerException {
 		String basePath = "D://PHRFiles/images/";
 		File folder = new File(basePath);
-		System.out.println(folder.exists());
+		if (!folder.exists())
+			folder.mkdir();
 		try {
 			BufferedImage bufferedImage = ImageIO.read(Files
 					.newInputStream(Paths.get(basePath + imageSource)));
