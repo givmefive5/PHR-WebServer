@@ -1,7 +1,6 @@
 package phr.web.models;
 
 import java.sql.Timestamp;
-import java.sql.Timestamp;
 
 public abstract class TrackerEntry {
 

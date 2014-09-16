@@ -1,6 +1,5 @@
 package phr.web.models;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class BloodSugar extends TrackerEntry {

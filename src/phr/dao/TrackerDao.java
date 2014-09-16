@@ -13,7 +13,7 @@ public interface TrackerDao<T> {
 
 	public void delete(T object) throws DataAccessException, EntryNotFoundException;
 
-	public T get(Integer entryID) throws DataAccessException;
+	public T get(int entryID) throws DataAccessException;
 	
 	public Integer getUserID(String userAccessToken) throws DataAccessException, EntryNotFoundException;
 

@@ -11,6 +11,8 @@ import phr.dao.BloodPressureDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.web.models.BloodPressure;
+import phr.web.models.FBPost;
+import phr.web.models.User;
 
 @Repository("bloodPressureDao")
 public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
@@ -45,10 +47,6 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 	@Override
 	public void edit(BloodPressure object) throws DataAccessException, EntryNotFoundException {
-		// find entry with id object.getEntryID();
-		// Set all fields of that entry to the values in the object.
-		// Throw EntryNotFoundException if the entryID was not found from DB
-		
 		try{
 			Connection conn = getConnection();
 			String query = "UPDATE bloodpressuretracker SET systolic = ?, diastolic = ?, dateAdded = ?, status=?, photo=?" +
@@ -72,10 +70,6 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 	@Override
 	public void delete(BloodPressure object) throws DataAccessException, EntryNotFoundException {
-		// find entry with id object.getEntryID();
-		// Delete that entry from db.
-		// Throw EntryNotFoundException if the entryID was not found from DB
-		
 		try{
 			Connection conn = getConnection();
 			String query = "DELETE FROM bloodpressuretracker WHERE id = ?";
@@ -84,15 +78,16 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, object.getEntryID());
 			
+			pstmt.executeUpdate();
+			
 		}catch (Exception e){
 			throw new EntryNotFoundException("Object ID not found in the database", e);
 		}
 	}
 
 	@Override
-	public BloodPressure get(Integer entryID) throws DataAccessException {
+	public BloodPressure get(int entryID) throws DataAccessException {
 		try{
-			
 			Connection conn = getConnection();
 			String query = "SELECT * FROM bloodpressure WHERE id = ?";
 			
@@ -100,20 +95,33 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, entryID);
 			
+			ResultSet rs = pstmt.executeQuery();
+			
+			//have to check if this is correct
+			if (rs.next())
+				return new BloodPressure(
+						rs.getInt("id"),
+						new User(rs.getInt("UserID")),
+						new FBPost(rs.getInt("fbPostID")),
+						rs.getTimestamp("dateAdded"),
+						rs.getString("status"),
+						rs.getString("photo"),
+						rs.getInt("systolic"),
+						rs.getInt("diastolic"));			
+			else
+				return null;
+			
 			
 		}catch (Exception e){
 			throw new DataAccessException (
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
-		return null;
 	}
 	
 	@Override
 	public Integer getUserID(String userAccessToken) throws DataAccessException, EntryNotFoundException {
 		try{
-			
 			Connection conn = getConnection();
 			String query = "SELECT id FROM useraccountandinfo WHERE userAccessToken = ?";
 			
@@ -136,23 +144,33 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	@Override
 	public ArrayList<BloodPressure> getAll(String userAccessToken)
 			throws DataAccessException {
+		
+		 ArrayList<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
 		try{
 			Connection conn = getConnection();
-			String query = "SELECT * FROM bloodpressuretracker WHERE userID = ?";
+			String query = "SELECT fbPostID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
 			
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, getUserID(userAccessToken));
 			
 			ResultSet rs = pstmt.executeQuery();
-			// add result in BloodPressure object then add to the arrayLIst
-			
+			 while (rs.next()) {
+				 bloodpressures.add(new BloodPressure(
+						 new FBPost(rs.getInt("fbPostID")),
+						 rs.getTimestamp("dateAdded"), 
+						 rs.getString("status"), 
+						 rs.getString("photo"),
+						 rs.getInt("systolic"),
+						 rs.getInt("diastolic")
+						 ));
+			 }
 		}catch (Exception e){
 			throw new DataAccessException("An error has occured while trying to access data from the database",
 					e);
 		}
 		
-		return null;
+		return bloodpressures;
 	}
 
 	@Override

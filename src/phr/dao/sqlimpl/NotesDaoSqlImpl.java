@@ -1,36 +1,91 @@
 package phr.dao.sqlimpl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import phr.web.models.FBPost;
 import phr.web.models.Note;
 import phr.dao.NotesDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 
-public class NotesDaoSqlImpl implements NotesDao {
+public class NotesDaoSqlImpl extends BaseDaoSqlImpl implements NotesDao {
 
 	@Override
-	public void add(Note object) throws DataAccessException {
-		// TODO Auto-generated method stub
+	public void add(Note note) throws DataAccessException {
+		try {
+			Connection conn = getConnection();
+			String query = "INSERT INTO notestracker (title, note, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, note.getTitle());
+			pstmt.setString(2, note.getNote());
+			pstmt.setTimestamp(3, note.getTimestamp());
+			pstmt.setString(4, note.getStatus());
+			pstmt.setInt(5, note.getUserID());
+			if (note.getFbPost() != null)
+				pstmt.setInt(6, note.getFbPost().getId());
+			else
+				pstmt.setInt(6, -1);
+			pstmt.setString(7, note.getImageFilePath());
+
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 		
 	}
 
 	@Override
-	public void edit(Note object) throws DataAccessException,
+	public void edit(Note note) throws DataAccessException,
 			EntryNotFoundException {
-		// TODO Auto-generated method stub
-		
+		try{
+			Connection conn = getConnection();
+			String query = "UPDATE notestracker SET title = ?, note = ?, dateAdded = ?, status=?, photo=?" +
+							"WHERE id = ?";
+			
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, note.getTitle());
+			pstmt.setString(2, note.getNote());
+			pstmt.setTimestamp(3, note.getTimestamp());
+			pstmt.setString(4, note.getStatus());
+			pstmt.setString(5, note.getImageFilePath());
+			pstmt.setInt(6, note.getEntryID());
+
+			pstmt.executeUpdate();
+			
+		}catch (Exception e){
+			throw new EntryNotFoundException("Object ID not found in the database", e);
+		}
 	}
 
 	@Override
-	public void delete(Note object) throws DataAccessException,
+	public void delete(Note note) throws DataAccessException,
 			EntryNotFoundException {
-		// TODO Auto-generated method stub
+		try{
+			Connection conn = getConnection();
+			String query = "DELETE FROM notestracker WHERE id = ?";
+			
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, note.getEntryID());
+			
+			pstmt.executeUpdate();
+			
+		}catch (Exception e){
+			throw new EntryNotFoundException("Object ID not found in the database", e);
+		}
 		
 	}
 
 	@Override
-	public Note get(Integer entryID) throws DataAccessException {
+	public Note get(int entryID) throws DataAccessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -38,21 +93,79 @@ public class NotesDaoSqlImpl implements NotesDao {
 	@Override
 	public Integer getUserID(String userAccessToken)
 			throws DataAccessException, EntryNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		try{
+			Connection conn = getConnection();
+			String query = "SELECT id FROM useraccountandinfo WHERE userAccessToken = ?";
+			
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, userAccessToken);
+			
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next())
+				return rs.getInt(1);
+			else
+				return null;
+			
+		}catch (Exception e){
+			throw new EntryNotFoundException("Object ID not found in the database", e);
+		}
 	}
 
 	@Override
 	public ArrayList<Note> getAll(String userAccessToken)
 			throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		 ArrayList<Note> notes = new ArrayList<Note>();
+		try{
+			Connection conn = getConnection();
+			String query = "SELECT fbPostID, title, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
+			
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, getUserID(userAccessToken));
+			
+			ResultSet rs = pstmt.executeQuery();
+			 while (rs.next()) {
+				 notes.add(new Note(
+						 new FBPost(rs.getInt("fbPostID")),
+						 rs.getTimestamp("dateAdded"), 
+						 rs.getString("status"), 
+						 rs.getString("photo"),
+						 rs.getString("title"),
+						 rs.getString("note")
+						 ));
+			 }
+		}catch (Exception e){
+			throw new DataAccessException("An error has occured while trying to access data from the database",
+					e);
+		}
+		return notes;
 	}
 
 	@Override
-	public Integer getEntryId(Note object) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer getEntryId(Note note) throws DataAccessException {
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id FROM notestracker WHERE "
+					+ "userID = ? AND dateAdded = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, note.getUserID());
+			pstmt.setTimestamp(2, note.getTimestamp());
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next())
+				return rs.getInt(1);
+			else
+				return null;
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 	}
 
 }

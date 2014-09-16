@@ -1,6 +1,5 @@
 package phr.web.models;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Weight extends TrackerEntry {
@@ -42,5 +41,14 @@ public class Weight extends TrackerEntry {
 		super(timestamp, status, imageFilePath);
 		this.weightInPounds = weightInPounds;
 	}
+
+	public double getWeightInPounds() {
+		return weightInPounds;
+	}
+
+	public void setWeightInPounds(double weightInPounds) {
+		this.weightInPounds = weightInPounds;
+	}
+	
 
 }
