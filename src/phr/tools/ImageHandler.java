@@ -89,7 +89,7 @@ public class ImageHandler {
 
 	public String getEncodedImageFromFile(String imageSource)
 			throws FileNotFoundException, ImageHandlerException {
-		String basePath = "/photos/";
+		String basePath = "D://PHRFiles/images/";
 		File folder = new File(basePath);
 		System.out.println(folder.exists());
 		try {
