@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `activitytracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activitytracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dateAdded` datetime DEFAULT NULL,
+  `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `activityID` int(11) DEFAULT NULL,
   `calorieBurnedPerHour` int(11) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
@@ -82,7 +82,7 @@ DROP TABLE IF EXISTS `bloodpressuretracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bloodpressuretracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dateAdded` datetime DEFAULT NULL,
+  `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `systolic` varchar(100) DEFAULT NULL,
   `diastolic` varchar(100) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
@@ -113,7 +113,7 @@ DROP TABLE IF EXISTS `bloodsugartracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bloodsugartracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dateAdded` datetime DEFAULT NULL,
+  `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `bloodSugar` decimal(11,0) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,
@@ -143,7 +143,7 @@ DROP TABLE IF EXISTS `checkuptracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `checkuptracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dateAdded` datetime DEFAULT NULL,
+  `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `purpose` varchar(100) DEFAULT NULL,
   `doctorsName` varchar(100) DEFAULT NULL,
   `location` varchar(100) DEFAULT NULL,
@@ -206,7 +206,7 @@ DROP TABLE IF EXISTS `foodtracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `foodtracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dateAdded` datetime DEFAULT NULL,
+  `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `foodID` int(11) DEFAULT NULL,
   `servingCount` int(11) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
@@ -239,7 +239,7 @@ DROP TABLE IF EXISTS `notestracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notestracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dateAdded` datetime DEFAULT NULL,
+  `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `title` varchar(100) DEFAULT NULL,
   `notes` varchar(200) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
@@ -330,7 +330,7 @@ DROP TABLE IF EXISTS `verifytable`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `verifytable` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dateAdded` datetime DEFAULT NULL,
+  `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `extractedWord` varchar(100) DEFAULT NULL,
   `category` varchar(100) DEFAULT NULL,
@@ -358,7 +358,7 @@ DROP TABLE IF EXISTS `weighttracker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `weighttracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dateAdded` datetime DEFAULT NULL,
+  `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `weightInPounds` double DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,
