@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import phr.dao.WeightDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.web.models.Weight;
 
 @Repository("weightDao")
@@ -34,6 +35,13 @@ public class WeightDaoImpl implements WeightDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public Integer getUserID(String userAccessToken)
+			throws DataAccessException, EntryNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public ArrayList<Weight> getAll(String username) throws DataAccessException {
@@ -46,5 +54,6 @@ public class WeightDaoImpl implements WeightDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

@@ -1,6 +1,7 @@
 package phr.web.models;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class BloodPressure extends TrackerEntry {
 
@@ -8,44 +9,44 @@ public class BloodPressure extends TrackerEntry {
 	int diastolic;
 
 	public BloodPressure(Integer entryID, User user, FBPost fbPost,
-			Date dateAdded, String status, String imageFilePath, int systolic,
+			Timestamp timestamp, String status, String imageFilePath, int systolic,
 			int diastolic) {
-		super(entryID, user, fbPost, dateAdded, status, imageFilePath);
+		super(entryID, user, fbPost, timestamp, status, imageFilePath);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 	}
 
-	public BloodPressure(User user, FBPost fbPost, Date dateAdded,
+	public BloodPressure(User user, FBPost fbPost, Timestamp timestamp,
 			String status, String imageFilePath, int systolic, int diastolic) {
-		super(user, fbPost, dateAdded, status, imageFilePath);
+		super(user, fbPost, timestamp, status, imageFilePath);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 	}
 
-	public BloodPressure(Integer entryID, FBPost fbPost, Date dateAdded,
+	public BloodPressure(Integer entryID, FBPost fbPost, Timestamp timestamp,
 			String status, String imageFilePath, int systolic, int diastolic) {
-		super(entryID, fbPost, dateAdded, status, imageFilePath);
+		super(entryID, fbPost, timestamp, status, imageFilePath);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 	}
 
-	public BloodPressure(Integer entryID, User user, Date dateAdded,
+	public BloodPressure(Integer entryID, User user, Timestamp timestamp,
 			String status, String imageFilePath, int systolic, int diastolic) {
-		super(entryID, user, dateAdded, status, imageFilePath);
+		super(entryID, user, timestamp, status, imageFilePath);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 	}
 
-	public BloodPressure(FBPost fbPost, Date dateAdded, String status,
+	public BloodPressure(FBPost fbPost, Timestamp timestamp, String status,
 			String imageFilePath, int systolic, int diastolic) {
-		super(fbPost, dateAdded, status, imageFilePath);
+		super(fbPost, timestamp, status, imageFilePath);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 	}
 
-	public BloodPressure(Date dateAdded, String status, String imageFilePath,
+	public BloodPressure(Timestamp timestamp, String status, String imageFilePath,
 			int systolic, int diastolic) {
-		super(dateAdded, status, imageFilePath);
+		super(timestamp, status, imageFilePath);
 		this.systolic = systolic;
 		this.diastolic = diastolic;
 	}

@@ -1,69 +1,70 @@
 package phr.web.models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.sql.Timestamp;
 
 public abstract class TrackerEntry {
 
 	Integer entryID;
 	User user;
 	FBPost fbPost;
-	Date dateAdded;
+	Timestamp timestamp;
 	String status;
 	String imageFilePath;
 
 	public TrackerEntry(Integer entryID, User user, FBPost fbPost,
-			Date dateAdded, String status, String imageFilePath) {
+			Timestamp timestamp, String status, String imageFilePath) {
 		super();
 		this.entryID = entryID;
 		this.user = user;
 		this.fbPost = fbPost;
-		this.dateAdded = dateAdded;
+		this.timestamp = timestamp;
 		this.status = status;
 		this.imageFilePath = imageFilePath;
 	}
 
-	public TrackerEntry(User user, FBPost fbPost, Date dateAdded,
+	public TrackerEntry(User user, FBPost fbPost, Timestamp timestamp,
 			String status, String imageFilePath) {
 		super();
 		this.user = user;
 		this.fbPost = fbPost;
-		this.dateAdded = dateAdded;
+		this.timestamp = timestamp;
 		this.status = status;
 		this.imageFilePath = imageFilePath;
 	}
 
-	public TrackerEntry(Integer entryID, FBPost fbPost, Date dateAdded,
+	public TrackerEntry(Integer entryID, FBPost fbPost, Timestamp timestamp,
 			String status, String imageFilePath) {
 		super();
 		this.entryID = entryID;
 		this.fbPost = fbPost;
-		this.dateAdded = dateAdded;
+		this.timestamp = timestamp;
 		this.status = status;
 		this.imageFilePath = imageFilePath;
 	}
 
-	public TrackerEntry(Integer entryID, User user, Date dateAdded,
+	public TrackerEntry(Integer entryID, User user, Timestamp timestamp,
 			String status, String imageFilePath) {
 		super();
 		this.entryID = entryID;
 		this.user = user;
-		this.dateAdded = dateAdded;
+		this.timestamp = timestamp;
 		this.status = status;
 		this.imageFilePath = imageFilePath;
 	}
 
-	public TrackerEntry(FBPost fbPost, Date dateAdded, String status,
+	public TrackerEntry(FBPost fbPost, Timestamp timestamp, String status,
 			String imageFilePath) {
 		super();
 		this.fbPost = fbPost;
-		this.dateAdded = dateAdded;
+		this.timestamp = timestamp;
 		this.status = status;
 		this.imageFilePath = imageFilePath;
 	}
 
-	public TrackerEntry(Date dateAdded, String status, String imageFilePath) {
+	public TrackerEntry(Timestamp timestamp, String status, String imageFilePath) {
 		super();
-		this.dateAdded = dateAdded;
+		this.timestamp = timestamp;
 		this.status = status;
 		this.imageFilePath = imageFilePath;
 	}
@@ -92,12 +93,12 @@ public abstract class TrackerEntry {
 		this.fbPost = fbPost;
 	}
 
-	public Date getDateAdded() {
-		return dateAdded;
+	public Timestamp getTimestamp() {
+		return timestamp;
 	}
 
-	public void setDateAdded(Date dateAdded) {
-		this.dateAdded = dateAdded;
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public String getStatus() {
