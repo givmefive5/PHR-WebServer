@@ -11,6 +11,11 @@ public class FBPost {
 	public String imageFilePath;
 	public String[] extractedWords;
 
+	public FBPost(Integer id) {
+		super();
+		this.id = id;
+	}
+
 	public FBPost(Integer id, String status, Date datetime, PostType postType,
 			String imageFilePath, String[] extractedWords) {
 		super();

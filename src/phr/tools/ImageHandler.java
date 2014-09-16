@@ -84,13 +84,16 @@ public class ImageHandler {
 
 	public String saveImage_ReturnFilePath(String encodedImage) {
 		long time = TimestampHandler.getCurrentTimestamp().getTime();
+		String uniqueString = UUIDGenerator.generateUniqueString();
 
-		System.out.println(Math.floor(Math.log10(time) + 1));
-		System.out.println(UUIDGenerator.generateUniqueString().length());
-		return null;
+		String fileName = time + uniqueString + ".jpg";
+		// save
+		System.out.println(fileName);
+
+		return fileName;
 	}
 
-	public String getEncodedImageFromFile(String imageSource)
+	public String getEncodedImageFromFile(String fileName)
 			throws FileNotFoundException, ImageHandlerException {
 		String basePath = "D://PHRFiles/images/";
 		File folder = new File(basePath);
@@ -98,7 +101,7 @@ public class ImageHandler {
 			folder.mkdir();
 		try {
 			BufferedImage bufferedImage = ImageIO.read(Files
-					.newInputStream(Paths.get(basePath + imageSource)));
+					.newInputStream(Paths.get(basePath + fileName)));
 			String encodedImage = encodedImageToBase64(bufferedImage);
 			return encodedImage;
 		} catch (IOException e) {
