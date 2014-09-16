@@ -21,6 +21,7 @@ import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
+import phr.tools.UUIDGenerator;
 import phr.web.models.User;
 
 @Controller
