@@ -23,10 +23,10 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	UserDao userDao;
 
 	@Override
-	public void add(String username, BloodSugar bloodSugar)
+	public void add(String accessToken, BloodSugar bloodSugar)
 			throws TrackerServiceException {
 		try {
-			int userID = userDao.getUserIdGivenUsername(username);
+			int userID = userDao.getUserIdGivenUsername(accessToken);
 			bloodSugar.setUser(new User(userID));
 			bloodSugarDao.add(bloodSugar);
 		} catch (DataAccessException e) {
@@ -37,21 +37,21 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	}
 
 	@Override
-	public void edit(String username, BloodSugar object)
+	public void edit(String accessToken, BloodSugar object)
 			throws TrackerServiceException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void delete(String username, BloodSugar object)
+	public void delete(String accessToken, BloodSugar object)
 			throws TrackerServiceException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public ArrayList<BloodSugar> getAll(String username)
+	public ArrayList<BloodSugar> getAll(String accessToken)
 			throws TrackerServiceException {
 		// TODO Auto-generated method stub
 		return null;

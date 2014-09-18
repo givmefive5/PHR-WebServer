@@ -1,7 +1,6 @@
 package phr.dao;
 
 import phr.exceptions.DataAccessException;
-import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.web.models.User;
 
@@ -21,7 +20,7 @@ public interface UserDao {
 	public int getUserIdGivenUsername(String username)
 			throws DataAccessException;
 
-	public Integer getUserID(String userAccessToken)
-			throws DataAccessException, EntryNotFoundException;
+	public Integer getUserIDGivenAccessToken(String userAccessToken)
+			throws DataAccessException;
 
 }

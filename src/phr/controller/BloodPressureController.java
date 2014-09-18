@@ -76,4 +76,5 @@ public class BloodPressureController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
+
 }

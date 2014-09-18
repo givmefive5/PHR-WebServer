@@ -104,7 +104,7 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, userDao.getUserID(userAccessToken));
+			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(userAccessToken));
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {

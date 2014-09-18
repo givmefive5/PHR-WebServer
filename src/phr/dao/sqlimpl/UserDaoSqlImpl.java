@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
-import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.tools.Hasher;
 import phr.web.models.User;
@@ -189,8 +188,8 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	}
 
 	@Override
-	public Integer getUserID(String userAccessToken)
-			throws DataAccessException, EntryNotFoundException {
+	public Integer getUserIDGivenAccessToken(String userAccessToken)
+			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id FROM useraccountandinfo WHERE userAccessToken = ?";
@@ -206,9 +205,9 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			else
 				return null;
 
-		} catch (Exception e) {
-			throw new EntryNotFoundException(
-					"Object ID not found in the database", e);
+		} catch (SQLException e) {
+			throw new DataAccessException(
+					"Error in db fetching user access token", e);
 		}
 	}
 }

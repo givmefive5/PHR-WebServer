@@ -23,10 +23,10 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	UserDao userDao;
 
 	@Override
-	public void add(String username, BloodPressure bloodPressure)
+	public void add(String accessToken, BloodPressure bloodPressure)
 			throws TrackerServiceException {
 		try {
-			int userID = userDao.getUserIdGivenUsername(username);
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodPressure.setUser(new User(userID));
 			bloodPressureDao.add(bloodPressure);
 		} catch (DataAccessException e) {
@@ -37,21 +37,21 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	}
 
 	@Override
-	public void edit(String username, BloodPressure object)
+	public void edit(String accessToken, BloodPressure object)
 			throws TrackerServiceException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void delete(String username, BloodPressure object)
+	public void delete(String accessToken, BloodPressure object)
 			throws TrackerServiceException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public ArrayList<BloodPressure> getAll(String username)
+	public ArrayList<BloodPressure> getAll(String accessToken)
 			throws TrackerServiceException {
 		// TODO Auto-generated method stub
 		return null;
