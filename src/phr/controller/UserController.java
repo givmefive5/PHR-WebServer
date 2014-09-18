@@ -33,11 +33,6 @@ public class UserController {
 
 	ImageHandler imageHandler = new ImageHandler();
 
-	@RequestMapping("/test")
-	public void test() {
-		imageHandler.saveImage_ReturnFilePath(null);
-	}
-
 	@RequestMapping(value = "/user/validateLogin", method = RequestMethod.POST)
 	public void validateLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException,

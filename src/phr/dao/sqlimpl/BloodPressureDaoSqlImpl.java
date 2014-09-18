@@ -5,18 +5,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import phr.dao.BloodPressureDao;
+import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.web.models.BloodPressure;
 import phr.web.models.FBPost;
-import phr.web.models.User;
 
 @Repository("bloodPressureDao")
 public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 		BloodPressureDao {
+
+	@Autowired
+	UserDao userDao;
 
 	@Override
 	public void add(BloodPressure bloodPressure) throws DataAccessException {
@@ -46,12 +50,13 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public void edit(BloodPressure object) throws DataAccessException, EntryNotFoundException {
-		try{
+	public void edit(BloodPressure object) throws DataAccessException,
+			EntryNotFoundException {
+		try {
 			Connection conn = getConnection();
-			String query = "UPDATE bloodpressuretracker SET systolic = ?, diastolic = ?, dateAdded = ?, status=?, photo=?" +
-							"WHERE id = ?";
-			
+			String query = "UPDATE bloodpressuretracker SET systolic = ?, diastolic = ?, dateAdded = ?, status=?, photo=?"
+					+ "WHERE id = ?";
+
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, object.getSystolic());
@@ -62,114 +67,58 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(6, object.getEntryID());
 
 			pstmt.executeUpdate();
-			
-		}catch (Exception e){
-			throw new EntryNotFoundException("Object ID not found in the database", e);
+
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
 		}
 	}
 
 	@Override
-	public void delete(BloodPressure object) throws DataAccessException, EntryNotFoundException {
-		try{
+	public void delete(BloodPressure object) throws DataAccessException,
+			EntryNotFoundException {
+		try {
 			Connection conn = getConnection();
 			String query = "DELETE FROM bloodpressuretracker WHERE id = ?";
-			
+
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, object.getEntryID());
-			
+
 			pstmt.executeUpdate();
-			
-		}catch (Exception e){
-			throw new EntryNotFoundException("Object ID not found in the database", e);
-		}
-	}
 
-	@Override
-	public BloodPressure get(int entryID) throws DataAccessException {
-		try{
-			Connection conn = getConnection();
-			String query = "SELECT * FROM bloodpressure WHERE id = ?";
-			
-			PreparedStatement pstmt;
-			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, entryID);
-			
-			ResultSet rs = pstmt.executeQuery();
-			
-			//have to check if this is correct
-			if (rs.next())
-				return new BloodPressure(
-						rs.getInt("id"),
-						new User(rs.getInt("UserID")),
-						new FBPost(rs.getInt("fbPostID")),
-						rs.getTimestamp("dateAdded"),
-						rs.getString("status"),
-						rs.getString("photo"),
-						rs.getInt("systolic"),
-						rs.getInt("diastolic"));			
-			else
-				return null;
-			
-			
-		}catch (Exception e){
-			throw new DataAccessException (
-					"An error has occured while trying to access data from the database",
-					e);
-		}
-	}
-	
-	@Override
-	public Integer getUserID(String userAccessToken) throws DataAccessException, EntryNotFoundException {
-		try{
-			Connection conn = getConnection();
-			String query = "SELECT id FROM useraccountandinfo WHERE userAccessToken = ?";
-			
-			PreparedStatement pstmt;
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, userAccessToken);
-			
-			ResultSet rs = pstmt.executeQuery();
-
-			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
-			
-		}catch (Exception e){
-			throw new EntryNotFoundException("Object ID not found in the database", e);
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
 		}
 	}
 
 	@Override
 	public ArrayList<BloodPressure> getAll(String userAccessToken)
 			throws DataAccessException {
-		
-		 ArrayList<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
-		try{
+
+		ArrayList<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
+		try {
 			Connection conn = getConnection();
 			String query = "SELECT fbPostID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
-			
+
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, getUserID(userAccessToken));
-			
+			pstmt.setInt(1, userDao.getUserID(userAccessToken));
+
 			ResultSet rs = pstmt.executeQuery();
-			 while (rs.next()) {
-				 bloodpressures.add(new BloodPressure(
-						 new FBPost(rs.getInt("fbPostID")),
-						 rs.getTimestamp("dateAdded"), 
-						 rs.getString("status"), 
-						 rs.getString("photo"),
-						 rs.getInt("systolic"),
-						 rs.getInt("diastolic")
-						 ));
-			 }
-		}catch (Exception e){
-			throw new DataAccessException("An error has occured while trying to access data from the database",
+			while (rs.next()) {
+				bloodpressures.add(new BloodPressure(new FBPost(rs
+						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+						.getString("status"), rs.getString("photo"), rs
+						.getInt("systolic"), rs.getInt("diastolic")));
+			}
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 		return bloodpressures;
 	}
 

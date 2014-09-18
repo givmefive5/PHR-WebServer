@@ -1,6 +1,7 @@
 package phr.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,7 @@ public class FacebookFetcherServiceImpl implements FacebookFetcherService {
 	FacebookFetcherDao facebookFetcherDao;
 
 	@Override
-	public ArrayList<FBPost> getAllPosts(String userAccessToken)
-			throws SNSException {
+	public List<FBPost> getAllPosts(String userAccessToken) throws SNSException {
 		// TODO Auto-generated method stub
 		try {
 			return facebookFetcherDao.getAllPosts(userAccessToken);

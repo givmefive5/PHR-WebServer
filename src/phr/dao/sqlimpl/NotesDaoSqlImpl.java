@@ -5,13 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import phr.web.models.FBPost;
-import phr.web.models.Note;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import phr.dao.NotesDao;
+import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.web.models.FBPost;
+import phr.web.models.Note;
 
 public class NotesDaoSqlImpl extends BaseDaoSqlImpl implements NotesDao {
+
+	@Autowired
+	UserDao userDao;
 
 	@Override
 	public void add(Note note) throws DataAccessException {
@@ -38,17 +44,17 @@ public class NotesDaoSqlImpl extends BaseDaoSqlImpl implements NotesDao {
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 	}
 
 	@Override
 	public void edit(Note note) throws DataAccessException,
 			EntryNotFoundException {
-		try{
+		try {
 			Connection conn = getConnection();
-			String query = "UPDATE notestracker SET title = ?, note = ?, dateAdded = ?, status=?, photo=?" +
-							"WHERE id = ?";
-			
+			String query = "UPDATE notestracker SET title = ?, note = ?, dateAdded = ?, status=?, photo=?"
+					+ "WHERE id = ?";
+
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, note.getTitle());
@@ -59,85 +65,55 @@ public class NotesDaoSqlImpl extends BaseDaoSqlImpl implements NotesDao {
 			pstmt.setInt(6, note.getEntryID());
 
 			pstmt.executeUpdate();
-			
-		}catch (Exception e){
-			throw new EntryNotFoundException("Object ID not found in the database", e);
+
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
 		}
 	}
 
 	@Override
 	public void delete(Note note) throws DataAccessException,
 			EntryNotFoundException {
-		try{
+		try {
 			Connection conn = getConnection();
 			String query = "DELETE FROM notestracker WHERE id = ?";
-			
+
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, note.getEntryID());
-			
+
 			pstmt.executeUpdate();
-			
-		}catch (Exception e){
-			throw new EntryNotFoundException("Object ID not found in the database", e);
+
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
 		}
-		
-	}
 
-	@Override
-	public Note get(int entryID) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer getUserID(String userAccessToken)
-			throws DataAccessException, EntryNotFoundException {
-		try{
-			Connection conn = getConnection();
-			String query = "SELECT id FROM useraccountandinfo WHERE userAccessToken = ?";
-			
-			PreparedStatement pstmt;
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, userAccessToken);
-			
-			ResultSet rs = pstmt.executeQuery();
-
-			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
-			
-		}catch (Exception e){
-			throw new EntryNotFoundException("Object ID not found in the database", e);
-		}
 	}
 
 	@Override
 	public ArrayList<Note> getAll(String userAccessToken)
 			throws DataAccessException {
-		 ArrayList<Note> notes = new ArrayList<Note>();
-		try{
+		ArrayList<Note> notes = new ArrayList<Note>();
+		try {
 			Connection conn = getConnection();
 			String query = "SELECT fbPostID, title, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
-			
+
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, getUserID(userAccessToken));
-			
+			pstmt.setInt(1, userDao.getUserID(userAccessToken));
+
 			ResultSet rs = pstmt.executeQuery();
-			 while (rs.next()) {
-				 notes.add(new Note(
-						 new FBPost(rs.getInt("fbPostID")),
-						 rs.getTimestamp("dateAdded"), 
-						 rs.getString("status"), 
-						 rs.getString("photo"),
-						 rs.getString("title"),
-						 rs.getString("note")
-						 ));
-			 }
-		}catch (Exception e){
-			throw new DataAccessException("An error has occured while trying to access data from the database",
+			while (rs.next()) {
+				notes.add(new Note(new FBPost(rs.getInt("fbPostID")), rs
+						.getTimestamp("dateAdded"), rs.getString("status"), rs
+						.getString("photo"), rs.getString("title"), rs
+						.getString("note")));
+			}
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
 					e);
 		}
 		return notes;
