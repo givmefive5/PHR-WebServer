@@ -9,9 +9,12 @@ import org.springframework.stereotype.Repository;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ImageHandlerException;
 import phr.sns.datamining.dao.FacebookFetcherDao;
+import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.tools.ImageHandler;
 import phr.web.models.FBPost;
 import phr.web.models.FBPostType;
+import phr.web.models.PHRImage;
+import phr.web.models.PHRImageType;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
@@ -52,7 +55,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	}
 
 	private List<FBPost> getPostsList(ResponseList<Post> feed)
-			throws ImageHandlerException {
+			throws ImageHandlerException, DataAccessException {
 
 		List<FBPost> posts = new ArrayList<>();
 
@@ -71,7 +74,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractFoodNames(p.getMessage());
 					if (foodWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
-								FBPostType.FOOD, encodedImage, foodWordsFound);
+								FBPostType.FOOD, new PHRImage(encodedImage,
+										PHRImageType.IMAGE), foodWordsFound);
 						posts.add(post);
 						continue;
 					}
@@ -79,7 +83,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractRestaurantNames(p.getMessage());
 					if (restaurantsWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
-								FBPostType.RESTAURANT, encodedImage,
+								FBPostType.RESTAURANT, new PHRImage(
+										encodedImage, PHRImageType.IMAGE),
 								restaurantsWordsFound);
 						posts.add(post);
 						continue;
@@ -88,8 +93,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractRestaurantNames(p.getMessage());
 					if (activityWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
-								FBPostType.ACTIVITY, encodedImage,
-								activityWordsFound);
+								FBPostType.ACTIVITY, new PHRImage(encodedImage,
+										PHRImageType.IMAGE), activityWordsFound);
 						posts.add(post);
 						continue;
 					}
@@ -97,14 +102,16 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractRestaurantNames(p.getMessage());
 					if (sportsEstablishmentsWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
-								FBPostType.SPORTS_ESTABLISHMENTS, encodedImage,
+								FBPostType.SPORTS_ESTABLISHMENTS, new PHRImage(
+										encodedImage, PHRImageType.IMAGE),
 								sportsEstablishmentsWordsFound);
 						posts.add(post);
 						continue;
 					}
 
 					post = new FBPost(p.getMessage(), p.getCreatedTime(),
-							FBPostType.UNRELATED, encodedImage, null);
+							FBPostType.UNRELATED, new PHRImage(encodedImage,
+									PHRImageType.IMAGE), null);
 					posts.add(post);
 				}
 			}

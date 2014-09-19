@@ -2,21 +2,21 @@ package phr.service;
 
 import java.util.ArrayList;
 
-import phr.exceptions.TrackerServiceException;
+import phr.exceptions.ServiceException;
 
 public interface TrackerService<T> {
 
 	public void add(String accessToken, T object)
-			throws TrackerServiceException;
+			throws ServiceException;
 
 	public void edit(String accessToken, T object)
-			throws TrackerServiceException;
+			throws ServiceException;
 
 	public void delete(String accessToken, T object)
-			throws TrackerServiceException;
+			throws ServiceException;
 
 	public ArrayList<T> getAll(String accessToken)
-			throws TrackerServiceException;
+			throws ServiceException;
 
-	public Integer getEntryId(T object) throws TrackerServiceException;
+	public Integer getEntryId(T object) throws ServiceException;
 }

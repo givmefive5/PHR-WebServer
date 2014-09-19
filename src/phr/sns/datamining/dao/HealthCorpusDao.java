@@ -1,14 +1,14 @@
 package phr.sns.datamining.dao;
 
-import java.util.HashSet;
+import java.util.List;
 
 public interface HealthCorpusDao {
 
-	HashSet<String> getFoodWords();
+	List<String> getFoodWords();
 
-	HashSet<String> getActivityWords();
+	List<String> getActivityWords();
 
-	HashSet<String> getRestaurantNames();
+	List<String> getRestaurantNames();
 
-	HashSet<String> getSportsEstablishmentNames();
+	List<String> getSportsEstablishmentNames();
 }

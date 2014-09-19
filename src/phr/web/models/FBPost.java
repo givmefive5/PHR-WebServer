@@ -8,7 +8,7 @@ public class FBPost {
 	public String status;
 	public Date datetime;
 	public FBPostType postType;
-	public String imageFilePath;
+	public PHRImage image;
 	public String[] extractedWords;
 
 	public FBPost(Integer id) {
@@ -16,24 +16,24 @@ public class FBPost {
 		this.id = id;
 	}
 
-	public FBPost(Integer id, String status, Date datetime, FBPostType postType,
-			String imageFilePath, String[] extractedWords) {
+	public FBPost(Integer id, String status, Date datetime,
+			FBPostType postType, PHRImage image, String[] extractedWords) {
 		super();
 		this.id = id;
 		this.status = status;
 		this.datetime = datetime;
 		this.postType = postType;
-		this.imageFilePath = imageFilePath;
+		this.image = image;
 		this.extractedWords = extractedWords;
 	}
 
 	public FBPost(String status, Date datetime, FBPostType postType,
-			String imageFilePath, String[] extractedWords) {
+			PHRImage image, String[] extractedWords) {
 		super();
 		this.status = status;
 		this.datetime = datetime;
 		this.postType = postType;
-		this.imageFilePath = imageFilePath;
+		this.image = image;
 		this.extractedWords = extractedWords;
 	}
 
@@ -69,12 +69,12 @@ public class FBPost {
 		this.postType = postType;
 	}
 
-	public String getImageFilePath() {
-		return imageFilePath;
+	public PHRImage getImage() {
+		return image;
 	}
 
-	public void setImageFilePath(String imageFilePath) {
-		this.imageFilePath = imageFilePath;
+	public void setImage(PHRImage image) {
+		this.image = image;
 	}
 
 	public String[] getExtractedWords() {

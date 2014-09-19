@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import phr.exceptions.JSONConverterException;
-import phr.exceptions.TrackerServiceException;
+import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
 import phr.service.BloodPressureService;
 import phr.service.UserService;
@@ -65,7 +65,7 @@ public class BloodPressureController {
 								"Access token is invalid, please ask user to log in again.");
 			}
 
-		} catch (JSONException | TrackerServiceException
+		} catch (JSONException | ServiceException
 				| JSONConverterException | UserServiceException e) {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
