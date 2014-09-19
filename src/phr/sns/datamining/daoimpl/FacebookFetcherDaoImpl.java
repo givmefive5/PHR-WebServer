@@ -11,7 +11,7 @@ import phr.exceptions.ImageHandlerException;
 import phr.sns.datamining.dao.FacebookFetcherDao;
 import phr.tools.ImageHandler;
 import phr.web.models.FBPost;
-import phr.web.models.PostType;
+import phr.web.models.FBPostType;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
@@ -71,7 +71,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractFoodNames(p.getMessage());
 					if (foodWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
-								PostType.FOOD, encodedImage, foodWordsFound);
+								FBPostType.FOOD, encodedImage, foodWordsFound);
 						posts.add(post);
 						continue;
 					}
@@ -79,7 +79,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractRestaurantNames(p.getMessage());
 					if (restaurantsWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
-								PostType.RESTAURANT, encodedImage,
+								FBPostType.RESTAURANT, encodedImage,
 								restaurantsWordsFound);
 						posts.add(post);
 						continue;
@@ -88,7 +88,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractRestaurantNames(p.getMessage());
 					if (activityWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
-								PostType.ACTIVITY, encodedImage,
+								FBPostType.ACTIVITY, encodedImage,
 								activityWordsFound);
 						posts.add(post);
 						continue;
@@ -97,14 +97,14 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractRestaurantNames(p.getMessage());
 					if (sportsEstablishmentsWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
-								PostType.SPORTS_ESTABLISHMENTS, encodedImage,
+								FBPostType.SPORTS_ESTABLISHMENTS, encodedImage,
 								sportsEstablishmentsWordsFound);
 						posts.add(post);
 						continue;
 					}
 
 					post = new FBPost(p.getMessage(), p.getCreatedTime(),
-							PostType.UNRELATED, encodedImage, null);
+							FBPostType.UNRELATED, encodedImage, null);
 					posts.add(post);
 				}
 			}
@@ -119,7 +119,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 		List<FBPost> foodPosts = new ArrayList<>();
 		for (FBPost p : posts) {
-			if (p.getPostType().equals(PostType.FOOD))
+			if (p.getPostType().equals(FBPostType.FOOD))
 				foodPosts.add(p);
 		}
 		return foodPosts;
@@ -132,7 +132,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 		List<FBPost> activityPosts = new ArrayList<>();
 		for (FBPost p : posts) {
-			if (p.getPostType().equals(PostType.ACTIVITY))
+			if (p.getPostType().equals(FBPostType.ACTIVITY))
 				activityPosts.add(p);
 		}
 		return activityPosts;

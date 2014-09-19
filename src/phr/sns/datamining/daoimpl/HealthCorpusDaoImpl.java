@@ -1,6 +1,6 @@
 package phr.sns.datamining.daoimpl;
 
-import java.util.List;
+import java.util.HashSet;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,25 +10,25 @@ import phr.sns.datamining.dao.HealthCorpusDao;
 public class HealthCorpusDaoImpl implements HealthCorpusDao {
 
 	@Override
-	public List<String> getFoodWords() {
+	public HashSet<String> getFoodWords() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<String> getActivityWords() {
+	public HashSet<String> getActivityWords() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<String> getRestaurantNames() {
+	public HashSet<String> getRestaurantNames() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<String> getSportsEstablishmentNames() {
+	public HashSet<String> getSportsEstablishmentNames() {
 		// TODO Auto-generated method stub
 		return null;
 	}

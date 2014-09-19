@@ -1,7 +1,7 @@
 package phr.sns.datamining.daoimpl;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,27 +10,11 @@ public class KeywordsExtractor {
 	@Autowired
 	HealthCorpusDaoImpl healthCorpusDao;
 
-	public boolean hasFoodNames(String message) {
-		return extractFoodNames(message).length > 0;
-	}
-
-	public boolean hasRestaurantNames(String message) {
-		return extractRestaurantNames(message).length > 0;
-	}
-
-	public boolean hasActivityNames(String message) {
-		return extractActivityNames(message).length > 0;
-	}
-
-	public boolean hasSportsEstablishmentsNames(String message) {
-		return extractSportsEstablishmentsNames(message).length > 0;
-	}
-
 	public String[] extractFoodNames(String message) {
 
-		List<String> corpus = healthCorpusDao.getFoodWords();
+		HashSet<String> corpus = healthCorpusDao.getFoodWords();
 
-		ArrayList<String> extractedWords = findMatches(message, corpus);
+		HashSet<String> extractedWords = findMatches(message, corpus);
 		if (message.contains("tocino"))
 			extractedWords.add("tocino");
 		return extractedWords.toArray(new String[extractedWords.size()]);
@@ -57,8 +41,70 @@ public class KeywordsExtractor {
 		return extractedWords.toArray(new String[extractedWords.size()]);
 	}
 
-	private ArrayList<String> findMatches(String message, List<String> corpus) {
+	private HashSet<String> findMatches(String message, HashSet<String> corpus) {
+		HashSet<String> hashtags = getHashtagsFromMessage(message);
+		message = removeHashtags(message, hashtags);
+		HashSet<String> wordsFoundInHashtags = findWordsInHashtags(hashtags,
+				corpus);
+
+		HashSet<String> wordsFoundInText = findWordsInText(message, hashtags);
+
+		HashSet<String> allWordsFound = new HashSet<>();
+
+		if (wordsFoundInHashtags != null)
+			allWordsFound.addAll(wordsFoundInHashtags);
+		if (wordsFoundInText != null)
+			allWordsFound.addAll(wordsFoundInText);
+
+		return allWordsFound;
+
+	}
+
+	private HashSet<String> findWordsInText(String message,
+			HashSet<String> hashtags) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private HashSet<String> findWordsInHashtags(HashSet<String> hashtags,
+			HashSet<String> corpus) {
+		HashSet<String> foundWords = new HashSet<>();
+
+		for (String hashtag : hashtags) {
+			String lowerCaseHashtag = cleanWord(hashtag);
+			for (String corpusWord : corpus) {
+				String lowerCaseCorpusWord = cleanWord(corpusWord);
+				if (lowerCaseHashtag.contains(lowerCaseCorpusWord)) {
+					foundWords.add(corpusWord);
+					lowerCaseHashtag.replace(lowerCaseCorpusWord, "*");
+				}
+			}
+		}
+		return foundWords;
+	}
+
+	private String cleanWord(String word) {
+		word = word.toLowerCase();
+		word = word.replaceAll("[^a-zA-Z0-9]", "");
+
+		return word;
+	}
+
+	private String removeHashtags(String message, HashSet<String> hashtags) {
+		for (String hashtag : hashtags) {
+			message = message.replace(hashtag, "*");
+		}
+		message = message.replaceAll("[*][ *][ *]*", "* ");
+		return message;
+	}
+
+	private HashSet<String> getHashtagsFromMessage(String message) {
+		String[] tokens = message.split(" ");
+		HashSet<String> hashtags = new HashSet<>();
+		for (String s : tokens) {
+			if (s.charAt(0) == '#')
+				hashtags.add(s);
+		}
+		return hashtags;
 	}
 }
