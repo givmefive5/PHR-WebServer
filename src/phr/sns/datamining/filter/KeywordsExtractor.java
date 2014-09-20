@@ -3,15 +3,13 @@ package phr.sns.datamining.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import phr.exceptions.DataAccessException;
+import phr.sns.datamining.dao.HealthCorpusDao;
 import phr.sns.datamining.daoimpl.HealthCorpusDaoImpl;
 
 public class KeywordsExtractor {
 
-	@Autowired
-	HealthCorpusDaoImpl healthCorpusDao;
+	HealthCorpusDao healthCorpusDao = new HealthCorpusDaoImpl();
 	List<String> foodCorpus;
 
 	DMFilter filter = new DMFilter();

@@ -8,6 +8,7 @@
 </head>
 <body>
 	<form method="POST" action="test">
+		<input type="text" name="userAccessToken"/>
 		<input type="submit"/>
 	</form>
 </body>

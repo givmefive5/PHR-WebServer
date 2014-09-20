@@ -33,9 +33,6 @@ public class NGramFilteringThread extends Thread {
 						foundWords.add(corpusWord);
 						message = message.replace(ngram, "*");
 						message = message.replaceAll("[*][ *][ *]*", "* ");
-
-						System.out.println("T-- Found " + corpusWord
-								+ " In Text Remaining : " + message);
 					}
 		}
 	}

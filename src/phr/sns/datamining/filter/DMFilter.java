@@ -1,7 +1,9 @@
 package phr.sns.datamining.filter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DMFilter {
 
@@ -9,20 +11,10 @@ public class DMFilter {
 			throws InterruptedException {
 		List<String> hashtags = getHashtagsFromMessage(message);
 		message = removeHashtags(message);
-		System.out.println("After removing hashtags: " + message);
-		long startTime = System.currentTimeMillis();
 		List<String> wordsFoundInHashtags = findWordsInHashtags(hashtags,
 				corpus);
-		long stopTime = System.currentTimeMillis();
-		long elapsedTime = stopTime - startTime;
-		System.out.println("Hashtag " + elapsedTime);
 
-		startTime = System.currentTimeMillis();
 		List<String> wordsFoundInText = findWordsInText(message, corpus);
-		stopTime = System.currentTimeMillis();
-		elapsedTime = stopTime - startTime;
-		System.out.println("Text " + elapsedTime);
-
 		List<String> allWordsFound = new ArrayList<>();
 
 		if (wordsFoundInHashtags != null)
@@ -31,8 +23,16 @@ public class DMFilter {
 			allWordsFound.addAll(wordsFoundInText);
 
 		allWordsFound = removeSubwordsFromWordsFound(allWordsFound);
+		allWordsFound = removeDuplicateEntries(allWordsFound);
 		return allWordsFound;
 
+	}
+
+	private List<String> removeDuplicateEntries(List<String> list) {
+		Set<String> s = new LinkedHashSet<String>(list);
+		list.clear();
+		list.addAll(s);
+		return list;
 	}
 
 	private List<String> findWordsInText(String message, List<String> corpus)
@@ -89,9 +89,6 @@ public class DMFilter {
 					foundWords.add(corpusWord);
 					lowerCaseHashtag = lowerCaseHashtag.replace(
 							lowerCaseCorpusWord, "*");
-					System.out.println("H--Found " + corpusWord
-							+ " Remaining text in hashtag : "
-							+ lowerCaseHashtag);
 					if (lowerCaseHashtag.equals("*")) {
 						break;
 					}

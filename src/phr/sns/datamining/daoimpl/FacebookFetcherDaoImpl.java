@@ -1,7 +1,9 @@
 package phr.sns.datamining.daoimpl;
 
 import java.awt.Image;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -30,31 +32,43 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	private static final String appID = "458502710946706";
 	private static final String appSecret = "c41ccfbd5ff58c87342f4df5911d2d88";
 
-	@Override
-	public List<FBPost> getAllPosts(String userAccessToken)
+	private ResponseList<Post> getAllPostsFromFB(String userFBAccessToken)
 			throws DataAccessException {
 		Facebook facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId(appID, appSecret);
 		String permissions = "email,user_groups,user_status,read_stream";
 		facebook.setOAuthPermissions(permissions);
 
-		facebook.setOAuthAccessToken(new AccessToken(userAccessToken, null));
+		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 
 		List<FBPost> posts = new ArrayList<>();
 
 		try {
 
 			ResponseList<Post> feed = facebook.getPosts();
-			posts = getPostsList(feed);
-
-		} catch (FacebookException | ImageHandlerException e) {
+			return feed;
+		} catch (FacebookException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
-		return posts;
 	}
 
-	private List<FBPost> getPostsList(ResponseList<Post> feed)
+	@Override
+	public List<FBPost> getAllPosts(String userFBAccessToken)
+			throws DataAccessException {
+		ResponseList<Post> feed = getAllPostsFromFB(userFBAccessToken);
+		List<FBPost> filteredPosts;
+		try {
+			filteredPosts = filterPostsList(feed);
+		} catch (ImageHandlerException e) {
+			throw new DataAccessException(
+					"An error has occured while retrieving posts", e);
+		}
+
+		return filteredPosts;
+	}
+
+	private List<FBPost> filterPostsList(List<Post> feed)
 			throws ImageHandlerException, DataAccessException {
 
 		List<FBPost> posts = new ArrayList<>();
@@ -90,7 +104,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						continue;
 					}
 					String[] activityWordsFound = keywordsExtractor
-							.extractRestaurantNames(p.getMessage());
+							.extractActivityNames(p.getMessage());
 					if (activityWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
 								FBPostType.ACTIVITY, new PHRImage(encodedImage,
@@ -99,7 +113,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						continue;
 					}
 					String[] sportsEstablishmentsWordsFound = keywordsExtractor
-							.extractRestaurantNames(p.getMessage());
+							.extractSportsEstablishmentsNames(p.getMessage());
 					if (sportsEstablishmentsWordsFound.length > 0) {
 						post = new FBPost(p.getMessage(), p.getCreatedTime(),
 								FBPostType.SPORTS_ESTABLISHMENTS, new PHRImage(
@@ -120,29 +134,28 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	}
 
 	@Override
-	public List<FBPost> getFoodRelatedPosts(String userAccessToken)
-			throws DataAccessException {
-		List<FBPost> posts = getAllPosts(userAccessToken);
+	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
+			String userFBAccessToken) throws DataAccessException {
+		ResponseList<Post> feed = getAllPostsFromFB(userFBAccessToken);
 
-		List<FBPost> foodPosts = new ArrayList<>();
-		for (FBPost p : posts) {
-			if (p.getPostType().equals(FBPostType.FOOD))
-				foodPosts.add(p);
+		List<Post> newFeed = new ArrayList<>();
+		for (Post p : feed) {
+			if (p != null) {
+				Date dateLastUpdated = p.getUpdatedTime();
+				Timestamp timeLastUpdated = new Timestamp(
+						dateLastUpdated.getTime());
+				if (timeLastUpdated.after(timestamp)) {
+					newFeed.add(p);
+				}
+			}
 		}
-		return foodPosts;
-	}
-
-	@Override
-	public List<FBPost> getActivityRelatedPosts(String userAccessToken)
-			throws DataAccessException {
-		List<FBPost> posts = getAllPosts(userAccessToken);
-
-		List<FBPost> activityPosts = new ArrayList<>();
-		for (FBPost p : posts) {
-			if (p.getPostType().equals(FBPostType.ACTIVITY))
-				activityPosts.add(p);
+		try {
+			List<FBPost> filteredPosts = filterPostsList(newFeed);
+			return filteredPosts;
+		} catch (ImageHandlerException e) {
+			throw new DataAccessException(
+					"An error has occured while retrieving posts", e);
 		}
-		return activityPosts;
-	}
 
+	}
 }

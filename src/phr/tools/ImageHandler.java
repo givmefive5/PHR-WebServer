@@ -1,6 +1,5 @@
 package phr.tools;
 
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -18,6 +17,7 @@ import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
 
 import phr.exceptions.ImageHandlerException;
+import sun.awt.image.ToolkitImage;
 
 public class ImageHandler {
 
@@ -31,24 +31,13 @@ public class ImageHandler {
 	}
 
 	private BufferedImage toBufferedImage(Image img) {
-		if (img instanceof BufferedImage) {
+		if (img.getClass().equals(BufferedImage.class))
 			return (BufferedImage) img;
-		}
-
-		// Create a buffered image with transparency
-		BufferedImage bimage = new BufferedImage(img.getWidth(null),
-				img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-		// Draw the image on to the buffered image
-		Graphics2D bGr = bimage.createGraphics();
-		bGr.drawImage(img, 0, 0, null);
-		bGr.dispose();
-
-		// Return the buffered image
-		return bimage;
+		BufferedImage buffered = ((ToolkitImage) img).getBufferedImage();
+		return buffered;
 	}
 
-	public String encodedImageToBase64(BufferedImage image)
+	public String encodeBufferedImage(BufferedImage image)
 			throws ImageHandlerException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
@@ -65,7 +54,7 @@ public class ImageHandler {
 	public String encodeImageToBase64(Image imageFromPost)
 			throws ImageHandlerException {
 		BufferedImage image = toBufferedImage(imageFromPost);
-		String encodedImage = encodeImageToBase64(image);
+		String encodedImage = encodeBufferedImage(image);
 		return encodedImage;
 	}
 
@@ -102,7 +91,7 @@ public class ImageHandler {
 		try {
 			BufferedImage bufferedImage = ImageIO.read(Files
 					.newInputStream(Paths.get(basePath + fileName)));
-			String encodedImage = encodedImageToBase64(bufferedImage);
+			String encodedImage = encodeBufferedImage((bufferedImage));
 			return encodedImage;
 		} catch (IOException e) {
 			throw new ImageHandlerException("An error occurred", e);
