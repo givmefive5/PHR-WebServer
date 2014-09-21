@@ -9,29 +9,31 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.BloodSugarService;
+import phr.service.NoteService;
 import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
-import phr.web.models.BloodSugar;
+import phr.web.models.Note;
 
-public class BloodSugarController {
+@Controller
+public class NoteController {
 	
 	@Autowired
-	BloodSugarService bloodSugarService;
+	NoteService noteService;
 	
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/tracker/addBloodSugar", method = RequestMethod.POST)
-	public void addBloodSugar(HttpServletRequest request,
+	@RequestMapping(value = "/tracker/addNote", method = RequestMethod.POST)
+	public void addNote(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 
 		PrintWriter writer = response.getWriter();
@@ -45,11 +47,11 @@ public class BloodSugarController {
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
 				
-				BloodSugar bloodSugar = GSONConverter
-						.getGSONObjectGivenJsonObject(data.getJSONObject("bloodSugar"),
-								BloodSugar.class);
-				bloodSugarService.add(accessToken, bloodSugar);
-				int entryID = bloodSugarService.getEntryId(bloodSugar);
+				Note note = GSONConverter
+						.getGSONObjectGivenJsonObject(data.getJSONObject("note"),
+								Note.class);
+				noteService.add(accessToken, note);
+				int entryID = noteService.getEntryId(note);
 				
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);
