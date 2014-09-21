@@ -12,8 +12,11 @@ import phr.dao.BloodSugarDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.tools.ImageHandler;
 import phr.web.models.BloodSugar;
 import phr.web.models.FBPost;
+import phr.web.models.PHRImage;
+import phr.web.models.PHRImageType;
 
 @Repository("bloodSugar")
 public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
@@ -37,7 +40,15 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 				pstmt.setInt(5, bloodSugar.getFbPost().getId());
 			else
 				pstmt.setInt(5, -1);
-			pstmt.setString(6, bloodSugar.getImageFilePath());
+
+			if (bloodSugar.getImage().getFileName() == null) {
+				String encodedImage = bloodSugar.getImage().getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				bloodSugar.getImage().setFileName(fileName);
+			}
+
+			pstmt.setString(6, bloodSugar.getImage().getFileName());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -61,7 +72,7 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 			pstmt.setDouble(1, bloodSugar.getBloodSugar());
 			pstmt.setTimestamp(2, bloodSugar.getTimestamp());
 			pstmt.setString(3, bloodSugar.getStatus());
-			pstmt.setString(4, bloodSugar.getImageFilePath());
+			pstmt.setString(4, bloodSugar.getImage().getFileName());
 			pstmt.setInt(5, bloodSugar.getEntryID());
 
 			pstmt.executeUpdate();
@@ -106,10 +117,12 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
+				PHRImage image = new PHRImage(rs.getString("photo"),
+						PHRImageType.FILENAME);
 				bloodsugars.add(new BloodSugar(
 						new FBPost(rs.getInt("fbPostID")), rs
 								.getTimestamp("dateAdded"), rs
-								.getString("status"), rs.getString("photo"), rs
+								.getString("status"), image, rs
 								.getDouble("bloodsugar")));
 			}
 		} catch (Exception e) {

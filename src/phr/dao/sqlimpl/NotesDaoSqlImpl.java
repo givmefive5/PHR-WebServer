@@ -13,6 +13,8 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.web.models.FBPost;
 import phr.web.models.Note;
+import phr.web.models.PHRImage;
+import phr.web.models.PHRImageType;
 
 public class NotesDaoSqlImpl extends BaseDaoSqlImpl implements NotesDao {
 
@@ -36,7 +38,7 @@ public class NotesDaoSqlImpl extends BaseDaoSqlImpl implements NotesDao {
 				pstmt.setInt(6, note.getFbPost().getId());
 			else
 				pstmt.setInt(6, -1);
-			pstmt.setString(7, note.getImageFilePath());
+			pstmt.setString(7, note.getImage().getFileName());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -61,7 +63,7 @@ public class NotesDaoSqlImpl extends BaseDaoSqlImpl implements NotesDao {
 			pstmt.setString(2, note.getNote());
 			pstmt.setTimestamp(3, note.getTimestamp());
 			pstmt.setString(4, note.getStatus());
-			pstmt.setString(5, note.getImageFilePath());
+			pstmt.setString(5, note.getImage().getFileName());
 			pstmt.setInt(6, note.getEntryID());
 
 			pstmt.executeUpdate();
@@ -106,10 +108,11 @@ public class NotesDaoSqlImpl extends BaseDaoSqlImpl implements NotesDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
+				PHRImage image = new PHRImage(rs.getString("photo"),
+						PHRImageType.FILENAME);
 				notes.add(new Note(new FBPost(rs.getInt("fbPostID")), rs
-						.getTimestamp("dateAdded"), rs.getString("status"), rs
-						.getString("photo"), rs.getString("title"), rs
-						.getString("note")));
+						.getTimestamp("dateAdded"), rs.getString("status"),
+						image, rs.getString("title"), rs.getString("note")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(

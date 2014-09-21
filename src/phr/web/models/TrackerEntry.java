@@ -9,63 +9,63 @@ public abstract class TrackerEntry {
 	FBPost fbPost;
 	Timestamp timestamp;
 	String status;
-	String imageFilePath;
+	PHRImage image;
 
 	public TrackerEntry(Integer entryID, User user, FBPost fbPost,
-			Timestamp timestamp, String status, String imageFilePath) {
+			Timestamp timestamp, String status, PHRImage image) {
 		super();
 		this.entryID = entryID;
 		this.user = user;
 		this.fbPost = fbPost;
 		this.timestamp = timestamp;
 		this.status = status;
-		this.imageFilePath = imageFilePath;
+		this.image = image;
 	}
 
 	public TrackerEntry(User user, FBPost fbPost, Timestamp timestamp,
-			String status, String imageFilePath) {
+			String status, PHRImage image) {
 		super();
 		this.user = user;
 		this.fbPost = fbPost;
 		this.timestamp = timestamp;
 		this.status = status;
-		this.imageFilePath = imageFilePath;
+		this.image = image;
 	}
 
 	public TrackerEntry(Integer entryID, FBPost fbPost, Timestamp timestamp,
-			String status, String imageFilePath) {
+			String status, PHRImage image) {
 		super();
 		this.entryID = entryID;
 		this.fbPost = fbPost;
 		this.timestamp = timestamp;
 		this.status = status;
-		this.imageFilePath = imageFilePath;
+		this.image = image;
 	}
 
 	public TrackerEntry(Integer entryID, User user, Timestamp timestamp,
-			String status, String imageFilePath) {
+			String status, PHRImage image) {
 		super();
 		this.entryID = entryID;
 		this.user = user;
 		this.timestamp = timestamp;
 		this.status = status;
-		this.imageFilePath = imageFilePath;
+		this.image = image;
 	}
 
 	public TrackerEntry(FBPost fbPost, Timestamp timestamp, String status,
-			String imageFilePath) {
+			PHRImage image) {
 		super();
 		this.fbPost = fbPost;
 		this.timestamp = timestamp;
 		this.status = status;
-		this.imageFilePath = imageFilePath;
+		this.image = image;
 	}
 
-	public TrackerEntry(Timestamp timestamp, String status, String imageFilePath) {
+	public TrackerEntry(Timestamp timestamp, String status, PHRImage image) {
 		super();
 		this.timestamp = timestamp;
 		this.status = status;
-		this.imageFilePath = imageFilePath;
+		this.image = image;
 	}
 
 	public Integer getEntryID() {
@@ -108,12 +108,12 @@ public abstract class TrackerEntry {
 		this.status = status;
 	}
 
-	public String getImageFilePath() {
-		return imageFilePath;
+	public PHRImage getImage() {
+		return image;
 	}
 
-	public void setImageFilePath(String imageFilePath) {
-		this.imageFilePath = imageFilePath;
+	public void setImage(PHRImage image) {
+		this.image = image;
 	}
 
 	public int getUserID() {

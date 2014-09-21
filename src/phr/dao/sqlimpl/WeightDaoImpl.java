@@ -12,7 +12,10 @@ import phr.dao.UserDao;
 import phr.dao.WeightDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.tools.ImageHandler;
 import phr.web.models.FBPost;
+import phr.web.models.PHRImage;
+import phr.web.models.PHRImageType;
 import phr.web.models.Weight;
 
 @Repository("weightDao")
@@ -38,7 +41,15 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 				pstmt.setInt(5, weight.getFbPost().getId());
 			else
 				pstmt.setInt(5, -1);
-			pstmt.setString(6, weight.getImageFilePath());
+
+			if (weight.getImage().getFileName() == null) {
+				String encodedImage = weight.getImage().getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				weight.getImage().setFileName(fileName);
+			}
+
+			pstmt.setString(6, weight.getImage().getFileName());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -62,7 +73,7 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 			pstmt.setDouble(1, weight.getWeightInPounds());
 			pstmt.setTimestamp(2, weight.getTimestamp());
 			pstmt.setString(3, weight.getStatus());
-			pstmt.setString(4, weight.getImageFilePath());
+			pstmt.setString(4, weight.getImage().getFileName());
 			pstmt.setInt(5, weight.getEntryID());
 
 			pstmt.executeUpdate();
@@ -108,9 +119,11 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
+				PHRImage image = new PHRImage(rs.getString("photo"),
+						PHRImageType.FILENAME);
 				weights.add(new Weight(new FBPost(rs.getInt("fbPostID")), rs
-						.getTimestamp("dateAdded"), rs.getString("status"), rs
-						.getString("photo"), rs.getDouble("weightInPounds")));
+						.getTimestamp("dateAdded"), rs.getString("status"),
+						image, rs.getDouble("weightInPounds")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
