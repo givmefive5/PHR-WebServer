@@ -1,3 +1,4 @@
+
 package phr.dao.sqlimpl;
 
 import java.sql.Connection;
@@ -9,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import phr.dao.BloodPressureDao;
-import phr.dao.FacebookPostDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.tools.ImageHandler;
 import phr.web.models.BloodPressure;
+import phr.web.models.FBPost;
+import phr.web.models.PHRImage;
+import phr.web.models.PHRImageType;
 
 @Repository("bloodPressureDao")
 public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
@@ -21,9 +25,6 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 	@Autowired
 	UserDao userDao;
-	
-	@Autowired
-	FacebookPostDao fbPostDao;
 
 	@Override
 	public void add(BloodPressure bloodPressure) throws DataAccessException {
@@ -42,7 +43,14 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 				pstmt.setInt(6, bloodPressure.getFbPost().getId());
 			else
 				pstmt.setInt(6, -1);
-			pstmt.setString(7, bloodPressure.getImageFilePath());
+			if (bloodPressure.getImage().getFileName() == null) {
+				String encodedImage = bloodPressure.getImage()
+						.getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				bloodPressure.getImage().setFileName(fileName);
+			}
+			pstmt.setString(7, bloodPressure.getImage().getFileName());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -66,7 +74,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(2, object.getDiastolic());
 			pstmt.setTimestamp(3, object.getTimestamp());
 			pstmt.setString(4, object.getStatus());
-			pstmt.setString(5, object.getImageFilePath());
+			pstmt.setString(5, object.getImage().getFileName());
 			pstmt.setInt(6, object.getEntryID());
 
 			pstmt.executeUpdate();
@@ -108,16 +116,15 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(userAccessToken));
-			
+
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bloodpressures.add(new BloodPressure(
-						fbPostDao.get(rs.getInt("fbPostID")), 
-						rs.getTimestamp("dateAdded"), 
-						rs.getString("status"), 
-						rs.getString("photo"), 
-						rs.getInt("systolic"), 
-						rs.getInt("diastolic")));
+				PHRImage image = new PHRImage(rs.getString("photo"),
+						PHRImageType.FILENAME);
+				bloodpressures.add(new BloodPressure(new FBPost(rs
+						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+						.getString("status"), image, rs.getInt("systolic"), rs
+						.getInt("diastolic")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -157,3 +164,4 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	}
 
 }
+
