@@ -21,7 +21,8 @@ import sun.awt.image.ToolkitImage;
 
 public class ImageHandler {
 
-	public Image getImageFromURL(URL pictureURL) throws ImageHandlerException {
+	public static Image getImageFromURL(URL pictureURL)
+			throws ImageHandlerException {
 		try {
 			Image image = ImageIO.read(pictureURL);
 			return toBufferedImage(image);
@@ -30,14 +31,14 @@ public class ImageHandler {
 		}
 	}
 
-	private BufferedImage toBufferedImage(Image img) {
+	private static BufferedImage toBufferedImage(Image img) {
 		if (img.getClass().equals(BufferedImage.class))
 			return (BufferedImage) img;
 		BufferedImage buffered = ((ToolkitImage) img).getBufferedImage();
 		return buffered;
 	}
 
-	public String encodeBufferedImage(BufferedImage image)
+	public static String encodeBufferedImage(BufferedImage image)
 			throws ImageHandlerException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
@@ -51,14 +52,14 @@ public class ImageHandler {
 		}
 	}
 
-	public String encodeImageToBase64(Image imageFromPost)
+	public static String encodeImageToBase64(Image imageFromPost)
 			throws ImageHandlerException {
 		BufferedImage image = toBufferedImage(imageFromPost);
 		String encodedImage = encodeBufferedImage(image);
 		return encodedImage;
 	}
 
-	public BufferedImage decodeImage(String encodedImage)
+	public static BufferedImage decodeImage(String encodedImage)
 			throws ImageHandlerException {
 		try {
 			Base64 base64 = new Base64();
@@ -71,7 +72,7 @@ public class ImageHandler {
 		}
 	}
 
-	public String saveImage_ReturnFilePath(String encodedImage) {
+	public static String saveImage_ReturnFilePath(String encodedImage) {
 		long time = TimestampHandler.getCurrentTimestamp().getTime();
 		String uniqueString = UUIDGenerator.generateUniqueString();
 
@@ -82,7 +83,7 @@ public class ImageHandler {
 		return fileName;
 	}
 
-	public String getEncodedImageFromFile(String fileName)
+	public static String getEncodedImageFromFile(String fileName)
 			throws FileNotFoundException, ImageHandlerException {
 		String basePath = "D://PHRFiles/images/";
 		File folder = new File(basePath);

@@ -15,7 +15,7 @@ public class PHRImage {
 		if (type == PHRImageType.IMAGE)
 			this.encodedImage = s;
 		else if (type == PHRImageType.FILENAME)
-			this.fileName = fileName;
+			this.fileName = s;
 	}
 
 	public String getEncodedImage() throws FileNotFoundException,
