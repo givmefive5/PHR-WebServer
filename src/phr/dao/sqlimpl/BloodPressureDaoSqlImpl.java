@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import phr.dao.BloodPressureDao;
+import phr.dao.FacebookPostDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.web.models.BloodPressure;
-import phr.web.models.FBPost;
 
 @Repository("bloodPressureDao")
 public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
@@ -21,6 +21,9 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	FacebookPostDao fbPostDao;
 
 	@Override
 	public void add(BloodPressure bloodPressure) throws DataAccessException {
@@ -105,13 +108,16 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(userAccessToken));
-
+			
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bloodpressures.add(new BloodPressure(new FBPost(rs
-						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
-						.getString("status"), rs.getString("photo"), rs
-						.getInt("systolic"), rs.getInt("diastolic")));
+				bloodpressures.add(new BloodPressure(
+						fbPostDao.get(rs.getInt("fbPostID")), 
+						rs.getTimestamp("dateAdded"), 
+						rs.getString("status"), 
+						rs.getString("photo"), 
+						rs.getInt("systolic"), 
+						rs.getInt("diastolic")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
