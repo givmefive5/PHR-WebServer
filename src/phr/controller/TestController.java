@@ -26,8 +26,8 @@ public class TestController {
 	public void test(@RequestParam String userAccessToken) throws SNSException {
 		Timestamp timestamp = new Timestamp(new Long("1411181266814"));
 		System.out.println(timestamp);
-		List<FBPost> posts = facebookFetcherService.getNewPostsAfterDate(
-				timestamp, userAccessToken);
+		List<FBPost> posts = facebookFetcherService
+				.getAllPosts(userAccessToken);
 
 		for (FBPost p : posts) {
 			System.out.println(p.getStatus() + " " + p.getPostType());
