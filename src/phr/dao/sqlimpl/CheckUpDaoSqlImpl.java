@@ -31,21 +31,20 @@ CheckUpDao {
 	public void add(CheckUp checkUp) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO checkuptracker(purpose, doctorsName, location, notes, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO checkuptracker(purpose, doctorsName, notes, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, checkUp.getPurpose());
 			pstmt.setString(2, checkUp.getDoctorsName());
-			pstmt.setString(3, checkUp.getLocation());
-			pstmt.setString(4, checkUp.getNotes());
-			pstmt.setTimestamp(5, checkUp.getTimestamp());
-			pstmt.setString(6, checkUp.getStatus());
-			pstmt.setInt(7, checkUp.getUserID());
+			pstmt.setString(3, checkUp.getNotes());
+			pstmt.setTimestamp(4, checkUp.getTimestamp());
+			pstmt.setString(5, checkUp.getStatus());
+			pstmt.setInt(6, checkUp.getUserID());
 			if (checkUp.getFbPost() != null)
-				pstmt.setInt(8, checkUp.getFbPost().getId());
+				pstmt.setInt(7, checkUp.getFbPost().getId());
 			else
-				pstmt.setInt(8, -1);
+				pstmt.setInt(7, -1);
 			if (checkUp.getImage().getFileName() == null) {
 				String encodedImage = checkUp.getImage()
 						.getEncodedImage();
@@ -53,7 +52,7 @@ CheckUpDao {
 						.saveImage_ReturnFilePath(encodedImage);
 				checkUp.getImage().setFileName(fileName);
 			}
-			pstmt.setString(9, checkUp.getImage().getFileName());
+			pstmt.setString(8, checkUp.getImage().getFileName());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -68,19 +67,18 @@ CheckUpDao {
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE checkuptracker SET purpose = ?, doctorName = ?, location = ?, notes = ?,  dateAdded = ?, status=?, photo=?"
+			String query = "UPDATE checkuptracker SET purpose = ?, doctorName = ?, notes = ?,  dateAdded = ?, status=?, photo=?"
 					+ "WHERE id = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, checkUp.getPurpose());
 			pstmt.setString(2, checkUp.getDoctorsName());
-			pstmt.setString(3, checkUp.getLocation());
-			pstmt.setString(4, checkUp.getNotes());
-			pstmt.setTimestamp(5, checkUp.getTimestamp());
-			pstmt.setString(6, checkUp.getStatus());
-			pstmt.setString(7, checkUp.getImage().getFileName());
-			pstmt.setInt(8, checkUp.getEntryID());
+			pstmt.setString(3, checkUp.getNotes());
+			pstmt.setTimestamp(4, checkUp.getTimestamp());
+			pstmt.setString(5, checkUp.getStatus());
+			pstmt.setString(6, checkUp.getImage().getFileName());
+			pstmt.setInt(7, checkUp.getEntryID());
 
 			pstmt.executeUpdate();
 
@@ -115,7 +113,7 @@ CheckUpDao {
 		ArrayList<CheckUp> checkups = new ArrayList<CheckUp>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT fbPostID, purpose, doctorsName, location, notes, status, photo, dateAdded FROM checkuptracker WHERE userID = ?";
+			String query = "SELECT fbPostID, purpose, doctorsName, notes, status, photo, dateAdded FROM checkuptracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -132,7 +130,6 @@ CheckUpDao {
 						image, 
 						rs.getString("purpose"),
 						rs.getString("doctorsName"),
-						rs.getString("location"),
 						rs.getString("notes")));
 			}
 		} catch (Exception e) {

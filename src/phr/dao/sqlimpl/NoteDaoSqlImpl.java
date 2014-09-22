@@ -27,20 +27,19 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 	public void add(Note note) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO notestracker (title, note, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO notestracker (note, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, note.getTitle());
-			pstmt.setString(2, note.getNote());
-			pstmt.setTimestamp(3, note.getTimestamp());
-			pstmt.setString(4, note.getStatus());
-			pstmt.setInt(5, note.getUserID());
+			pstmt.setString(1, note.getNote());
+			pstmt.setTimestamp(2, note.getTimestamp());
+			pstmt.setString(3, note.getStatus());
+			pstmt.setInt(4, note.getUserID());
 			if (note.getFbPost() != null)
-				pstmt.setInt(6, note.getFbPost().getId());
+				pstmt.setInt(5, note.getFbPost().getId());
 			else
-				pstmt.setInt(6, -1);
-			pstmt.setString(7, note.getImage().getFileName());
+				pstmt.setInt(5, -1);
+			pstmt.setString(6, note.getImage().getFileName());
 
 			pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -56,17 +55,16 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE notestracker SET title = ?, note = ?, dateAdded = ?, status=?, photo=?"
+			String query = "UPDATE notestracker SET note = ?, dateAdded = ?, status=?, photo=?"
 					+ "WHERE id = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, note.getTitle());
-			pstmt.setString(2, note.getNote());
-			pstmt.setTimestamp(3, note.getTimestamp());
-			pstmt.setString(4, note.getStatus());
-			pstmt.setString(5, note.getImage().getFileName());
-			pstmt.setInt(6, note.getEntryID());
+			pstmt.setString(1, note.getNote());
+			pstmt.setTimestamp(2, note.getTimestamp());
+			pstmt.setString(3, note.getStatus());
+			pstmt.setString(4, note.getImage().getFileName());
+			pstmt.setInt(5, note.getEntryID());
 
 			pstmt.executeUpdate();
 
@@ -102,7 +100,7 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 		ArrayList<Note> notes = new ArrayList<Note>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT fbPostID, title, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
+			String query = "SELECT fbPostID, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -114,7 +112,7 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 						PHRImageType.FILENAME);
 				notes.add(new Note(new FBPost(rs.getInt("fbPostID")), rs
 						.getTimestamp("dateAdded"), rs.getString("status"),
-						image, rs.getString("title"), rs.getString("note")));
+						image,rs.getString("note")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
