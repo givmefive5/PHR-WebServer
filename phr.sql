@@ -115,6 +115,7 @@ CREATE TABLE `bloodsugartracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `bloodSugar` decimal(11,0) DEFAULT NULL,
+  `type` varchar(200) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,
   `fbPostID` int(11) DEFAULT NULL,
@@ -146,7 +147,6 @@ CREATE TABLE `checkuptracker` (
   `dateAdded` TIMESTAMP NULL DEFAULT NULL,
   `purpose` varchar(100) DEFAULT NULL,
   `doctorsName` varchar(100) DEFAULT NULL,
-  `location` varchar(100) DEFAULT NULL,
   `notes` varchar(100) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,
@@ -240,7 +240,6 @@ DROP TABLE IF EXISTS `notestracker`;
 CREATE TABLE `notestracker` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dateAdded` TIMESTAMP NULL DEFAULT NULL,
-  `title` varchar(100) DEFAULT NULL,
   `note` varchar(200) DEFAULT NULL,
   `status` varchar(200) DEFAULT NULL,
   `photo` varchar(100) DEFAULT NULL,

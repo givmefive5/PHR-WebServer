@@ -1,16 +1,17 @@
 package phr.controller;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import phr.exceptions.SNSException;
 import phr.service.BloodPressureService;
-import phr.sns.datamining.daoimpl.HealthCorpusDaoImpl;
-import phr.sns.datamining.filter.DMFilter;
 import phr.sns.datamining.service.FacebookFetcherService;
+import phr.web.models.FBPost;
 
 @Controller
 public class TestController {
@@ -22,14 +23,17 @@ public class TestController {
 	FacebookFetcherService facebookFetcherService;
 
 	@RequestMapping(value = "/test")
-	public void test() throws SNSException, InterruptedException {
-		HealthCorpusDaoImpl healthCorpusDaoImpl = new HealthCorpusDaoImpl();
-		List<String> corpus = healthCorpusDaoImpl.getFoodWords();
-		String message = "yum yum yum!!!! eating bacon and pancakes with egg at mcdonald's #bacon #pancakes #happy";
-		DMFilter filter = new DMFilter();
-		List<String> matches = filter.findMatches(message, corpus);
-		for (String m : matches) {
-			System.out.println(m);
+	public void test(@RequestParam String userAccessToken) throws SNSException {
+		Timestamp timestamp = new Timestamp(new Long("1411181266814"));
+		System.out.println(timestamp);
+		List<FBPost> posts = facebookFetcherService.getNewPostsAfterDate(
+				timestamp, userAccessToken);
+
+		for (FBPost p : posts) {
+			System.out.println(p.getStatus() + " " + p.getPostType());
+			if (p.getExtractedWords() != null)
+				for (String s : p.getExtractedWords())
+					System.out.println(s);
 		}
 	}
 }

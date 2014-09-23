@@ -15,23 +15,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.BloodSugarService;
+import phr.service.CheckUpService;
 import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
-import phr.web.models.BloodSugar;
+import phr.web.models.CheckUp;
 
-public class BloodSugarController {
-	
+public class CheckUpController {
+
 	@Autowired
-	BloodSugarService bloodSugarService;
+	CheckUpService checkUpService;
 	
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/tracker/addBloodSugar", method = RequestMethod.POST)
-	public void addBloodSugar(HttpServletRequest request,
+	@RequestMapping(value = "/tracker/addCheckUp", method = RequestMethod.POST)
+	public void addCheckUp(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 
 		PrintWriter writer = response.getWriter();
@@ -45,11 +45,11 @@ public class BloodSugarController {
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
 				
-				BloodSugar bloodSugar = GSONConverter
-						.getGSONObjectGivenJsonObject(data.getJSONObject("bloodSugar"),
-								BloodSugar.class);
-				bloodSugarService.add(accessToken, bloodSugar);
-				int entryID = bloodSugarService.getEntryId(bloodSugar);
+				CheckUp checkUp = GSONConverter
+						.getGSONObjectGivenJsonObject(data.getJSONObject("checkUp"),
+								CheckUp.class);
+				checkUpService.add(accessToken, checkUp);
+				int entryID = checkUpService.getEntryId(checkUp);
 				
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);
@@ -75,5 +75,4 @@ public class BloodSugarController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
-
 }

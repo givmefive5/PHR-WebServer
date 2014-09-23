@@ -192,7 +192,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id FROM useraccountandinfo WHERE userAccessToken = ?";
+			String query = "SELECT userID FROM useraccountandinfo WHERE userAccessToken = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);

@@ -1,3 +1,4 @@
+
 package phr.dao.sqlimpl;
 
 import java.sql.Connection;
@@ -163,3 +164,4 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	}
 
 }
+

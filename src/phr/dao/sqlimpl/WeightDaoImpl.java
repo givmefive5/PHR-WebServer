@@ -160,3 +160,4 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 	}
 
 }
+
