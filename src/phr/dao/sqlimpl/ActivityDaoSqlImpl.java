@@ -2,6 +2,7 @@ package phr.dao.sqlimpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,10 +80,30 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	}
 
 	@Override
-	public Integer getEntryId(ActivityTrackerEntry object)
+	public Integer getEntryId(ActivityTrackerEntry activityTrackerEntry)
 			throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id FROM activitytracker WHERE "
+					+ "userID = ? AND dateAdded = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, activityTrackerEntry.getUserID());
+			pstmt.setTimestamp(2, activityTrackerEntry.getTimestamp());
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next())
+				return rs.getInt(1);
+			else
+				return null;
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 	}
 	
 	@Override

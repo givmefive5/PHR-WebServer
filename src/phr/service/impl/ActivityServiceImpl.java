@@ -10,7 +10,6 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
 import phr.service.ActivityService;
-import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
 import phr.web.models.User;
 
