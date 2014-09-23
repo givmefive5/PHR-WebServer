@@ -3,7 +3,6 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.tools.ImageHandler;
-import phr.web.models.BloodPressure;
 import phr.web.models.CheckUp;
 import phr.web.models.FBPost;
 import phr.web.models.PHRImage;
