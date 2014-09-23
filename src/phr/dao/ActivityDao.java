@@ -7,5 +7,5 @@ import phr.web.models.ActivityTrackerEntry;
 public interface ActivityDao extends TrackerDao<ActivityTrackerEntry> {
 	
 	public void addActivityListEntry(Activity activity) throws DataAccessException;
-
+	
 }

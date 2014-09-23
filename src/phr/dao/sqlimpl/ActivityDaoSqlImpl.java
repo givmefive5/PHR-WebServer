@@ -84,7 +84,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
 	public void addActivityListEntry(Activity activity) throws DataAccessException {
 		
@@ -105,5 +105,4 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		}
 		
 	}
-
 }

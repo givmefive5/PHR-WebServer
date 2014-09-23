@@ -30,7 +30,12 @@ public class ActivityServiceImpl implements ActivityService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			activityTrackerEntry.setUser(new User(userID));
+			
+			if(activityTrackerEntry.getActivity().getEntryID() == null)
+				activityDao.addActivityListEntry(activityTrackerEntry.getActivity());
+			
 			activityDao.add(activityTrackerEntry);
+			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -73,17 +78,4 @@ public class ActivityServiceImpl implements ActivityService {
 						e);
 			}
 	}
-
-	@Override
-	public void addActivityListEntry(Activity activity) throws ServiceException {
-		try {
-			activityDao.addActivityListEntry(activity);
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-			throw new ServiceException(
-					"Error has occurred while adding a activity entry in activity list", e);
-		}
-		
-	}
-
 }
