@@ -2,6 +2,8 @@ package phr.tools;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,4 +57,13 @@ public final class GSONConverter {
 		return new JSONObject(gson.toJson(objectToBeConverted));
 	}
 
+	public static <T> List<T> convertJSONToObjectList(String jsonString,
+			Type type) {
+		Gson gson = new Gson();
+		List<T> list = gson.fromJson(jsonString, type);
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i));
+		}
+		return list;
+	}
 }
