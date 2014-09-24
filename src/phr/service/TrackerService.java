@@ -2,6 +2,7 @@ package phr.service;
 
 import java.util.ArrayList;
 
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 
 public interface TrackerService<T> {
@@ -10,10 +11,10 @@ public interface TrackerService<T> {
 			throws ServiceException;
 
 	public void edit(String accessToken, T object)
-			throws ServiceException;
+			throws ServiceException, EntryNotFoundException;
 
 	public void delete(String accessToken, T object)
-			throws ServiceException;
+			throws ServiceException, EntryNotFoundException;
 
 	public ArrayList<T> getAll(String accessToken)
 			throws ServiceException;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.UserDao;
 import phr.dao.WeightDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.WeightService;
 import phr.web.models.User;
@@ -36,22 +37,47 @@ public class WeightServiceImpl implements WeightService {
 	}
 
 	@Override
-	public void edit(String accessToken, Weight object) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void edit(String accessToken, Weight weight) throws ServiceException, EntryNotFoundException {
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			weight.setUser(new User(userID));
+			weightDao.edit(weight);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while editing a weight entry", e);
+		}
 
 	}
 
 	@Override
-	public void delete(String accessToken, Weight object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
-
+	public void delete(String accessToken, Weight weight)
+			throws ServiceException, EntryNotFoundException {
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			weight.setUser(new User(userID));
+			weightDao.delete(weight);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting a weight entry", e);
+		}
 	}
 
 	@Override
 	public ArrayList<Weight> getAll(String accessToken) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<Weight> weights = new ArrayList<Weight>();
+		
+		try{
+			weights = weightDao.getAll(accessToken);
+		}catch(DataAccessException e){
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occured while getting all entries in weight tracker", e);
+		}
+		
+		return weights;
 	}
 
 	@Override
@@ -63,7 +89,7 @@ public class WeightServiceImpl implements WeightService {
 				return weightDao.getEntryId(weight);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
-						"Error has occurred while adding a weight entry",
+						"Error has occurred while getting the entry id of a weight entry",
 						e);
 			}
 	}

@@ -61,7 +61,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public void edit(BloodPressure object) throws DataAccessException,
+	public void edit(BloodPressure bloodPressure) throws DataAccessException,
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
@@ -70,12 +70,12 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, object.getSystolic());
-			pstmt.setInt(2, object.getDiastolic());
-			pstmt.setTimestamp(3, object.getTimestamp());
-			pstmt.setString(4, object.getStatus());
-			pstmt.setString(5, object.getImage().getFileName());
-			pstmt.setInt(6, object.getEntryID());
+			pstmt.setInt(1, bloodPressure.getSystolic());
+			pstmt.setInt(2, bloodPressure.getDiastolic());
+			pstmt.setTimestamp(3, bloodPressure.getTimestamp());
+			pstmt.setString(4, bloodPressure.getStatus());
+			pstmt.setString(5, bloodPressure.getImage().getFileName());
+			pstmt.setInt(6, bloodPressure.getEntryID());
 
 			pstmt.executeUpdate();
 
@@ -86,7 +86,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public void delete(BloodPressure object) throws DataAccessException,
+	public void delete(BloodPressure bloodPressure) throws DataAccessException,
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
@@ -94,7 +94,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, object.getEntryID());
+			pstmt.setInt(1, bloodPressure.getEntryID());
 
 			pstmt.executeUpdate();
 
@@ -119,12 +119,14 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),
-						PHRImageType.FILENAME);
-				bloodpressures.add(new BloodPressure(new FBPost(rs
-						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
-						.getString("status"), image, rs.getInt("systolic"), rs
-						.getInt("diastolic")));
+				PHRImage image = new PHRImage(rs.getString("photo"),PHRImageType.FILENAME);
+				bloodpressures.add(new BloodPressure
+						(new FBPost(rs.getInt("fbPostID")), 
+								rs.getTimestamp("dateAdded"), 
+								rs.getString("status"),
+								image, 
+								rs.getInt("systolic"), 
+								rs.getInt("diastolic")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(

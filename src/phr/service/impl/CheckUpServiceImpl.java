@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.CheckUpDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.CheckUpService;
 import phr.web.models.CheckUp;
@@ -36,24 +37,52 @@ public class CheckUpServiceImpl implements CheckUpService {
 	}
 
 	@Override
-	public void edit(String accessToken, CheckUp object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
+	public void edit(String accessToken, CheckUp checkUp)
+			throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			checkUp.setUser(new User(userID));
+			checkUpDao.edit(checkUp);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while editing a check up entry", e);
+		}
 
 	}
 
 	@Override
-	public void delete(String accessToken, CheckUp object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
+	public void delete(String accessToken, CheckUp checkUp)
+			throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			checkUp.setUser(new User(userID));
+			checkUpDao.delete(checkUp);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting a check up entry", e);
+		}
 
 	}
 
 	@Override
 	public ArrayList<CheckUp> getAll(String accessToken)
 			throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<CheckUp> checkups = new ArrayList<CheckUp>();
+		
+		try{
+			checkups = checkUpDao.getAll(accessToken);
+		}catch(DataAccessException e){
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occured while getting all entries in Check Up tracker", e);
+		}
+		
+		return checkups;
 	}
 
 	@Override
@@ -65,7 +94,7 @@ public class CheckUpServiceImpl implements CheckUpService {
 				return checkUpDao.getEntryId(checkUp);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
-						"Error has occurred while adding a checkup entry",
+						"Error has occurred while getting the entry id of a checkup entry",
 						e);
 			}
 	}

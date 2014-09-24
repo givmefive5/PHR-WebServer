@@ -28,7 +28,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO foodtracker(foodID, servingCount, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO foodtracker(FoodID, servingCount, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -69,7 +69,21 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	@Override
 	public void delete(FoodTrackerEntry object) throws DataAccessException,
 			EntryNotFoundException {
-		// TODO Auto-generated method stub
+		
+		try {
+			Connection conn = getConnection();
+			String query = "DELETE FROM foodtracker WHERE id = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, object.getEntryID());
+
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
+		}
 		
 	}
 
