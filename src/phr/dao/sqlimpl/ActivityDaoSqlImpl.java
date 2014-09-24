@@ -32,7 +32,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO activitytracker(ActivityID, calorieBurnedPerHour, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO activitytracker(activityID, calorieBurnedPerHour, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);

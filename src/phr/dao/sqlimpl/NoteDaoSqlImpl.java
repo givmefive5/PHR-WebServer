@@ -100,7 +100,7 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 		ArrayList<Note> notes = new ArrayList<Note>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT fbPostID, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
+			String query = "SELECT id, fbPostID, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -108,11 +108,14 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),
-						PHRImageType.FILENAME);
-				notes.add(new Note(new FBPost(rs.getInt("fbPostID")), rs
-						.getTimestamp("dateAdded"), rs.getString("status"),
-						image,rs.getString("note")));
+				PHRImage image = new PHRImage(rs.getString("photo"),PHRImageType.FILENAME);
+				notes.add(new Note(
+						rs.getInt("id"),
+						new FBPost(rs.getInt("fbPostID")),
+						rs.getTimestamp("dateAdded"), 
+						rs.getString("status"),
+						image,
+						rs.getString("note")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(

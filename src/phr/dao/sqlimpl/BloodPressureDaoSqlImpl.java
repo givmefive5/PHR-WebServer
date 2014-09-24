@@ -111,7 +111,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 		ArrayList<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT fbPostID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
+			String query = "SELECT id, fbPostID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -120,8 +120,9 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				PHRImage image = new PHRImage(rs.getString("photo"),PHRImageType.FILENAME);
-				bloodpressures.add(new BloodPressure
-						(new FBPost(rs.getInt("fbPostID")), 
+				bloodpressures.add(new BloodPressure(
+						        rs.getInt("id"),
+						        new FBPost(rs.getInt("fbPostID")), 
 								rs.getTimestamp("dateAdded"), 
 								rs.getString("status"),
 								image, 

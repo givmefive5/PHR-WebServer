@@ -111,7 +111,7 @@ CheckUpDao {
 		ArrayList<CheckUp> checkups = new ArrayList<CheckUp>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT fbPostID, purpose, doctorsName, notes, status, photo, dateAdded FROM checkuptracker WHERE userID = ?";
+			String query = "SELECT id, fbPostID, purpose, doctorsName, notes, status, photo, dateAdded FROM checkuptracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -119,10 +119,10 @@ CheckUpDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),
-						PHRImageType.FILENAME);
-				checkups.add(new CheckUp(new FBPost(
-						rs.getInt("fbPostID")), 
+				PHRImage image = new PHRImage(rs.getString("photo"),PHRImageType.FILENAME);
+				checkups.add(new CheckUp(
+						rs.getInt("id"),
+						new FBPost(rs.getInt("fbPostID")), 
 						rs.getTimestamp("dateAdded"), 
 						rs.getString("status"),
 						image, 
