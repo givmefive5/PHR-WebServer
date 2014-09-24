@@ -13,6 +13,7 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.tools.ImageHandler;
+import phr.web.models.Activity;
 import phr.web.models.Food;
 import phr.web.models.FoodTrackerEntry;
 
@@ -170,6 +171,37 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 					"An error has occured while trying to access data from the database",
 					e);
 		}
+	}
+
+	@Override
+	public ArrayList<Food> getAllFood() throws DataAccessException {
+		ArrayList<Food> foods = new ArrayList<Food>();
+		
+		try{
+			Connection conn = getConnection();
+			String query = "SELECT id, name, calorie, servingUnit, servingSize, restaurantID, fromFatsecret FROM foodList";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				foods.add(new Food(
+						rs.getInt("id"),
+						rs.getString("name"),
+						rs.getDouble("calorie"),
+						rs.getString("servingUnit"),
+						rs.getDouble("servingSize"),
+						rs.getInt("restaurantID"),
+						rs.getBoolean("fromFatsecret")));	
+			}
+		}catch (Exception e){
+			throw new DataAccessException(
+				"An error has occured while trying to access data from the database",
+				e);
+		}
+		
+		return foods;
 	}
 
 }

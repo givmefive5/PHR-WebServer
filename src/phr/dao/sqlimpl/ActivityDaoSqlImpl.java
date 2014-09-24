@@ -15,10 +15,7 @@ import phr.exceptions.EntryNotFoundException;
 import phr.tools.ImageHandler;
 import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
-import phr.web.models.BloodPressure;
-import phr.web.models.FBPost;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
+
 
 @Repository("activityDao")
 public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
@@ -169,6 +166,36 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 					"An error has occured while trying to access data from the database",
 					e);
 		}
+		
+	}
+
+	@Override
+	public ArrayList<Activity> getAllActivity()
+			throws DataAccessException {
+		
+		ArrayList<Activity> activities = new ArrayList<Activity>();
+					
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id, name, MET FROM activityList";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				activities.add(new Activity(
+						rs.getInt("id"),
+						rs.getString("name"),
+						rs.getDouble("MET")));
+			}
+		}catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		
+		return activities;
 		
 	}
 }
