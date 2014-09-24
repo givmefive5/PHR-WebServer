@@ -1,39 +1,31 @@
 package phr.controller;
 
-import java.sql.Timestamp;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import phr.exceptions.SNSException;
-import phr.service.BloodPressureService;
-import phr.sns.datamining.service.FacebookFetcherService;
-import phr.web.models.FBPost;
+import phr.fatsecret.FatSecretFetcher;
+import phr.fatsecret.FatSecretFood;
 
 @Controller
 public class TestController {
 
-	@Autowired
-	BloodPressureService bloodPressureService;
-
-	@Autowired
-	FacebookFetcherService facebookFetcherService;
+	FatSecretFetcher fatSecretFetcher = new FatSecretFetcher();
 
 	@RequestMapping(value = "/test")
-	public void test(@RequestParam String userAccessToken) throws SNSException {
-		Timestamp timestamp = new Timestamp(new Long("1411181266814"));
-		System.out.println(timestamp);
-		List<FBPost> posts = facebookFetcherService.getNewPostsAfterDate(
-				timestamp, userAccessToken);
-
-		for (FBPost p : posts) {
-			System.out.println(p.getStatus() + " " + p.getPostType());
-			if (p.getExtractedWords() != null)
-				for (String s : p.getExtractedWords())
-					System.out.println(s);
+	public void test() throws SNSException, UnsupportedEncodingException,
+			ClientProtocolException, GeneralSecurityException, IOException,
+			JSONException {
+		List<FatSecretFood> foodList = fatSecretFetcher.searchFood("bacon");
+		for (FatSecretFood f : foodList) {
+			System.out.println(f.getFood_name());
 		}
 	}
 }
