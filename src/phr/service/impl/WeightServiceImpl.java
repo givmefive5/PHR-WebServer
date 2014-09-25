@@ -24,11 +24,11 @@ public class WeightServiceImpl implements WeightService {
 	UserDao userDao;
 
 	@Override
-	public void add(String accessToken, Weight weight) throws ServiceException {
+	public int addReturnEntryID(String accessToken, Weight weight) throws ServiceException {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			weight.setUser(new User(userID));
-			weightDao.add(weight);
+			return weightDao.addReturnsEntryID(weight);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(

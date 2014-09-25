@@ -48,7 +48,7 @@ public class CheckUpController {
 				CheckUp checkUp = GSONConverter
 						.getGSONObjectGivenJsonObject(data.getJSONObject("checkUp"),
 								CheckUp.class);
-				checkUpService.add(accessToken, checkUp);
+				checkUpService.addReturnEntryID(accessToken, checkUp);
 				int entryID = checkUpService.getEntryId(checkUp);
 				
 				JSONObject dataForResponse = new JSONObject();

@@ -25,16 +25,16 @@ public class ActivityServiceImpl implements ActivityService {
 	
 
 	@Override
-	public void add(String accessToken, ActivityTrackerEntry activityTrackerEntry)
+	public int addReturnEntryID(String accessToken, ActivityTrackerEntry activityTrackerEntry)
 			throws ServiceException {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			activityTrackerEntry.setUser(new User(userID));
 			
 			if(activityTrackerEntry.getActivity().getEntryID() == null)
-				activityDao.addActivityListEntry(activityTrackerEntry.getActivity());
+				activityTrackerEntry.getActivity().setEntryID(activityDao.addActivityListEntryReturnEntryID(activityTrackerEntry.getActivity()));
 			
-			activityDao.add(activityTrackerEntry);
+			return activityDao.addReturnsEntryID(activityTrackerEntry); 
 			
 		} catch (DataAccessException e) {
 			e.printStackTrace();

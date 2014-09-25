@@ -8,7 +8,7 @@ import phr.web.models.FoodTrackerEntry;
 
 public interface FoodDao extends TrackerDao<FoodTrackerEntry> {
 	
-	public void addFoodListEntry(Food food) throws DataAccessException;
+	public int addFoodListEntryReturnEntryID(Food food) throws DataAccessException;
 	
 	public Boolean checkFoodEntryInList(Food food) throws DataAccessException;
 	

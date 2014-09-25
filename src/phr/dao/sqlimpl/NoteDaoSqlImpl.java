@@ -3,6 +3,7 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,13 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 	UserDao userDao;
 
 	@Override
-	public void add(Note note) throws DataAccessException {
+	public int addReturnsEntryID(Note note) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO notestracker (note, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query);
+			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, note.getNote());
 			pstmt.setTimestamp(2, note.getTimestamp());
 			pstmt.setString(3, note.getStatus());
@@ -42,6 +43,15 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 			pstmt.setString(6, note.getImage().getFileName());
 
 			pstmt.executeUpdate();
+			
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+			int entryID = -1;
+			if (rs.next())
+				entryID = rs.getInt(1);
+			
+			return entryID;
+
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

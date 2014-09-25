@@ -24,11 +24,11 @@ public class NoteServiceImpl implements NoteService {
 	UserDao userDao;
 
 	@Override
-	public void add(String accessToken, Note note) throws ServiceException {
+	public int addReturnEntryID(String accessToken, Note note) throws ServiceException {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			note.setUser(new User(userID));
-			noteDao.add(note);
+			return noteDao.addReturnsEntryID(note);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.sql.Statement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,13 +26,13 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 	UserDao userDao;
 
 	@Override
-	public void add(BloodSugar bloodSugar) throws DataAccessException {
+	public int addReturnsEntryID(BloodSugar bloodSugar) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO bloodsugartracker (bloodsugar, type,  dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query);
+			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setDouble(1, bloodSugar.getBloodSugar());
 			pstmt.setString(2, bloodSugar.getType());
 			pstmt.setTimestamp(3, bloodSugar.getTimestamp());
@@ -52,6 +53,15 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 			pstmt.setString(7, bloodSugar.getImage().getFileName());
 
 			pstmt.executeUpdate();
+			
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+			int entryID = -1;
+			if (rs.next())
+				entryID = rs.getInt(1);
+			
+			return entryID;
+
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

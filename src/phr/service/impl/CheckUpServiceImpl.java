@@ -24,11 +24,11 @@ public class CheckUpServiceImpl implements CheckUpService {
 	UserDao userDao;
 
 	@Override
-	public void add(String accessToken, CheckUp checkUp) throws ServiceException {
+	public int addReturnEntryID(String accessToken, CheckUp checkUp) throws ServiceException {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			checkUp.setUser(new User(userID));
-			checkUpDao.add(checkUp);
+			return checkUpDao.addReturnsEntryID(checkUp);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(

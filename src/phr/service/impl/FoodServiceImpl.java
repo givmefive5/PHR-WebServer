@@ -25,7 +25,7 @@ public class FoodServiceImpl implements FoodService {
 	UserDao userDao;
 
 	@Override
-	public void add(String accessToken, FoodTrackerEntry foodTrackerEntry)
+	public int addReturnEntryID(String accessToken, FoodTrackerEntry foodTrackerEntry)
 			throws ServiceException {
 		
 		try {
@@ -34,10 +34,10 @@ public class FoodServiceImpl implements FoodService {
 			
 			if(foodTrackerEntry.getFood().getEntryID() == null){
 				if(!foodDao.checkFoodEntryInList(foodTrackerEntry.getFood()))
-					foodDao.addFoodListEntry(foodTrackerEntry.getFood());
+				foodTrackerEntry.getFood().setEntryID(foodDao.addFoodListEntryReturnEntryID(foodTrackerEntry.getFood()));
 			}
 				
-			foodDao.add(foodTrackerEntry);
+			return foodDao.addReturnsEntryID(foodTrackerEntry);
 			
 		} catch (DataAccessException e) {
 			e.printStackTrace();

@@ -7,7 +7,7 @@ import phr.exceptions.EntryNotFoundException;
 
 public interface TrackerDao<T> {
 
-	public void add(T object) throws DataAccessException;
+	public int addReturnsEntryID(T object) throws DataAccessException;
 
 	public void edit(T object) throws DataAccessException,
 			EntryNotFoundException;

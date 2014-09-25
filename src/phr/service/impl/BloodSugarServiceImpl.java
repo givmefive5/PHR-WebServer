@@ -24,12 +24,12 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	UserDao userDao;
 
 	@Override
-	public void add(String accessToken, BloodSugar bloodSugar)
+	public int addReturnEntryID(String accessToken, BloodSugar bloodSugar)
 			throws ServiceException {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodSugar.setUser(new User(userID));
-			bloodSugarDao.add(bloodSugar);
+			return bloodSugarDao.addReturnsEntryID(bloodSugar);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(

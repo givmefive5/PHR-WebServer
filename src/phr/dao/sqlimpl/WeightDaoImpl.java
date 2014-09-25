@@ -3,6 +3,7 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,14 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 	UserDao userDao;
 
 	@Override
-	public void add(Weight weight) throws DataAccessException {
+	public int addReturnsEntryID(Weight weight) throws DataAccessException {
 
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO weighttracker(weightInPounds, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query);
+			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setDouble(1, weight.getWeightInPounds());
 			pstmt.setTimestamp(2, weight.getTimestamp());
 			pstmt.setString(3, weight.getStatus());
@@ -52,6 +53,15 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 			pstmt.setString(6, weight.getImage().getFileName());
 
 			pstmt.executeUpdate();
+			
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+			int entryID = -1;
+			if (rs.next())
+				entryID = rs.getInt(1);
+			
+			return entryID;
+
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

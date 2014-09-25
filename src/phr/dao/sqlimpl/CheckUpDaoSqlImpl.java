@@ -3,6 +3,7 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,13 @@ CheckUpDao {
 	UserDao userDao;
 
 	@Override
-	public void add(CheckUp checkUp) throws DataAccessException {
+	public int addReturnsEntryID(CheckUp checkUp) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO checkuptracker(purpose, doctorsName, notes, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query);
+			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, checkUp.getPurpose());
 			pstmt.setString(2, checkUp.getDoctorsName());
 			pstmt.setString(3, checkUp.getNotes());
@@ -53,6 +54,15 @@ CheckUpDao {
 			pstmt.setString(8, checkUp.getImage().getFileName());
 
 			pstmt.executeUpdate();
+			
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+			int entryID = -1;
+			if (rs.next())
+				entryID = rs.getInt(1);
+			
+			return entryID;
+
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

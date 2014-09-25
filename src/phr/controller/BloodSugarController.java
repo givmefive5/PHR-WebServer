@@ -48,7 +48,7 @@ public class BloodSugarController {
 				BloodSugar bloodSugar = GSONConverter
 						.getGSONObjectGivenJsonObject(data.getJSONObject("bloodSugar"),
 								BloodSugar.class);
-				bloodSugarService.add(accessToken, bloodSugar);
+				bloodSugarService.addReturnEntryID(accessToken, bloodSugar);
 				int entryID = bloodSugarService.getEntryId(bloodSugar);
 				
 				JSONObject dataForResponse = new JSONObject();
