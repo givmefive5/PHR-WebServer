@@ -61,9 +61,6 @@ public final class GSONConverter {
 			Type type) {
 		Gson gson = new Gson();
 		List<T> list = gson.fromJson(jsonString, type);
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i));
-		}
 		return list;
 	}
 }

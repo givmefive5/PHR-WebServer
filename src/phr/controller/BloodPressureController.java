@@ -65,8 +65,8 @@ public class BloodPressureController {
 								"Access token is invalid, please ask user to log in again.");
 			}
 
-		} catch (JSONException | ServiceException
-				| JSONConverterException | UserServiceException e) {
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
@@ -77,4 +77,85 @@ public class BloodPressureController {
 		writer.write(jsonResponse.toString());
 	}
 
+	@RequestMapping(value = "/tracker/editBloodPressure", method = RequestMethod.POST)
+	public void editBloodPressure(HttpServletRequest request,
+			HttpServletResponse response) throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				BloodPressure bloodPressure = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("bloodPressure"),
+								BloodPressure.class);
+				bloodPressureService.edit(accessToken, bloodPressure);
+
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", null, "Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
+
+	@RequestMapping(value = "/tracker/deleteBloodPressure", method = RequestMethod.POST)
+	public void deleteBloodPressure(HttpServletRequest request,
+			HttpServletResponse response) throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				BloodPressure bloodPressure = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("bloodPressure"),
+								BloodPressure.class);
+				bloodPressureService.delete(accessToken, bloodPressure);
+
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", null, "Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
 }
