@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.BloodPressureDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.BloodPressureService;
 import phr.web.models.BloodPressure;
@@ -37,25 +38,52 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	}
 
 	@Override
-	public void edit(String accessToken, BloodPressure object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
-
+	public void edit(String accessToken, BloodPressure bloodPressure)
+			throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			bloodPressure.setUser(new User(userID));
+			bloodPressureDao.edit(bloodPressure);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while editing a blood pressure entry", e);
+		}
 	}
 
 	@Override
-	public void delete(String accessToken, BloodPressure object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
-
+	public void delete(String accessToken, BloodPressure bloodPressure)
+			throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			bloodPressure.setUser(new User(userID));
+			bloodPressureDao.delete(bloodPressure);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting a blood pressure entry", e);
+		}
 	}
 
 	@Override
 	public ArrayList<BloodPressure> getAll(String accessToken)
 			throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
+		
+		try{
+			bloodpressures = bloodPressureDao.getAll(accessToken);
+		}catch(DataAccessException e){
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occured while getting all entries in Blood Pressure tracker", e);
+		}
+		
+		return bloodpressures;
 	}
+
 
 	@Override
 	public Integer getEntryId(BloodPressure bloodPressure)
@@ -67,7 +95,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 				return bloodPressureDao.getEntryId(bloodPressure);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
-						"Error has occurred while adding a blood pressure entry",
+						"Error has occurred while getting the entry id a blood pressure entry",
 						e);
 			}
 	}

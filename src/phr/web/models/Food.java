@@ -9,6 +9,35 @@ public class Food {
 	double servingSize;
 	Integer restaurantID;
 	Boolean fromFatsecret;
+	
+	
+	
+	public Food(Integer entryID, String name, double calorie,
+			String servingUnit, double servingSize, Integer restaurantID,
+			Boolean fromFatsecret) {
+		super();
+		this.entryID = entryID;
+		this.name = name;
+		this.calorie = calorie;
+		this.servingUnit = servingUnit;
+		this.servingSize = servingSize;
+		this.restaurantID = restaurantID;
+		this.fromFatsecret = fromFatsecret;
+	}
+	
+	public Food(String name, double calorie, String servingUnit,
+			double servingSize, Integer restaurantID, Boolean fromFatsecret) {
+		super();
+		this.name = name;
+		this.calorie = calorie;
+		this.servingUnit = servingUnit;
+		this.servingSize = servingSize;
+		this.restaurantID = restaurantID;
+		this.fromFatsecret = fromFatsecret;
+	}
+
+
+
 	public Integer getEntryID() {
 		return entryID;
 	}

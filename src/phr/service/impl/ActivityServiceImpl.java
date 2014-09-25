@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.ActivityDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.ActivityService;
 import phr.web.models.ActivityTrackerEntry;
@@ -43,24 +44,53 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
-	public void edit(String accessToken, ActivityTrackerEntry object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
+	public void edit(String accessToken, ActivityTrackerEntry activityTrackerEntry)
+			throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			activityTrackerEntry.setUser(new User(userID));
+			activityDao.edit(activityTrackerEntry);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while editing a activity entry", e);
+		}
 		
 	}
 
 	@Override
-	public void delete(String accessToken, ActivityTrackerEntry object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
+	public void delete(String accessToken, ActivityTrackerEntry activityTrackerEntry)
+			throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			activityTrackerEntry.setUser(new User(userID));
+			activityDao.delete(activityTrackerEntry);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting a activity entry", e);
+		}
+
 		
 	}
 
 	@Override
 	public ArrayList<ActivityTrackerEntry> getAll(String accessToken)
 			throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<ActivityTrackerEntry> activities = new ArrayList<ActivityTrackerEntry>();
+		
+		try{
+			activities = activityDao.getAll(accessToken);
+		}catch(DataAccessException e){
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occured while getting all entries in activity tracker", e);
+		}
+		
+		return activities;
 	}
 
 	@Override
@@ -73,7 +103,7 @@ public class ActivityServiceImpl implements ActivityService {
 				return activityDao.getEntryId(activityTrackerEntry);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
-						"Error has occurred while adding a activity entry",
+						"Error has occurred while getting the entry id a activity entry",
 						e);
 			}
 	}

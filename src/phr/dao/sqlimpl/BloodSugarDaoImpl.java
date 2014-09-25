@@ -111,7 +111,7 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 		ArrayList<BloodSugar> bloodsugars = new ArrayList<BloodSugar>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT fbPostID, bloodsugar, type,  status, photo, dateAdded FROM bloodsugartracker WHERE userID = ?";
+			String query = "SELECT id, fbPostID, bloodsugar, type,  status, photo, dateAdded FROM bloodsugartracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -122,7 +122,8 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 				PHRImage image = new PHRImage(rs.getString("photo"),
 						PHRImageType.FILENAME);
 				bloodsugars.add(new BloodSugar(
-						new FBPost(rs.getInt("fbPostID")), 
+						 		   rs.getInt("id"),
+						 		   new FBPost(rs.getInt("fbPostID")), 
 								   rs.getTimestamp("dateAdded"), 
 								   rs.getString("status"), 
 								   image, 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.NoteDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.NoteService;
 import phr.web.models.Note;
@@ -36,21 +37,48 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public void edit(String accessToken, Note object) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void edit(String accessToken, Note note) throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			note.setUser(new User(userID));
+			noteDao.edit(note);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while editng a note entry", e);
+		}
 
 	}
 
 	@Override
-	public void delete(String accessToken, Note object) throws ServiceException {
-		// TODO Auto-generated method stub
-
+	public void delete(String accessToken, Note note) throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			note.setUser(new User(userID));
+			noteDao.delete(note);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting a note entry", e);
+		}
 	}
 
 	@Override
 	public ArrayList<Note> getAll(String accessToken) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<Note> notes = new ArrayList<Note>();
+		
+		try{
+			notes = noteDao.getAll(accessToken);
+		}catch(DataAccessException e){
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occured while getting all entries in note tracker", e);
+		}
+		
+		return notes;
 	}
 
 	@Override
@@ -62,7 +90,7 @@ public class NoteServiceImpl implements NoteService {
 				return noteDao.getEntryId(note);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
-						"Error has occurred while adding a note entry",
+						"Error has occurred while getting the entry id of a note entry",
 						e);
 			}
 	}

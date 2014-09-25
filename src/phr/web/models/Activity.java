@@ -12,6 +12,13 @@ public class Activity {
 		this.name = name;
 		MET = mET;
 	}
+	
+	public Activity(String name, double mET) {
+		super();
+		this.name = name;
+		MET = mET;
+	}
+
 
 	public Integer getEntryID() {
 		return entryID;

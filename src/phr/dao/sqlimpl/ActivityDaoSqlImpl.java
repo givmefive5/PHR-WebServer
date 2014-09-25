@@ -16,6 +16,7 @@ import phr.tools.ImageHandler;
 import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
 
+
 @Repository("activityDao")
 public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
@@ -28,7 +29,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO activitytracker(activityID, caloriesBurnedPerHour, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO activitytracker(activityID, calorieBurnedPerHour, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -59,24 +60,65 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	}
 
 	@Override
-	public void edit(ActivityTrackerEntry object) throws DataAccessException,
+	public void edit(ActivityTrackerEntry activityTrackerEntry) throws DataAccessException,
 			EntryNotFoundException {
-		// TODO Auto-generated method stub
+		
+		try {
+			Connection conn = getConnection();
+			String query = "UPDATE activitytracker SET activityID = ?, calorieBurnedPerHour = ?, dateAdded =? , status = ?, photo = ?)"
+					+ "WHERE id = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, activityTrackerEntry.getActivity().getEntryID());
+			pstmt.setDouble(2, activityTrackerEntry.getCalorisBurnedPerHour());
+			pstmt.setTimestamp(3, activityTrackerEntry.getTimestamp());
+			pstmt.setString(4, activityTrackerEntry.getStatus());
+			if (activityTrackerEntry.getImage().getFileName() == null) {
+				String encodedImage = activityTrackerEntry.getImage()
+						.getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				activityTrackerEntry.getImage().setFileName(fileName);
+			}
+			pstmt.setString(5, activityTrackerEntry.getImage().getFileName());
+
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 		
 	}
 
 	@Override
-	public void delete(ActivityTrackerEntry object) throws DataAccessException,
+	public void delete(ActivityTrackerEntry activityTrackerEntry) throws DataAccessException,
 			EntryNotFoundException {
-		// TODO Auto-generated method stub
+		
+		try {
+			Connection conn = getConnection();
+			String query = "DELETE FROM activitytracker WHERE id = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, activityTrackerEntry.getEntryID());
+
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
+		}
 		
 	}
 
 	@Override
 	public ArrayList<ActivityTrackerEntry> getAll(String userAccessToken)
 			throws DataAccessException {
-		// TODO Auto-generated method stub
+	
 		return null;
+
 	}
 
 	@Override
@@ -124,6 +166,36 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 					"An error has occured while trying to access data from the database",
 					e);
 		}
+		
+	}
+
+	@Override
+	public ArrayList<Activity> getAllActivity()
+			throws DataAccessException {
+		
+		ArrayList<Activity> activities = new ArrayList<Activity>();
+					
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id, name, MET FROM activityList";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				activities.add(new Activity(
+						rs.getInt("id"),
+						rs.getString("name"),
+						rs.getDouble("MET")));
+			}
+		}catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		
+		return activities;
 		
 	}
 }

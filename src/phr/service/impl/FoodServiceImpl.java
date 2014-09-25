@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.FoodDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.FoodService;
 import phr.web.models.FoodTrackerEntry;
@@ -47,24 +48,51 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	@Override
-	public void edit(String accessToken, FoodTrackerEntry object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
+	public void edit(String accessToken, FoodTrackerEntry foodTrackerEntry)
+			throws ServiceException, EntryNotFoundException {
+		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			foodTrackerEntry.setUser(new User(userID));
+			foodDao.edit(foodTrackerEntry);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while editing a food entry", e);
+		}
 		
 	}
 
 	@Override
-	public void delete(String accessToken, FoodTrackerEntry object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
+	public void delete(String accessToken, FoodTrackerEntry foodTrackerEntry)
+			throws ServiceException, EntryNotFoundException {
 		
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			foodTrackerEntry.setUser(new User(userID));
+			foodDao.delete(foodTrackerEntry);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting a food entry", e);
+		}
 	}
 
 	@Override
 	public ArrayList<FoodTrackerEntry> getAll(String accessToken)
 			throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ArrayList<FoodTrackerEntry> foods = new ArrayList<FoodTrackerEntry>();
+		
+		try{
+			foods = foodDao.getAll(accessToken);
+		}catch(DataAccessException e){
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occured while getting all entries in food tracker", e);
+		}
+		
+		return foods;
 	}
 
 	@Override
@@ -76,7 +104,7 @@ public class FoodServiceImpl implements FoodService {
 				return foodDao.getEntryId(foodTrackerEntry);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
-						"Error has occurred while adding a food entry",
+						"Error has occurred while getting the entry id of a food entry",
 						e);
 			}
 	}

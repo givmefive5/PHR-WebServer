@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.BloodSugarDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.BloodSugarService;
 import phr.web.models.BloodSugar;
@@ -37,24 +38,49 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	}
 
 	@Override
-	public void edit(String accessToken, BloodSugar object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
+	public void edit(String accessToken, BloodSugar bloodSugar)
+			throws ServiceException, EntryNotFoundException {
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			bloodSugar.setUser(new User(userID));
+			bloodSugarDao.edit(bloodSugar);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while editing a blood sugar entry", e);
+		}
 
 	}
 
 	@Override
-	public void delete(String accessToken, BloodSugar object)
-			throws ServiceException {
-		// TODO Auto-generated method stub
+	public void delete(String accessToken, BloodSugar bloodSugar)
+			throws ServiceException, EntryNotFoundException {
+		try {
+			int userID = userDao.getUserIDGivenAccessToken(accessToken);
+			bloodSugar.setUser(new User(userID));
+			bloodSugarDao.delete(bloodSugar);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting a blood sugar entry", e);
+		}
 
 	}
 
 	@Override
 	public ArrayList<BloodSugar> getAll(String accessToken)
 			throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<BloodSugar> bloodsugars = new ArrayList<BloodSugar>();
+		
+		try{
+			bloodsugars = bloodSugarDao.getAll(accessToken);
+		}catch(DataAccessException e){
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occured while getting all entries in Blood Sugar tracker", e);
+		}
+		
+		return bloodsugars;
 	}
 
 	@Override
@@ -67,7 +93,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 				return bloodSugarDao.getEntryId(bloodSugar);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
-						"Error has occurred while adding a blood sugar entry",
+						"Error has occurred while getting the entry id of a blood sugar entry",
 						e);
 			}
 	}

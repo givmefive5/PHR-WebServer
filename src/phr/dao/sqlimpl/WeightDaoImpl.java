@@ -111,7 +111,7 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 		ArrayList<Weight> weights = new ArrayList<Weight>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT fbPostID, weightInPounds, status, photo, dateAdded FROM weighttracker WHERE userID = ?";
+			String query = "SELECT id, fbPostID, weightInPounds, status, photo, dateAdded FROM weighttracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -119,11 +119,14 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),
-						PHRImageType.FILENAME);
-				weights.add(new Weight(new FBPost(rs.getInt("fbPostID")), rs
-						.getTimestamp("dateAdded"), rs.getString("status"),
-						image, rs.getDouble("weightInPounds")));
+				PHRImage image = new PHRImage(rs.getString("photo"),PHRImageType.FILENAME);
+				weights.add(new Weight(
+						rs.getInt("id"),
+						new FBPost(rs.getInt("fbPostID")), 
+						rs.getTimestamp("dateAdded"), 
+						rs.getString("status"),
+						image, 
+						rs.getDouble("weightInPounds")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
