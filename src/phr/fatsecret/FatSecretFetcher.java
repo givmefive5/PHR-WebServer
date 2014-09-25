@@ -62,49 +62,6 @@ public class FatSecretFetcher {
 		return new String(Base64.encodeBase64(mac.doFinal(text))).trim();
 	}
 
-	private static void getExercises() throws ClientProtocolException,
-			IOException, GeneralSecurityException {
-		Long timestamp = getTimeStamp();
-		String params = "format=json&method=exercises.get&oauth_consumer_key="
-				+ consumerKey + "&oauth_nonce=" + timestamp + "&"
-				+ "oauth_signature_method=HMAC-SHA1&oauth_timestamp="
-				+ timestamp + "&oauth_version=1.0";
-
-		String signatureBaseString = "";
-		signatureBaseString += "GET&" + encode(address) + "&" + encode(params);
-		System.out.println("Signature Base String :");
-		System.out.println(signatureBaseString + "\n");
-		String signatureValue = computeSignature(signatureBaseString,
-				sharedSecret + "&");
-		System.out.println("Signature Value:");
-		System.out.println(signatureValue + "\n");
-		HttpClient client = new DefaultHttpClient();
-
-		String newParams = "format=json&method=exercises.get&oauth_consumer_key="
-				+ consumerKey
-				+ "&oauth_nonce="
-				+ timestamp
-				+ "&"
-				+ "oauth_signature="
-				+ signatureValue
-				+ "&"
-				+ "oauth_signature_method=HMAC-SHA1&oauth_timestamp="
-				+ timestamp + "&oauth_version=1.0";
-		System.out.println("Http Request:");
-		System.out.println(address + "?" + newParams + "\n");
-		HttpGet get = new HttpGet(address + "?" + newParams);
-		HttpResponse response = client.execute(get);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		out.close();
-		response.getEntity().writeTo(out);
-		JsonParser parser = new JsonParser();
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-		JsonElement el = parser.parse(out.toString());
-		String output = gson.toJson(el);
-		System.out.println(output);
-	}
-
 	public List<FatSecretFood> searchFood(String query)
 			throws UnsupportedEncodingException, GeneralSecurityException,
 			IOException, ClientProtocolException, JSONException {
