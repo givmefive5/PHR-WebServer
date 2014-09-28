@@ -7,7 +7,14 @@
 <title>Insert title here</title>
 </head>
 <body>
+	Test1
 	<form method="POST" action="test">
+		FB Access Token from Graph API:<input type="text" name="userFBAccessToken"/><br>
+		<input type="submit"/>
+	</form>
+	<br><br>
+	Test2
+	<form method="POST" action="test2">
 		<input type="submit"/>
 	</form>
 </body>

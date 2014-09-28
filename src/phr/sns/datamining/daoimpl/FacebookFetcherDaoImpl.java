@@ -27,8 +27,7 @@ import facebook4j.auth.AccessToken;
 @Repository("facebookFetcherDao")
 public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
-	ImageHandler imageHandler = new ImageHandler();
-	KeywordsExtractor keywordsExtractor = new KeywordsExtractor();
+	private KeywordsExtractor keywordsExtractor = new KeywordsExtractor();
 	private static final String appID = "458502710946706";
 	private static final String appSecret = "c41ccfbd5ff58c87342f4df5911d2d88";
 
@@ -41,11 +40,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 
-		List<FBPost> posts = new ArrayList<>();
-
 		try {
 
 			ResponseList<Post> feed = facebook.getPosts();
+			System.out.println("Number of Posts Retrieved: " + feed.size());
 			return feed;
 		} catch (FacebookException e) {
 			throw new DataAccessException(
@@ -57,7 +55,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	public List<FBPost> getAllPosts(String userFBAccessToken)
 			throws DataAccessException {
 		ResponseList<Post> feed = getAllPostsFromFB(userFBAccessToken);
-		List<FBPost> filteredPosts;
+		List<FBPost> filteredPosts = new ArrayList<>();
 		try {
 			filteredPosts = filterPostsList(feed);
 		} catch (ImageHandlerException e) {
@@ -78,9 +76,9 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				FBPost post;
 				String encodedImage = null;
 				if (p.getPicture() != null) {
-					Image imageFromPost = imageHandler.getImageFromURL(p
+					Image imageFromPost = ImageHandler.getImageFromURL(p
 							.getPicture());
-					encodedImage = imageHandler
+					encodedImage = ImageHandler
 							.encodeImageToBase64(imageFromPost);
 				}
 				if (p.getMessage() != null) {

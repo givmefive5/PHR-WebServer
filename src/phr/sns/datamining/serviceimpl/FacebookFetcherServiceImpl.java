@@ -3,20 +3,19 @@ package phr.sns.datamining.serviceimpl;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.exceptions.DataAccessException;
 import phr.exceptions.SNSException;
 import phr.sns.datamining.dao.FacebookFetcherDao;
+import phr.sns.datamining.daoimpl.FacebookFetcherDaoImpl;
 import phr.sns.datamining.service.FacebookFetcherService;
 import phr.web.models.FBPost;
 
 @Service("facebookFetcherService")
 public class FacebookFetcherServiceImpl implements FacebookFetcherService {
 
-	@Autowired
-	FacebookFetcherDao facebookFetcherDao;
+	FacebookFetcherDao facebookFetcherDao = new FacebookFetcherDaoImpl();
 
 	@Override
 	public List<FBPost> getAllPosts(String userFBAccessToken)

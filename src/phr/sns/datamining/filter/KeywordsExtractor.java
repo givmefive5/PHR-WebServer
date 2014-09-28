@@ -11,6 +11,7 @@ public class KeywordsExtractor {
 
 	HealthCorpusDao healthCorpusDao = new HealthCorpusDaoImpl();
 	List<String> foodCorpus;
+	List<String> restaurantCorpus;
 
 	DMFilter filter = new DMFilter();
 
@@ -26,15 +27,22 @@ public class KeywordsExtractor {
 					"An error occured in the while accessing and processing SNS posts",
 					e);
 		}
-		if (message.contains("tocino"))
-			extractedWords.add("tocino");
 		return extractedWords.toArray(new String[extractedWords.size()]);
 	}
 
-	public String[] extractRestaurantNames(String message) {
-		ArrayList<String> extractedWords = new ArrayList<>();
-		if (message.contains("Jollibee"))
-			extractedWords.add("Jollibee");
+	public String[] extractRestaurantNames(String message)
+			throws DataAccessException {
+		if (restaurantCorpus == null)
+			restaurantCorpus = healthCorpusDao.getRestaurantNames();
+
+		List<String> extractedWords;
+		try {
+			extractedWords = filter.findMatches(message, restaurantCorpus);
+		} catch (InterruptedException e) {
+			throw new DataAccessException(
+					"An error occured in the while accessing and processing SNS posts",
+					e);
+		}
 		return extractedWords.toArray(new String[extractedWords.size()]);
 	}
 

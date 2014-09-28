@@ -13,11 +13,18 @@ public class Assist {
 		return word;
 	}
 
-	public static String onlyLettersDigitsAndSpaces(String message) {
-		message = message.toLowerCase();
-		message = message.replaceAll("[^a-zA-Z0-9]", "");
+	public static String onlyLettersDigitsAndSpaces(String word) {
+		word = word.toLowerCase();
+		word = word.replaceAll("[^a-zA-Z0-9]", "");
 
-		return message;
+		return word;
+	}
+
+	public static String replaceSymbolsWithSpace(String word) {
+		word = word.toLowerCase();
+		word = word.replaceAll("[^a-zA-Z0-9]", " ");
+
+		return word;
 	}
 
 	public static List<String> createNGrams(int n, String message) {

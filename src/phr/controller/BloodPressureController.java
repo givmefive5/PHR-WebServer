@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
@@ -112,6 +113,9 @@ public class BloodPressureController {
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
 			e.printStackTrace();
+		} catch (EntryNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		System.out.println("Response JSON To Be Sent Back To App: "
 				+ jsonResponse);
@@ -152,6 +156,9 @@ public class BloodPressureController {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
+			e.printStackTrace();
+		} catch (EntryNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Response JSON To Be Sent Back To App: "

@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import phr.tools.GSONConverter;
+import phr.tools.UUIDGenerator;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -66,8 +67,9 @@ public class FatSecretFetcher {
 			throws UnsupportedEncodingException, GeneralSecurityException,
 			IOException, ClientProtocolException, JSONException {
 		Long timestamp = getTimeStamp();
+		String uniqueString = UUIDGenerator.generateUniqueString();
 		String params = "format=json&method=foods.search&oauth_consumer_key="
-				+ consumerKey + "&oauth_nonce=" + timestamp + "&"
+				+ consumerKey + "&oauth_nonce=" + uniqueString + "&"
 				+ "oauth_signature_method=HMAC-SHA1&oauth_timestamp="
 				+ timestamp + "&oauth_version=1.0&" + "search_expression="
 				+ query;
@@ -85,7 +87,7 @@ public class FatSecretFetcher {
 		String newParams = "format=json&method=foods.search&oauth_consumer_key="
 				+ consumerKey
 				+ "&oauth_nonce="
-				+ timestamp
+				+ uniqueString
 				+ "&"
 				+ "oauth_signature="
 				+ signatureValue

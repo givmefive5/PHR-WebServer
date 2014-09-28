@@ -1,6 +1,7 @@
 package phr.sns.datamining.filter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,6 +10,9 @@ public class DMFilter {
 
 	public List<String> findMatches(String message, List<String> corpus)
 			throws InterruptedException {
+		LengthComparator comparator = new LengthComparator();
+		Collections.sort(corpus, comparator);
+
 		List<String> hashtags = getHashtagsFromMessage(message);
 		message = removeHashtags(message);
 		List<String> wordsFoundInHashtags = findWordsInHashtags(hashtags,
@@ -68,7 +72,9 @@ public class DMFilter {
 			for (String s1 : allWordsFound) {
 				String stemp = Assist.cleanWord(s);
 				String s1temp = Assist.cleanWord(s1);
-				if (s1temp.contains(stemp) && !s1temp.equals(stemp))
+				if ((s1temp.contains(stemp) && !s1temp.equals(stemp)))
+					toAdd = false;
+				if (equivalentWordExistsInList(newList, s))
 					toAdd = false;
 			}
 			if (toAdd == true)
@@ -77,13 +83,28 @@ public class DMFilter {
 		return newList;
 	}
 
+	private boolean equivalentWordExistsInList(List<String> list,
+			String wordToMatch) {
+		for (String s : list) {
+			if (s.toLowerCase().equals(wordToMatch.toLowerCase()))
+				return true;
+			String sTemp = Assist.replaceSymbolsWithSpace(s);
+			String wordToMatchTemp = Assist
+					.replaceSymbolsWithSpace(wordToMatch);
+			if (sTemp.equals(wordToMatchTemp))
+				return true;
+		}
+
+		return false;
+	}
+
 	private List<String> findWordsInHashtags(List<String> hashtags,
-			List<String> corpus2) {
+			List<String> corpus) {
 		List<String> foundWords = new ArrayList<>();
 
 		for (String hashtag : hashtags) {
 			String lowerCaseHashtag = Assist.cleanWord(hashtag);
-			for (String corpusWord : corpus2) {
+			for (String corpusWord : corpus) {
 				String lowerCaseCorpusWord = Assist.cleanWord(corpusWord);
 				if (lowerCaseHashtag.contains(lowerCaseCorpusWord)) {
 					foundWords.add(corpusWord);
