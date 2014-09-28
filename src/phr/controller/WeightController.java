@@ -50,7 +50,7 @@ public class WeightController {
 				Weight weight = GSONConverter
 						.getGSONObjectGivenJsonObject(data.getJSONObject("weight"),
 								Weight.class);
-				weightService.add(accessToken, weight);
+				weightService.addReturnEntryID(accessToken, weight);
 				int entryID = weightService.getEntryId(weight);
 				
 				JSONObject dataForResponse = new JSONObject();

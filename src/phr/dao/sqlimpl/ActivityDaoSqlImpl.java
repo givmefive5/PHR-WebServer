@@ -3,6 +3,7 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,15 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	
 	
 	@Override
-	public void add(ActivityTrackerEntry activityTrackerEntry) throws DataAccessException {
+	public int addReturnsEntryID(ActivityTrackerEntry activityTrackerEntry) throws DataAccessException {
 		
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO activitytracker(activityID, calorieBurnedPerHour, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO activitytracker(activityID, calorieBurnedPerHour, dateAdded, status, userID, fbPostID, photo) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query);
+			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, activityTrackerEntry.getActivity().getEntryID());
 			pstmt.setDouble(2, activityTrackerEntry.getCalorisBurnedPerHour());
 			pstmt.setTimestamp(3, activityTrackerEntry.getTimestamp());
@@ -52,6 +54,15 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			pstmt.setString(7, activityTrackerEntry.getImage().getFileName());
 
 			pstmt.executeUpdate();
+			
+			ResultSet rs = pstmt.getGeneratedKeys();
+		
+			int entryID = -1;
+			if (rs.next())
+				entryID = rs.getInt(1);
+			
+			return entryID;
+			
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -149,18 +160,27 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	}
 	
 	@Override
-	public void addActivityListEntry(Activity activity) throws DataAccessException {
+	public int addActivityListEntryReturnEntryID(Activity activity) throws DataAccessException {
 		
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO activitylist(name, MET) VALUES (?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query);
+			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, activity.getName());
 			pstmt.setDouble(2, activity.getMET());
 		
 			pstmt.executeUpdate();
+			
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+			int entryID = -1;
+			if (rs.next())
+				entryID = rs.getInt(1);
+			
+			return entryID;
+
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

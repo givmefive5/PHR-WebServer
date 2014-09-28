@@ -10,9 +10,9 @@ import phr.web.models.FBPost;
 public class FacebookPostDaoSqlImpl implements FacebookPostDao {
 
 	@Override
-	public void add(FBPost object) throws DataAccessException {
+	public int addReturnsEntryID(FBPost object) throws DataAccessException {
 		// TODO Auto-generated method stub
-
+		return 0;
 	}
 
 	@Override

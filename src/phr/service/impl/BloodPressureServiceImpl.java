@@ -24,12 +24,12 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	UserDao userDao;
 
 	@Override
-	public void add(String accessToken, BloodPressure bloodPressure)
+	public int addReturnEntryID(String accessToken, BloodPressure bloodPressure)
 			throws ServiceException {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodPressure.setUser(new User(userID));
-			bloodPressureDao.add(bloodPressure);
+			return bloodPressureDao.addReturnsEntryID(bloodPressure);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(

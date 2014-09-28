@@ -50,7 +50,7 @@ public class NoteController {
 				Note note = GSONConverter
 						.getGSONObjectGivenJsonObject(data.getJSONObject("note"),
 								Note.class);
-				noteService.add(accessToken, note);
+				noteService.addReturnEntryID(accessToken, note);
 				int entryID = noteService.getEntryId(note);
 				
 				JSONObject dataForResponse = new JSONObject();

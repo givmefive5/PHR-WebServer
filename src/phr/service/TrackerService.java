@@ -7,7 +7,7 @@ import phr.exceptions.ServiceException;
 
 public interface TrackerService<T> {
 
-	public void add(String accessToken, T object)
+	public int addReturnEntryID(String accessToken, T object)
 			throws ServiceException;
 
 	public void edit(String accessToken, T object)
