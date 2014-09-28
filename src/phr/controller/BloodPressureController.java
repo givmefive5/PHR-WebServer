@@ -2,6 +2,7 @@ package phr.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,8 @@ import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
 import phr.web.models.BloodPressure;
+
+import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class BloodPressureController {
@@ -50,7 +53,8 @@ public class BloodPressureController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("bloodPressure"),
 								BloodPressure.class);
-				bloodPressureService.addReturnEntryID(accessToken, bloodPressure);
+				bloodPressureService.addReturnEntryID(accessToken,
+						bloodPressure);
 				int entryID = bloodPressureService.getEntryId(bloodPressure);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -114,7 +118,9 @@ public class BloodPressureController {
 							+ e.getMessage());
 			e.printStackTrace();
 		} catch (EntryNotFoundException e) {
-			// TODO Auto-generated catch block
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"The entry to be edited was not found in the database + "
+							+ e.getMessage());
 			e.printStackTrace();
 		}
 		System.out.println("Response JSON To Be Sent Back To App: "
@@ -158,11 +164,58 @@ public class BloodPressureController {
 							+ e.getMessage());
 			e.printStackTrace();
 		} catch (EntryNotFoundException e) {
-			// TODO Auto-generated catch block
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"The entry to be deleted was not found in the database + "
+							+ e.getMessage());
 			e.printStackTrace();
 		}
 		System.out.println("Response JSON To Be Sent Back To App: "
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
+	}
+
+	@RequestMapping(value = "/tracker/getAllBloodPressure")
+	public void getAll(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, JSONException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				List<BloodPressure> bpList = bloodPressureService
+						.getAll(accessToken);
+				String jsonArray = GSONConverter.convertListToJSONArray(bpList,
+						new TypeToken<List<BloodPressure>>() {
+						}.getType());
+
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("list", jsonArray);
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", dataForResponse,
+						"Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+
 	}
 }

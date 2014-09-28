@@ -7,14 +7,19 @@
 <title>Insert title here</title>
 </head>
 <body>
-	Test1
+	Test1: Retrieve and Filter Posts Retrieved from FB
 	<form method="POST" action="test">
 		FB Access Token from Graph API:<input type="text" name="userFBAccessToken"/><br>
 		<input type="submit"/>
 	</form>
 	<br><br>
-	Test2
+	Test2: Testing the Filter tool 
 	<form method="POST" action="test2">
+		<input type="submit"/>
+	</form>
+	
+	Test3: Test the conversion of ArrayList to GSON
+	<form method="POST" action="tracker/getAllBloodPressure">
 		<input type="submit"/>
 	</form>
 </body>

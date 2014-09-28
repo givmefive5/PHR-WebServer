@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import phr.exceptions.JSONConverterException;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 public final class GSONConverter {
 
@@ -62,5 +64,12 @@ public final class GSONConverter {
 		Gson gson = new Gson();
 		List<T> list = gson.fromJson(jsonString, type);
 		return list;
+	}
+
+	public static <T> String convertListToJSONArray(List<T> list, Type type) {
+		Gson gson = new Gson();
+		JsonElement element = gson.toJsonTree(list, type);
+		JsonArray jsonArray = element.getAsJsonArray();
+		return jsonArray.toString();
 	}
 }
