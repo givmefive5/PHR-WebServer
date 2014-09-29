@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 			String query = "INSERT INTO weighttracker(weightInPounds, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setDouble(1, weight.getWeightInPounds());
 			pstmt.setTimestamp(2, weight.getTimestamp());
 			pstmt.setString(3, weight.getStatus());
@@ -41,7 +43,7 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 			if (weight.getFbPost() != null)
 				pstmt.setInt(5, weight.getFbPost().getId());
 			else
-				pstmt.setInt(5, -1);
+				pstmt.setNull(5, Types.NULL);
 
 			if (weight.getImage().getFileName() == null) {
 				String encodedImage = weight.getImage().getEncodedImage();
@@ -53,13 +55,13 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 			pstmt.setString(6, weight.getImage().getFileName());
 
 			pstmt.executeUpdate();
-			
+
 			ResultSet rs = pstmt.getGeneratedKeys();
 
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-			
+
 			return entryID;
 
 		} catch (Exception e) {
@@ -129,14 +131,12 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),PHRImageType.FILENAME);
-				weights.add(new Weight(
-						rs.getInt("id"),
-						new FBPost(rs.getInt("fbPostID")), 
-						rs.getTimestamp("dateAdded"), 
-						rs.getString("status"),
-						image, 
-						rs.getDouble("weightInPounds")));
+				PHRImage image = new PHRImage(rs.getString("photo"),
+						PHRImageType.FILENAME);
+				weights.add(new Weight(rs.getInt("id"), new FBPost(rs
+						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+						.getString("status"), image, rs
+						.getDouble("weightInPounds")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -173,4 +173,3 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 	}
 
 }
-

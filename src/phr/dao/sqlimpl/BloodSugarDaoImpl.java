@@ -3,8 +3,9 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.sql.Statement;
+import java.sql.Types;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -26,13 +27,15 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 	UserDao userDao;
 
 	@Override
-	public int addReturnsEntryID(BloodSugar bloodSugar) throws DataAccessException {
+	public int addReturnsEntryID(BloodSugar bloodSugar)
+			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO bloodsugartracker (bloodsugar, type,  dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setDouble(1, bloodSugar.getBloodSugar());
 			pstmt.setString(2, bloodSugar.getType());
 			pstmt.setTimestamp(3, bloodSugar.getTimestamp());
@@ -41,7 +44,7 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 			if (bloodSugar.getFbPost() != null)
 				pstmt.setInt(6, bloodSugar.getFbPost().getId());
 			else
-				pstmt.setInt(6, -1);
+				pstmt.setNull(6, Types.NULL);
 
 			if (bloodSugar.getImage().getFileName() == null) {
 				String encodedImage = bloodSugar.getImage().getEncodedImage();
@@ -53,13 +56,13 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 			pstmt.setString(7, bloodSugar.getImage().getFileName());
 
 			pstmt.executeUpdate();
-			
+
 			ResultSet rs = pstmt.getGeneratedKeys();
 
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-			
+
 			return entryID;
 
 		} catch (Exception e) {
@@ -131,14 +134,10 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 			while (rs.next()) {
 				PHRImage image = new PHRImage(rs.getString("photo"),
 						PHRImageType.FILENAME);
-				bloodsugars.add(new BloodSugar(
-						 		   rs.getInt("id"),
-						 		   new FBPost(rs.getInt("fbPostID")), 
-								   rs.getTimestamp("dateAdded"), 
-								   rs.getString("status"), 
-								   image, 
-								   rs.getDouble("bloodsugar"),
-								   rs.getString("type")));
+				bloodsugars.add(new BloodSugar(rs.getInt("id"), new FBPost(rs
+						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+						.getString("status"), image,
+						rs.getDouble("bloodsugar"), rs.getString("type")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -174,4 +173,3 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 		}
 	}
 }
-

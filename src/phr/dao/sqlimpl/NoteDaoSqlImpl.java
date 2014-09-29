@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,8 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 			String query = "INSERT INTO notestracker (note, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, note.getNote());
 			pstmt.setTimestamp(2, note.getTimestamp());
 			pstmt.setString(3, note.getStatus());
@@ -39,17 +41,18 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 			if (note.getFbPost() != null)
 				pstmt.setInt(5, note.getFbPost().getId());
 			else
-				pstmt.setInt(5, -1);
+				pstmt.setNull(5, Types.NULL);
+
 			pstmt.setString(6, note.getImage().getFileName());
 
 			pstmt.executeUpdate();
-			
+
 			ResultSet rs = pstmt.getGeneratedKeys();
 
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-			
+
 			return entryID;
 
 		} catch (Exception e) {
@@ -118,14 +121,11 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),PHRImageType.FILENAME);
-				notes.add(new Note(
-						rs.getInt("id"),
-						new FBPost(rs.getInt("fbPostID")),
-						rs.getTimestamp("dateAdded"), 
-						rs.getString("status"),
-						image,
-						rs.getString("note")));
+				PHRImage image = new PHRImage(rs.getString("photo"),
+						PHRImageType.FILENAME);
+				notes.add(new Note(rs.getInt("id"), new FBPost(rs
+						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+						.getString("status"), image, rs.getString("note")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -161,4 +161,3 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 	}
 
 }
-

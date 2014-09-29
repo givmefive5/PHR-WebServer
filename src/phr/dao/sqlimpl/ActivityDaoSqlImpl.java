@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +18,24 @@ import phr.tools.ImageHandler;
 import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
 
-
 @Repository("activityDao")
 public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 	@Autowired
 	UserDao userDao;
-	
-	
+
 	@Override
-	public int addReturnsEntryID(ActivityTrackerEntry activityTrackerEntry) throws DataAccessException {
-		
+	public int addReturnsEntryID(ActivityTrackerEntry activityTrackerEntry)
+			throws DataAccessException {
+
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO activitytracker(activityID, calorieBurnedPerHour, dateAdded, status, userID, fbPostID, photo) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, activityTrackerEntry.getActivity().getEntryID());
 			pstmt.setDouble(2, activityTrackerEntry.getCalorisBurnedPerHour());
 			pstmt.setTimestamp(3, activityTrackerEntry.getTimestamp());
@@ -43,7 +44,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			if (activityTrackerEntry.getFbPost() != null)
 				pstmt.setInt(6, activityTrackerEntry.getFbPost().getId());
 			else
-				pstmt.setInt(6, -1);
+				pstmt.setNull(6, Types.NULL);
 			if (activityTrackerEntry.getImage().getFileName() == null) {
 				String encodedImage = activityTrackerEntry.getImage()
 						.getEncodedImage();
@@ -54,15 +55,15 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			pstmt.setString(7, activityTrackerEntry.getImage().getFileName());
 
 			pstmt.executeUpdate();
-			
+
 			ResultSet rs = pstmt.getGeneratedKeys();
-		
+
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-			
+
 			return entryID;
-			
+
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -71,9 +72,9 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	}
 
 	@Override
-	public void edit(ActivityTrackerEntry activityTrackerEntry) throws DataAccessException,
-			EntryNotFoundException {
-		
+	public void edit(ActivityTrackerEntry activityTrackerEntry)
+			throws DataAccessException, EntryNotFoundException {
+
 		try {
 			Connection conn = getConnection();
 			String query = "UPDATE activitytracker SET activityID = ?, calorieBurnedPerHour = ?, dateAdded =? , status = ?, photo = ?)"
@@ -100,13 +101,13 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 	}
 
 	@Override
-	public void delete(ActivityTrackerEntry activityTrackerEntry) throws DataAccessException,
-			EntryNotFoundException {
-		
+	public void delete(ActivityTrackerEntry activityTrackerEntry)
+			throws DataAccessException, EntryNotFoundException {
+
 		try {
 			Connection conn = getConnection();
 			String query = "DELETE FROM activitytracker WHERE id = ?";
@@ -121,13 +122,13 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
 		}
-		
+
 	}
 
 	@Override
 	public ArrayList<ActivityTrackerEntry> getAll(String userAccessToken)
 			throws DataAccessException {
-	
+
 		return null;
 
 	}
@@ -135,7 +136,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	@Override
 	public Integer getEntryId(ActivityTrackerEntry activityTrackerEntry)
 			throws DataAccessException {
-		
+
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id FROM activitytracker WHERE "
@@ -158,27 +159,29 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 					e);
 		}
 	}
-	
+
 	@Override
-	public int addActivityListEntryReturnEntryID(Activity activity) throws DataAccessException {
-		
+	public int addActivityListEntryReturnEntryID(Activity activity)
+			throws DataAccessException {
+
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO activitylist(name, MET) VALUES (?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, activity.getName());
 			pstmt.setDouble(2, activity.getMET());
-		
+
 			pstmt.executeUpdate();
-			
+
 			ResultSet rs = pstmt.getGeneratedKeys();
 
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-			
+
 			return entryID;
 
 		} catch (Exception e) {
@@ -186,36 +189,33 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 	}
 
 	@Override
-	public ArrayList<Activity> getAllActivity()
-			throws DataAccessException {
-		
+	public ArrayList<Activity> getAllActivity() throws DataAccessException {
+
 		ArrayList<Activity> activities = new ArrayList<Activity>();
-					
+
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id, name, MET FROM activityList";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			
+
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				activities.add(new Activity(
-						rs.getInt("id"),
-						rs.getString("name"),
-						rs.getDouble("MET")));
+				activities.add(new Activity(rs.getInt("id"), rs
+						.getString("name"), rs.getDouble("MET")));
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 		return activities;
-		
+
 	}
 }

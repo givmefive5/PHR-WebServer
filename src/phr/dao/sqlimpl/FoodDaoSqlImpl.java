@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			if (foodTrackerEntry.getFbPost() != null)
 				pstmt.setInt(6, foodTrackerEntry.getFbPost().getId());
 			else
-				pstmt.setInt(6, -1);
+				pstmt.setNull(6, Types.NULL);
 			if (foodTrackerEntry.getImage().getFileName() == null) {
 				String encodedImage = foodTrackerEntry.getImage()
 						.getEncodedImage();

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,7 @@ import phr.web.models.PHRImage;
 import phr.web.models.PHRImageType;
 
 @Repository("checkup")
-public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements
-CheckUpDao {
+public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 
 	@Autowired
 	UserDao userDao;
@@ -33,7 +33,8 @@ CheckUpDao {
 			String query = "INSERT INTO checkuptracker(purpose, doctorsName, notes, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, checkUp.getPurpose());
 			pstmt.setString(2, checkUp.getDoctorsName());
 			pstmt.setString(3, checkUp.getNotes());
@@ -43,10 +44,10 @@ CheckUpDao {
 			if (checkUp.getFbPost() != null)
 				pstmt.setInt(7, checkUp.getFbPost().getId());
 			else
-				pstmt.setInt(7, -1);
+				pstmt.setNull(7, Types.NULL);
+
 			if (checkUp.getImage().getFileName() == null) {
-				String encodedImage = checkUp.getImage()
-						.getEncodedImage();
+				String encodedImage = checkUp.getImage().getEncodedImage();
 				String fileName = ImageHandler
 						.saveImage_ReturnFilePath(encodedImage);
 				checkUp.getImage().setFileName(fileName);
@@ -54,13 +55,13 @@ CheckUpDao {
 			pstmt.setString(8, checkUp.getImage().getFileName());
 
 			pstmt.executeUpdate();
-			
+
 			ResultSet rs = pstmt.getGeneratedKeys();
 
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-			
+
 			return entryID;
 
 		} catch (Exception e) {
@@ -129,16 +130,12 @@ CheckUpDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),PHRImageType.FILENAME);
-				checkups.add(new CheckUp(
-						rs.getInt("id"),
-						new FBPost(rs.getInt("fbPostID")), 
-						rs.getTimestamp("dateAdded"), 
-						rs.getString("status"),
-						image, 
-						rs.getString("purpose"),
-						rs.getString("doctorsName"),
-						rs.getString("notes")));
+				PHRImage image = new PHRImage(rs.getString("photo"),
+						PHRImageType.FILENAME);
+				checkups.add(new CheckUp(rs.getInt("id"), new FBPost(rs
+						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+						.getString("status"), image, rs.getString("purpose"),
+						rs.getString("doctorsName"), rs.getString("notes")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
