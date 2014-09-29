@@ -51,7 +51,7 @@ public class BloodPressureController {
 			if (userService.isValidAccessToken(accessToken, username)) {
 				BloodPressure bloodPressure = GSONConverter
 						.getGSONObjectGivenJsonObject(
-								data.getJSONObject("bloodPressure"),
+								data.getJSONObject("objectToAdd"),
 								BloodPressure.class);
 				bloodPressureService.addReturnEntryID(accessToken,
 						bloodPressure);
@@ -97,7 +97,7 @@ public class BloodPressureController {
 			if (userService.isValidAccessToken(accessToken, username)) {
 				BloodPressure bloodPressure = GSONConverter
 						.getGSONObjectGivenJsonObject(
-								data.getJSONObject("bloodPressure"),
+								data.getJSONObject("objectToEdit"),
 								BloodPressure.class);
 				bloodPressureService.edit(accessToken, bloodPressure);
 
@@ -143,7 +143,7 @@ public class BloodPressureController {
 			if (userService.isValidAccessToken(accessToken, username)) {
 				BloodPressure bloodPressure = GSONConverter
 						.getGSONObjectGivenJsonObject(
-								data.getJSONObject("bloodPressure"),
+								data.getJSONObject("objectToDelete"),
 								BloodPressure.class);
 				bloodPressureService.delete(accessToken, bloodPressure);
 
