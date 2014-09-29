@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,6 @@ import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
 import phr.web.models.BloodPressure;
-
-import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class BloodPressureController {
@@ -189,12 +188,11 @@ public class BloodPressureController {
 			if (userService.isValidAccessToken(accessToken, username)) {
 				List<BloodPressure> bpList = bloodPressureService
 						.getAll(accessToken);
-				String jsonArray = GSONConverter.convertListToJSONArray(bpList,
-						new TypeToken<List<BloodPressure>>() {
-						}.getType());
+				JSONArray jsonArray = GSONConverter
+						.convertListToJSONArray(bpList);
 
 				JSONObject dataForResponse = new JSONObject();
-				dataForResponse.put("list", jsonArray);
+				dataForResponse.put("array", jsonArray);
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataForResponse,
 						"Process has been completed");

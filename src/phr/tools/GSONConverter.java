@@ -5,14 +5,13 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import phr.exceptions.JSONConverterException;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 
 public final class GSONConverter {
 
@@ -66,10 +65,8 @@ public final class GSONConverter {
 		return list;
 	}
 
-	public static <T> String convertListToJSONArray(List<T> list, Type type) {
-		Gson gson = new Gson();
-		JsonElement element = gson.toJsonTree(list, type);
-		JsonArray jsonArray = element.getAsJsonArray();
-		return jsonArray.toString();
+	public static <T> JSONArray convertListToJSONArray(List<T> list) {
+		JSONArray array = new JSONArray(list);
+		return array;
 	}
 }
