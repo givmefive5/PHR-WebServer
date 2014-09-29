@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -19,24 +18,23 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
+import phr.service.FoodService;
 import phr.service.UserService;
-import phr.service.WeightService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
-import phr.web.models.Weight;
+import phr.web.models.FoodTrackerEntry;
 
-@Controller
-public class WeightController {
-
+public class FoodController {
+	
 	@Autowired
-	WeightService weightService;
+	FoodService foodService;
 	
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/tracker/addWeight", method = RequestMethod.POST)
-	public void addWeight(HttpServletRequest request,
+	@RequestMapping(value = "/tracker/addFood", method = RequestMethod.POST)
+	public void addFood(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 
 		PrintWriter writer = response.getWriter();
@@ -49,13 +47,13 @@ public class WeightController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				Weight weight = GSONConverter
+				FoodTrackerEntry food = GSONConverter
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
-								Weight.class);
-				weightService.addReturnEntryID(accessToken,
-						weight);
-				int entryID = weightService.getEntryId(weight);
+								FoodTrackerEntry.class);
+				foodService.addReturnEntryID(accessToken,
+						food);
+				int entryID = foodService.getEntryId(food);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);
@@ -82,8 +80,8 @@ public class WeightController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/editWeight", method = RequestMethod.POST)
-	public void editWeight(HttpServletRequest request,
+	@RequestMapping(value = "/tracker/editFood", method = RequestMethod.POST)
+	public void editFood(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
@@ -95,11 +93,11 @@ public class WeightController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				Weight weight = GSONConverter
+				FoodTrackerEntry food = GSONConverter
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToEdit"),
-								Weight.class);
-				weightService.edit(accessToken, weight);
+								FoodTrackerEntry.class);
+				foodService.edit(accessToken, food);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -128,8 +126,8 @@ public class WeightController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/deleteWeight", method = RequestMethod.POST)
-	public void deleteWeight(HttpServletRequest request,
+	@RequestMapping(value = "/tracker/deleteFood", method = RequestMethod.POST)
+	public void deleteFood(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
@@ -141,11 +139,11 @@ public class WeightController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				Weight weight = GSONConverter
+				FoodTrackerEntry food = GSONConverter
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
-								Weight.class);
-				weightService.delete(accessToken, weight);
+								FoodTrackerEntry.class);
+				foodService.delete(accessToken, food);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -174,7 +172,7 @@ public class WeightController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/getAllWeight")
+	@RequestMapping(value = "/tracker/getAllFood")
 	public void getAll(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, JSONException {
 		PrintWriter writer = response.getWriter();
@@ -187,10 +185,10 @@ public class WeightController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				List<Weight> weightList = weightService
+				List<FoodTrackerEntry> foodList = foodService
 						.getAll(accessToken);
 				JSONArray jsonArray = GSONConverter
-						.convertListToJSONArray(weightList);
+						.convertListToJSONArray(foodList);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("array", jsonArray);
@@ -217,5 +215,5 @@ public class WeightController {
 		writer.write(jsonResponse.toString());
 
 	}
-	
+
 }
