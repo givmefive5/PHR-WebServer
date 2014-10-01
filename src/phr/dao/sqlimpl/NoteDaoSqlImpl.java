@@ -14,6 +14,7 @@ import phr.dao.NoteDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.tools.ImageHandler;
 import phr.web.models.FBPost;
 import phr.web.models.Note;
 import phr.web.models.PHRImage;
@@ -123,6 +124,11 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 			while (rs.next()) {
 				PHRImage image = new PHRImage(rs.getString("photo"),
 						PHRImageType.FILENAME);
+				if(image.getFileName()!= null){
+					String encodedImage = ImageHandler.getEncodedImageFromFile(image.getFileName());
+					image.setEncodedImage(encodedImage);
+					image.setFileName(null);
+				}
 				notes.add(new Note(rs.getInt("id"), new FBPost(rs
 						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
 						.getString("status"), image, rs.getString("note")));

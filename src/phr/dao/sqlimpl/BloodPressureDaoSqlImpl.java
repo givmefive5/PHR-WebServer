@@ -133,6 +133,11 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			while (rs.next()) {
 				PHRImage image = new PHRImage(rs.getString("photo"),
 						PHRImageType.FILENAME);
+				if(image.getFileName()!= null){
+					String encodedImage = ImageHandler.getEncodedImageFromFile(image.getFileName());
+					image.setEncodedImage(encodedImage);
+					image.setFileName(null);
+				}
 				bloodpressures.add(new BloodPressure(rs.getInt("id"),
 						new FBPost(rs.getInt("fbPostID")), rs
 								.getTimestamp("dateAdded"), rs
