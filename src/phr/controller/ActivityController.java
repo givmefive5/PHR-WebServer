@@ -51,9 +51,8 @@ public class ActivityController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								ActivityTrackerEntry.class);
-				activityService.addReturnEntryID(accessToken,
+				int entryID = activityService.addReturnEntryID(accessToken,
 						activity);
-				int entryID = activityService.getEntryId(activity);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);

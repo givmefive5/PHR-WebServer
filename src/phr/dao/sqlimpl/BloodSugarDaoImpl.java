@@ -45,15 +45,16 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 				pstmt.setInt(6, bloodSugar.getFbPost().getId());
 			else
 				pstmt.setNull(6, Types.NULL);
-
-			if (bloodSugar.getImage().getFileName() == null) {
+			
+			if(bloodSugar.getImage()!= null){
 				String encodedImage = bloodSugar.getImage().getEncodedImage();
 				String fileName = ImageHandler
 						.saveImage_ReturnFilePath(encodedImage);
 				bloodSugar.getImage().setFileName(fileName);
+				pstmt.setString(7, bloodSugar.getImage().getFileName());
 			}
-
-			pstmt.setString(7, bloodSugar.getImage().getFileName());
+			else
+				pstmt.setString(7, null);
 
 			pstmt.executeUpdate();
 

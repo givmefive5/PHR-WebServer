@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -24,7 +25,7 @@ import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
 import phr.web.models.CheckUp;
-
+@Controller
 public class CheckUpController {
 
 	@Autowired
@@ -51,9 +52,8 @@ public class CheckUpController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								CheckUp.class);
-				checkUpService.addReturnEntryID(accessToken,
+				int entryID = checkUpService.addReturnEntryID(accessToken,
 						checkUp);
-				int entryID = checkUpService.getEntryId(checkUp);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);

@@ -52,9 +52,8 @@ public class BloodPressureController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								BloodPressure.class);
-				bloodPressureService.addReturnEntryID(accessToken,
+				int entryID = bloodPressureService.addReturnEntryID(accessToken,
 						bloodPressure);
-				int entryID = bloodPressureService.getEntryId(bloodPressure);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);

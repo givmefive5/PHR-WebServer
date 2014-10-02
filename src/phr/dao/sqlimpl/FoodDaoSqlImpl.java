@@ -170,7 +170,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	@Override
-	public Boolean checkFoodEntryInList(Food food) throws DataAccessException {
+	public Boolean foodEntryExists(Food food) throws DataAccessException {
 		
 		try {
 			Connection conn = getConnection();

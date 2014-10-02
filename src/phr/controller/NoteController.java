@@ -53,9 +53,8 @@ public class NoteController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								Note.class);
-				noteService.addReturnEntryID(accessToken,
+				int entryID = noteService.addReturnEntryID(accessToken,
 						note);
-				int entryID = noteService.getEntryId(note);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);

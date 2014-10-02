@@ -33,7 +33,7 @@ public class FoodServiceImpl implements FoodService {
 			foodTrackerEntry.setUser(new User(userID));
 			
 			if(foodTrackerEntry.getFood().getEntryID() == null){
-				if(!foodDao.checkFoodEntryInList(foodTrackerEntry.getFood()))
+				if(!foodDao.foodEntryExists(foodTrackerEntry.getFood()))
 				foodTrackerEntry.getFood().setEntryID(foodDao.addFoodListEntryReturnEntryID(foodTrackerEntry.getFood()));
 			}
 				

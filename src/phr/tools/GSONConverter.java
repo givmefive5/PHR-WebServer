@@ -12,24 +12,25 @@ import org.json.JSONObject;
 import phr.exceptions.JSONConverterException;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public final class GSONConverter {
 
 	public static <T> T getGSONObjectFromReader(BufferedReader reader,
 			Class<T> classTypeToGenerate) {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		return gson.fromJson(reader, classTypeToGenerate);
 	}
 
 	public static <T> T getGSONObjectGivenJsonString(String jsonString,
 			Class<T> classTypeToGenerate) {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		return gson.fromJson(jsonString, classTypeToGenerate);
 	}
 
 	public static <T> T getGSONObjectGivenJsonObject(JSONObject json,
 			Class<T> classTypeToGenerate) {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		String jsonString = json.toString();
 		return gson.fromJson(jsonString, classTypeToGenerate);
 	}
@@ -54,13 +55,13 @@ public final class GSONConverter {
 			throws JSONException {
 		if (objectToBeConverted.getClass().equals(JSONObject.class))
 			return (JSONObject) objectToBeConverted;
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		return new JSONObject(gson.toJson(objectToBeConverted));
 	}
 
 	public static <T> List<T> convertJSONToObjectList(String jsonString,
 			Type type) {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 		List<T> list = gson.fromJson(jsonString, type);
 		return list;
 	}

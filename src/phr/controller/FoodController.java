@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -24,7 +25,7 @@ import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
 import phr.web.models.FoodTrackerEntry;
-
+@Controller
 public class FoodController {
 	
 	@Autowired
@@ -51,9 +52,8 @@ public class FoodController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								FoodTrackerEntry.class);
-				foodService.addReturnEntryID(accessToken,
+				int entryID = foodService.addReturnEntryID(accessToken,
 						food);
-				int entryID = foodService.getEntryId(food);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);
