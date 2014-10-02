@@ -34,7 +34,7 @@ public class FoodController {
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/tracker/addFood", method = RequestMethod.POST)
+	@RequestMapping(value = "/tracker/addFoodTrackerEntry", method = RequestMethod.POST)
 	public void addFood(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 
@@ -80,7 +80,7 @@ public class FoodController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/editFood", method = RequestMethod.POST)
+	@RequestMapping(value = "/tracker/editFoodTrackerEntry", method = RequestMethod.POST)
 	public void editFood(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -126,7 +126,7 @@ public class FoodController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/deleteFood", method = RequestMethod.POST)
+	@RequestMapping(value = "/tracker/deleteFoodTrackerEntry", method = RequestMethod.POST)
 	public void deleteFood(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -172,7 +172,7 @@ public class FoodController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/getAllFood")
+	@RequestMapping(value = "/tracker/getAllFoodTrackerEntry")
 	public void getAll(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, JSONException {
 		PrintWriter writer = response.getWriter();

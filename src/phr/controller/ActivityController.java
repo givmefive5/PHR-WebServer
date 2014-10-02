@@ -33,7 +33,7 @@ public class ActivityController {
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/tracker/addActivity", method = RequestMethod.POST)
+	@RequestMapping(value = "/tracker/addActivityTrackerEntry", method = RequestMethod.POST)
 	public void addActivity(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 
@@ -79,7 +79,7 @@ public class ActivityController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/editActivity", method = RequestMethod.POST)
+	@RequestMapping(value = "/tracker/editActivityTrackerEntry", method = RequestMethod.POST)
 	public void editActivity(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -125,7 +125,7 @@ public class ActivityController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/deleteActivity", method = RequestMethod.POST)
+	@RequestMapping(value = "/tracker/deleteActivityTrackerEntry", method = RequestMethod.POST)
 	public void deleteActivity(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -171,7 +171,7 @@ public class ActivityController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "/tracker/getAllActivity")
+	@RequestMapping(value = "/tracker/getAllActivityTrackerEntry")
 	public void getAll(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, JSONException {
 		PrintWriter writer = response.getWriter();
