@@ -6,6 +6,11 @@ public class Activity {
 	String name;
 	double MET;
 	
+	public Activity(Integer entryID){
+		super();
+		this.entryID = entryID;
+	}
+	
 	public Activity(Integer entryID, String name, double mET) {
 		super();
 		this.entryID = entryID;

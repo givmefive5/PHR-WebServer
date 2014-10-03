@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -46,14 +47,17 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 			else
 				pstmt.setNull(7, Types.NULL);
 
-			if (checkUp.getImage().getFileName() == null) {
+			if (checkUp.getImage() != null) {
 				String encodedImage = checkUp.getImage().getEncodedImage();
 				String fileName = ImageHandler
 						.saveImage_ReturnFilePath(encodedImage);
 				checkUp.getImage().setFileName(fileName);
+				pstmt.setString(8, checkUp.getImage().getFileName());
 			}
-			pstmt.setString(8, checkUp.getImage().getFileName());
-
+			else
+				pstmt.setNull(8, Types.NULL);
+			
+			
 			pstmt.executeUpdate();
 
 			ResultSet rs = pstmt.getGeneratedKeys();
@@ -117,9 +121,10 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 	}
 
 	@Override
-	public ArrayList<CheckUp> getAll(String userAccessToken)
+	public List<CheckUp> getAll(String userAccessToken)
 			throws DataAccessException {
-		ArrayList<CheckUp> checkups = new ArrayList<CheckUp>();
+		
+		List<CheckUp> checkups = new ArrayList<CheckUp>();
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id, fbPostID, purpose, doctorsName, notes, status, photo, dateAdded FROM checkuptracker WHERE userID = ?";

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -46,15 +47,17 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 				pstmt.setInt(6, bloodPressure.getFbPost().getId());
 			else
 				pstmt.setNull(6, Types.NULL);
-			if (bloodPressure.getImage().getFileName() == null) {
-				String encodedImage = bloodPressure.getImage()
-						.getEncodedImage();
+			
+			if(bloodPressure.getImage()!= null){
+				String encodedImage = bloodPressure.getImage().getEncodedImage();
 				String fileName = ImageHandler
 						.saveImage_ReturnFilePath(encodedImage);
 				bloodPressure.getImage().setFileName(fileName);
+				pstmt.setString(7, bloodPressure.getImage().getFileName());
 			}
-			pstmt.setString(7, bloodPressure.getImage().getFileName());
-
+			else
+				pstmt.setString(7, null);
+			
 			pstmt.executeUpdate();
 
 			ResultSet rs = pstmt.getGeneratedKeys();
@@ -117,10 +120,10 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public ArrayList<BloodPressure> getAll(String userAccessToken)
+	public List<BloodPressure> getAll(String userAccessToken)
 			throws DataAccessException {
 
-		ArrayList<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
+		List<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id, fbPostID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";

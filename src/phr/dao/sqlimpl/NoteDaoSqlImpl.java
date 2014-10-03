@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -43,8 +44,17 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 				pstmt.setInt(5, note.getFbPost().getId());
 			else
 				pstmt.setNull(5, Types.NULL);
+			
+			if(note.getImage()!= null){
+				String encodedImage = note.getImage().getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				note.getImage().setFileName(fileName);
+				pstmt.setString(6, note.getImage().getFileName());
+			}
+			else
+				pstmt.setNull(6, Types.NULL);
 
-			pstmt.setString(6, note.getImage().getFileName());
 
 			pstmt.executeUpdate();
 
@@ -109,9 +119,9 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 	}
 
 	@Override
-	public ArrayList<Note> getAll(String userAccessToken)
+	public List<Note> getAll(String userAccessToken)
 			throws DataAccessException {
-		ArrayList<Note> notes = new ArrayList<Note>();
+		List<Note> notes = new ArrayList<Note>();
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id, fbPostID, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,14 +46,16 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 			else
 				pstmt.setNull(5, Types.NULL);
 
-			if (weight.getImage().getFileName() == null) {
+			if (weight.getImage() != null) {
 				String encodedImage = weight.getImage().getEncodedImage();
 				String fileName = ImageHandler
 						.saveImage_ReturnFilePath(encodedImage);
 				weight.getImage().setFileName(fileName);
+				pstmt.setString(6, weight.getImage().getFileName());
 			}
+			else
+				pstmt.setNull(6, Types.NULL);
 
-			pstmt.setString(6, weight.getImage().getFileName());
 
 			pstmt.executeUpdate();
 
@@ -117,10 +120,10 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 	}
 
 	@Override
-	public ArrayList<Weight> getAll(String userAccessToken)
+	public List<Weight> getAll(String userAccessToken)
 			throws DataAccessException {
 
-		ArrayList<Weight> weights = new ArrayList<Weight>();
+		List<Weight> weights = new ArrayList<Weight>();
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id, fbPostID, weightInPounds, status, photo, dateAdded FROM weighttracker WHERE userID = ?";

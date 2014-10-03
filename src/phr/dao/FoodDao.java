@@ -1,6 +1,6 @@
 package phr.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import phr.exceptions.DataAccessException;
 import phr.web.models.Food;
@@ -12,7 +12,9 @@ public interface FoodDao extends TrackerDao<FoodTrackerEntry> {
 	
 	public Boolean foodEntryExists(Food food) throws DataAccessException;
 	
-	public ArrayList<Food> getAllFood () throws DataAccessException;
+	public List<Food> getAllFood () throws DataAccessException;
+	
+	public Food getFood(int entryID) throws DataAccessException;
 
 }
 

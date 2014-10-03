@@ -13,6 +13,11 @@ public class Food {
 	Integer restaurantID;
 	Boolean fromFatsecret;
 	
+	public Food(Integer entryID){
+		super();
+		this.entryID = entryID;
+	}
+	
 	public Food(Integer entryID, String name, double calorie, double protein,
 			double fat, double carbohydrate, String servingUnit,
 			double servingSize, Integer restaurantID, Boolean fromFatsecret) {

@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,8 +17,11 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.tools.ImageHandler;
+import phr.web.models.FBPost;
 import phr.web.models.Food;
 import phr.web.models.FoodTrackerEntry;
+import phr.web.models.PHRImage;
+import phr.web.models.PHRImageType;
 
 @Repository("foodDao")
 
@@ -44,14 +49,16 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				pstmt.setInt(6, foodTrackerEntry.getFbPost().getId());
 			else
 				pstmt.setNull(6, Types.NULL);
-			if (foodTrackerEntry.getImage().getFileName() == null) {
+			if (foodTrackerEntry.getImage() != null) {
 				String encodedImage = foodTrackerEntry.getImage()
 						.getEncodedImage();
 				String fileName = ImageHandler
 						.saveImage_ReturnFilePath(encodedImage);
 				foodTrackerEntry.getImage().setFileName(fileName);
+				pstmt.setString(7, foodTrackerEntry.getImage().getFileName());
 			}
-			pstmt.setString(7, foodTrackerEntry.getImage().getFileName());
+			else
+				pstmt.setNull(7, Types.NULL);
 
 			pstmt.executeUpdate();
 			
@@ -100,10 +107,48 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	@Override
-	public ArrayList<FoodTrackerEntry> getAll(String userAccessToken)
+	public List<FoodTrackerEntry> getAll(String userAccessToken)
 			throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<FoodTrackerEntry> foods = new ArrayList<FoodTrackerEntry>();
+		
+		try{
+			Connection conn = getConnection();
+			String query = "SELECT id, foodID, servingCount, fbPostID status, photo, dateAdded "
+					+ " FROM foodList WHERE userID = ? ";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(userAccessToken));
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				
+				PHRImage image = new PHRImage(rs.getString("photo"),
+						PHRImageType.FILENAME);
+				if(image.getFileName()!= null){
+					String encodedImage = ImageHandler.getEncodedImageFromFile(image.getFileName());
+					image.setEncodedImage(encodedImage);
+					image.setFileName(null);
+				}
+
+				foods.add(new FoodTrackerEntry(
+						rs.getInt("id"),
+						new FBPost(rs.getInt("fbPostID")),
+						rs.getTimestamp("dateAdded"),
+						rs.getString("status"),
+						image, 
+						getFood(rs.getInt("foodID")),
+						rs.getDouble("servingCount")
+						));	
+			}
+		}catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		
+		return foods;
 	}
 
 	@Override
@@ -179,8 +224,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
-			
-			//pstmt.setInt(1, food.getEntryID());
+
 			pstmt.setString(1, food.getName());
 			
 			ResultSet rs = pstmt.executeQuery();
@@ -197,8 +241,9 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	@Override
-	public ArrayList<Food> getAllFood() throws DataAccessException {
-		ArrayList<Food> foods = new ArrayList<Food>();
+	public List<Food> getAllFood() throws DataAccessException {
+		
+		List<Food> foods = new ArrayList<Food>();
 		
 		try{
 			Connection conn = getConnection();
@@ -228,6 +273,38 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		}
 		
 		return foods;
+	}
+
+	@Override
+	public Food getFood(int entryID) throws DataAccessException {
+		Food food = new Food(entryID);
+		
+		try{
+			Connection conn = getConnection();
+			String query = "SELECT name, calorie, servingUnit, servingSize, restaurantID, fromFatsecret"
+					+ " FROM foodList WHERE id = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, entryID);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				food.setName(rs.getString("name"));
+				food.setCalorie(rs.getDouble("calorie"));
+				food.setServingUnit(rs.getString("servingUnit"));
+				food.setServingSize(rs.getDouble("servingSize"));
+				food.setRestaurantID(rs.getInt("restaurantID"));
+				food.setFromFatsecret(rs.getBoolean("fromFatsecret"));
+			}
+		}catch (Exception e){
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+			}
+		
+		return food;
+		
 	}
 
 }

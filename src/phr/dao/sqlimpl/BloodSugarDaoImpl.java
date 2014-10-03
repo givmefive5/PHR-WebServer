@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -120,9 +121,10 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 	}
 
 	@Override
-	public ArrayList<BloodSugar> getAll(String userAccessToken)
+	public List<BloodSugar> getAll(String userAccessToken)
 			throws DataAccessException {
-		ArrayList<BloodSugar> bloodsugars = new ArrayList<BloodSugar>();
+		
+		List<BloodSugar> bloodsugars = new ArrayList<BloodSugar>();
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id, fbPostID, bloodsugar, type,  status, photo, dateAdded FROM bloodsugartracker WHERE userID = ?";
