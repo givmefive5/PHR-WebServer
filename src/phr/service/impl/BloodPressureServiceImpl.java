@@ -1,6 +1,7 @@
 package phr.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,10 +69,10 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 	}
 
 	@Override
-	public ArrayList<BloodPressure> getAll(String accessToken)
+	public List<BloodPressure> getAll(String accessToken)
 			throws ServiceException {
 		
-		ArrayList<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
+		List<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
 		
 		try{
 			bloodpressures = bloodPressureDao.getAll(accessToken);

@@ -1,6 +1,7 @@
 package phr.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,10 +80,10 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	@Override
-	public ArrayList<FoodTrackerEntry> getAll(String accessToken)
+	public List<FoodTrackerEntry> getAll(String accessToken)
 			throws ServiceException {
 		
-		ArrayList<FoodTrackerEntry> foods = new ArrayList<FoodTrackerEntry>();
+		List<FoodTrackerEntry> foods = new ArrayList<FoodTrackerEntry>();
 		
 		try{
 			foods = foodDao.getAll(accessToken);

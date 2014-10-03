@@ -1,6 +1,7 @@
 package phr.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,9 +69,9 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 	}
 
 	@Override
-	public ArrayList<BloodSugar> getAll(String accessToken)
+	public List<BloodSugar> getAll(String accessToken)
 			throws ServiceException {
-		ArrayList<BloodSugar> bloodsugars = new ArrayList<BloodSugar>();
+		List<BloodSugar> bloodsugars = new ArrayList<BloodSugar>();
 		
 		try{
 			bloodsugars = bloodSugarDao.getAll(accessToken);

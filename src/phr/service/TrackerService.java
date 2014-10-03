@@ -1,6 +1,6 @@
 package phr.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -16,7 +16,7 @@ public interface TrackerService<T> {
 	public void delete(String accessToken, T object)
 			throws ServiceException, EntryNotFoundException;
 
-	public ArrayList<T> getAll(String accessToken)
+	public List<T> getAll(String accessToken)
 			throws ServiceException;
 
 	public Integer getEntryId(T object) throws ServiceException;

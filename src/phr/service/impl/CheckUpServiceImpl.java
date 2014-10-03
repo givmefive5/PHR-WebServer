@@ -1,6 +1,7 @@
 package phr.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,10 +70,10 @@ public class CheckUpServiceImpl implements CheckUpService {
 	}
 
 	@Override
-	public ArrayList<CheckUp> getAll(String accessToken)
+	public List<CheckUp> getAll(String accessToken)
 			throws ServiceException {
 		
-		ArrayList<CheckUp> checkups = new ArrayList<CheckUp>();
+		List<CheckUp> checkups = new ArrayList<CheckUp>();
 		
 		try{
 			checkups = checkUpDao.getAll(accessToken);

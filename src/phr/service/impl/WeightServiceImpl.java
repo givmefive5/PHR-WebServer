@@ -1,6 +1,7 @@
 package phr.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,9 +66,9 @@ public class WeightServiceImpl implements WeightService {
 	}
 
 	@Override
-	public ArrayList<Weight> getAll(String accessToken) throws ServiceException {
+	public List<Weight> getAll(String accessToken) throws ServiceException {
 		
-		ArrayList<Weight> weights = new ArrayList<Weight>();
+		List<Weight> weights = new ArrayList<Weight>();
 		
 		try{
 			weights = weightDao.getAll(accessToken);

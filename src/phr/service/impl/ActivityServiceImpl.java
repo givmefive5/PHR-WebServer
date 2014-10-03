@@ -1,6 +1,7 @@
 package phr.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,10 +78,10 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	@Override
-	public ArrayList<ActivityTrackerEntry> getAll(String accessToken)
+	public List<ActivityTrackerEntry> getAll(String accessToken)
 			throws ServiceException {
 		
-		ArrayList<ActivityTrackerEntry> activities = new ArrayList<ActivityTrackerEntry>();
+		List<ActivityTrackerEntry> activities = new ArrayList<ActivityTrackerEntry>();
 		
 		try{
 			activities = activityDao.getAll(accessToken);

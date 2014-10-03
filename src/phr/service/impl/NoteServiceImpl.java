@@ -1,6 +1,7 @@
 package phr.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,9 +67,9 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public ArrayList<Note> getAll(String accessToken) throws ServiceException {
+	public List<Note> getAll(String accessToken) throws ServiceException {
 		
-		ArrayList<Note> notes = new ArrayList<Note>();
+		List<Note> notes = new ArrayList<Note>();
 		
 		try{
 			notes = noteDao.getAll(accessToken);
