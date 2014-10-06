@@ -307,4 +307,10 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		
 	}
 
+	@Override
+	public List<Food> search(String searchQuery) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

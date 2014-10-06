@@ -16,5 +16,7 @@ public interface FoodDao extends TrackerDao<FoodTrackerEntry> {
 	
 	public Food getFood(int entryID) throws DataAccessException;
 
+	public List<Food> search(String searchQuery);
+
 }
 

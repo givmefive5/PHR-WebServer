@@ -12,6 +12,7 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.FoodService;
+import phr.web.models.Food;
 import phr.web.models.FoodTrackerEntry;
 import phr.web.models.User;
 
@@ -108,6 +109,12 @@ public class FoodServiceImpl implements FoodService {
 						"Error has occurred while getting the entry id of a food entry",
 						e);
 			}
+	}
+
+	@Override
+	public List<Food> search(String searchQuery)
+			throws ServiceException {
+		return foodDao.search(searchQuery);
 	}
 
 }
