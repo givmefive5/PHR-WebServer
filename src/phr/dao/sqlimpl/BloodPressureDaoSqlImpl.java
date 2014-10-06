@@ -134,12 +134,12 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),
-						PHRImageType.FILENAME);
-				if(image.getFileName()!= null){
-					String encodedImage = ImageHandler.getEncodedImageFromFile(image.getFileName());
-					image.setEncodedImage(encodedImage);
-					image.setFileName(null);
+				PHRImage image = null;
+				if(rs.getString("photo") == null)
+					image = null;
+				else{
+					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 				bloodpressures.add(new BloodPressure(rs.getInt("id"),
 						new FBPost(rs.getInt("fbPostID")), rs

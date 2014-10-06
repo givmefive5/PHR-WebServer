@@ -135,12 +135,12 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				PHRImage image = new PHRImage(rs.getString("photo"),
-						PHRImageType.FILENAME);
-				if(image.getFileName()!= null){
-					String encodedImage = ImageHandler.getEncodedImageFromFile(image.getFileName());
-					image.setEncodedImage(encodedImage);
-					image.setFileName(null);
+				PHRImage image = null;
+				if(rs.getString("photo") == null)
+					image = null;
+				else{
+					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 				checkups.add(new CheckUp(rs.getInt("id"), new FBPost(rs
 						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
