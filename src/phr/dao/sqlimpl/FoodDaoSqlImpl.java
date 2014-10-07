@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,10 +78,40 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	@Override
-	public void edit(FoodTrackerEntry object) throws DataAccessException,
+	public void edit(FoodTrackerEntry foodTrackerEntry) throws DataAccessException,
 			EntryNotFoundException {
-		// TODO Auto-generated method stub
 		
+		try{	
+			Connection conn = getConnection();
+			String query = "UPDATE foodtracker SET foodID = ?, servingCount = ?, dateAdded =? , status = ?, photo = ?)"
+					+ "WHERE id = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, foodTrackerEntry.getFood().getEntryID());
+			pstmt.setDouble(2, foodTrackerEntry.getServingCount());
+			pstmt.setTimestamp(3, foodTrackerEntry.getTimestamp());
+			pstmt.setString(4, foodTrackerEntry.getStatus());
+			if (foodTrackerEntry.getImage() != null) {
+				String encodedImage = foodTrackerEntry.getImage()
+						.getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				foodTrackerEntry.getImage().setFileName(fileName);
+				pstmt.setString(5, foodTrackerEntry.getImage().getFileName());
+			}
+			else
+				pstmt.setNull(5, Types.NULL);
+			
+			pstmt.setInt(6, foodTrackerEntry.getEntryID());
+			
+			pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 	}
 
 	@Override
@@ -307,9 +336,39 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	@Override
-	public List<Food> search(String searchQuery) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Food> search(String searchQuery) throws DataAccessException {
+		List<Food> foods = new ArrayList<Food>();
+		
+		try{
+			Connection conn = getConnection();
+			String query = "SELECT * FROM foodList WHERE name LIKE ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, searchQuery);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				
+				foods.add(new Food(
+						rs.getInt("id"),
+						rs.getString("name"),
+						rs.getDouble("calorie"),
+						rs.getDouble("protein"),
+						rs.getDouble("fat"),
+						rs.getDouble("carbohydrate"),
+						rs.getString("servingUnit"),
+						rs.getDouble("servingSize"),
+						rs.getInt("restaurantID"),
+						rs.getBoolean("fromFatsecret")));
+			}
+		}catch (Exception e){
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+			}
+		
+		return foods;
 	}
 
 }

@@ -2,6 +2,7 @@ package phr.service;
 
 import java.util.List;
 
+import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
 import phr.web.models.Food;
 import phr.web.models.FoodTrackerEntry;

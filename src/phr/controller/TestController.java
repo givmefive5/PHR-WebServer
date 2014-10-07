@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import phr.exceptions.DataAccessException;
 import phr.exceptions.FatSecretFetcherException;
 import phr.exceptions.ImageHandlerException;
@@ -28,7 +29,7 @@ import phr.web.models.FBPost;
 @Controller
 public class TestController {
 	FacebookFetcherService fetcher = new FacebookFetcherServiceImpl();
-
+	
 	@RequestMapping(value = "/test")
 	public void test(@RequestParam String userFBAccessToken)
 			throws SNSException, UnsupportedEncodingException,
@@ -94,4 +95,5 @@ public class TestController {
 			System.out.println(food.getFood_name());
 		}
 	}
+	
 }

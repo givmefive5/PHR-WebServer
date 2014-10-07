@@ -114,7 +114,15 @@ public class FoodServiceImpl implements FoodService {
 	@Override
 	public List<Food> search(String searchQuery)
 			throws ServiceException {
-		return foodDao.search(searchQuery);
+		
+		List<Food> foods = new ArrayList<Food>();
+		try {
+			foods = foodDao.search(searchQuery);
+		} catch (DataAccessException e) {
+			throw new ServiceException(
+					"Error has occured while searching for food entries", e);
+		}
+		return foods;
 	}
 
 }
