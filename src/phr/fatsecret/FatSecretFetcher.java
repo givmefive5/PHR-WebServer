@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.crypto.Mac;
@@ -21,6 +22,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import phr.exceptions.FatSecretFetcherException;
 import phr.tools.GSONConverter;
 import phr.tools.UUIDGenerator;
 
@@ -40,7 +42,7 @@ public class FatSecretFetcher {
 		return timestamp;
 	}
 
-	private static String encode(String string)
+	private static String percentEncode(String string)
 			throws UnsupportedEncodingException {
 		String encoded = URLEncoder.encode(string, "UTF-8");
 		return encoded;
@@ -60,45 +62,64 @@ public class FatSecretFetcher {
 
 		byte[] text = baseString.getBytes();
 
-		return new String(Base64.encodeBase64(mac.doFinal(text))).trim();
+		String base64EncodedString = new String(Base64.encodeBase64(mac.doFinal(text))).trim();
+		return percentEncode(base64EncodedString);
 	}
 
-	public List<FatSecretFood> searchFood(String query)
-			throws UnsupportedEncodingException, GeneralSecurityException,
-			IOException, ClientProtocolException, JSONException {
-		Long timestamp = getTimeStamp();
-		String uniqueString = UUIDGenerator.generateUniqueString();
-		String params = "format=json&method=foods.search&oauth_consumer_key="
-				+ consumerKey + "&oauth_nonce=" + uniqueString + "&"
-				+ "oauth_signature_method=HMAC-SHA1&oauth_timestamp="
-				+ timestamp + "&oauth_version=1.0&" + "search_expression="
-				+ query;
+	public static List<FatSecretFood> searchFood(String query) throws FatSecretFetcherException {
+		try {
+			Long timestamp = getTimeStamp();
+			String uniqueString = UUIDGenerator.generateUniqueString();
+			String params = "format=json&method=foods.search&oauth_consumer_key="
+					+ consumerKey + "&oauth_nonce=" + uniqueString + "&"
+					+ "oauth_signature_method=HMAC-SHA1&oauth_timestamp="
+					+ timestamp + "&oauth_version=1.0&" + "search_expression="
+					+ query;
+	
+			String signatureBaseString = "GET&" + percentEncode(address) + "&" + percentEncode(params);
+			System.out.println("Signature Base String : " + signatureBaseString + "\n");
+			String signatureValue = computeSignature(signatureBaseString,
+					sharedSecret + "&");
+			System.out.println();
+			System.out.println("Signature Value:" + signatureValue + "\n");
+			
+	
+			String newParams = "format=json&method=foods.search&oauth_consumer_key="
+					+ consumerKey
+					+ "&oauth_nonce="
+					+ uniqueString
+					+ "&"
+					+ "oauth_signature="
+					+ signatureValue
+					+ "&"
+					+ "oauth_signature_method=HMAC-SHA1&oauth_timestamp="
+					+ timestamp
+					+ "&oauth_version=1.0&"
+					+ "search_expression="
+					+ query;
+			System.out.println("Http Request:" + address + "?" + newParams + "\n");
+			String output = performHttpRequest(newParams);
+			System.out.println(output);
+			JSONObject json = new JSONObject(output);
+			List<FatSecretFood> foodList = new ArrayList<>();;
+			JSONObject foods = json.getJSONObject("foods");
+				if(foods.has("food")){
+					String jsonArr = foods.get("food").toString();
+					Type type = new TypeToken<List<FatSecretFood>>() {
+					}.getType();
+					foodList = GSONConverter.convertJSONToObjectList(
+							jsonArr, type);
+				}
+				return foodList;
+		} catch (Exception e) {
+			throw new FatSecretFetcherException("An error has occurred, cannot parse JSON", e);
+		}
+		
+	}
 
-		String signatureBaseString = "";
-		signatureBaseString += "GET&" + encode(address) + "&" + encode(params);
-		System.out.println("Signature Base String :");
-		System.out.println(signatureBaseString + "\n");
-		String signatureValue = computeSignature(signatureBaseString,
-				sharedSecret + "&");
-		System.out.println("Signature Value:");
-		System.out.println(signatureValue + "\n");
+	private static String performHttpRequest(String newParams)
+			throws IOException, ClientProtocolException {
 		HttpClient client = new DefaultHttpClient();
-
-		String newParams = "format=json&method=foods.search&oauth_consumer_key="
-				+ consumerKey
-				+ "&oauth_nonce="
-				+ uniqueString
-				+ "&"
-				+ "oauth_signature="
-				+ signatureValue
-				+ "&"
-				+ "oauth_signature_method=HMAC-SHA1&oauth_timestamp="
-				+ timestamp
-				+ "&oauth_version=1.0&"
-				+ "search_expression="
-				+ query;
-		System.out.println("Http Request:");
-		System.out.println(address + "?" + newParams + "\n");
 		HttpGet get = new HttpGet(address + "?" + newParams);
 		HttpResponse response = client.execute(get);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -109,13 +130,6 @@ public class FatSecretFetcher {
 
 		JsonElement el = parser.parse(out.toString());
 		String output = gson.toJson(el);
-		System.out.println(output);
-		JSONObject json = new JSONObject(output);
-		String jsonArr = json.getJSONObject("foods").get("food").toString();
-		Type type = new TypeToken<List<FatSecretFood>>() {
-		}.getType();
-		List<FatSecretFood> foodList = GSONConverter.convertJSONToObjectList(
-				jsonArr, type);
-		return foodList;
+		return output;
 	}
 }

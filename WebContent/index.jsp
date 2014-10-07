@@ -23,6 +23,10 @@
 		<input type="submit"/>
 	</form>
 	
-	
+	Test5: FatSecret
+	<form method="POST" action="test5">
+		Search Using FatSecret:<input type="text" name="searchQuery"/><br>
+		<input type="submit"/>
+	</form>
 </body>
 </html>

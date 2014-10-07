@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import phr.exceptions.DataAccessException;
+import phr.exceptions.FatSecretFetcherException;
 import phr.exceptions.ImageHandlerException;
 import phr.exceptions.SNSException;
+import phr.fatsecret.FatSecretFetcher;
+import phr.fatsecret.FatSecretFood;
 import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.sns.datamining.service.FacebookFetcherService;
 import phr.sns.datamining.serviceimpl.FacebookFetcherServiceImpl;
@@ -76,11 +79,19 @@ public class TestController {
 	}
 	
 	@RequestMapping(value = "/test4")
-	public void test3() throws ImageHandlerException{
+	public void test4() throws ImageHandlerException{
 		BufferedImage image = new BufferedImage(10,10,10);
 		String encodedImage = ImageHandler.encodeBufferedImage(image);
 		System.out.println(encodedImage);
 		String filePath = ImageHandler.saveImage_ReturnFilePath(encodedImage);
 		System.out.println(filePath);
+	}
+	
+	@RequestMapping(value = "/test5")
+	public void test5(@RequestParam String searchQuery) throws FatSecretFetcherException{
+		List<FatSecretFood> foods = FatSecretFetcher.searchFood(searchQuery);
+		for(FatSecretFood food: foods){
+			System.out.println(food.getFood_name());
+		}
 	}
 }
