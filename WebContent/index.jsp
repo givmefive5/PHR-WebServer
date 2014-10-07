@@ -18,9 +18,11 @@
 		<input type="submit"/>
 	</form>
 	
-	Test3: Test the conversion of ArrayList to GSON
-	<form method="POST" action="tracker/getAllBloodPressure">
+	Test4: Testing the image encoding/saving
+	<form method="POST" action="test4">
 		<input type="submit"/>
 	</form>
+	
+	
 </body>
 </html>

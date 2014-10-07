@@ -72,13 +72,24 @@ public class ImageHandler {
 		}
 	}
 
-	public static String saveImage_ReturnFilePath(String encodedImage) {
+	public static String saveImage_ReturnFilePath(String encodedImage) throws ImageHandlerException {
 		long time = TimestampHandler.getCurrentTimestamp().getTime();
 		String uniqueString = UUIDGenerator.generateUniqueString();
 
 		String fileName = time + uniqueString + ".jpg";
-		// save
-		System.out.println(fileName);
+		
+		String basePath = "D://PHRFiles/images/";
+		File folder = new File(basePath);
+		if (!folder.exists())
+			folder.mkdir();
+		BufferedImage image = decodeImage(encodedImage);
+		File outputFile = new File(basePath+fileName);
+		try {
+			ImageIO.write(image, "png", outputFile);
+		} catch (IOException e) {
+			throw new ImageHandlerException("Unable to saveImage", e);
+		}
+		System.out.println("Generated from web server: " + fileName);
 
 		return fileName;
 	}

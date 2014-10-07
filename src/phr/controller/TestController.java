@@ -1,5 +1,6 @@
 package phr.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import phr.exceptions.DataAccessException;
+import phr.exceptions.ImageHandlerException;
 import phr.exceptions.SNSException;
 import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.sns.datamining.service.FacebookFetcherService;
 import phr.sns.datamining.serviceimpl.FacebookFetcherServiceImpl;
+import phr.tools.ImageHandler;
 import phr.web.models.FBPost;
 
 @Controller
@@ -49,7 +52,7 @@ public class TestController {
 		samplePosts
 				.add("Halo-Halo #filipinofood #filipino #dessert #ube #gulaman");
 		samplePosts
-				.add("Inihaw na Pusit and Lechon Kawali. Stomach is happy #filipinofood #favourite #yum #blessed #mmm #ooogurl #sofine");
+				.add("Inihaw na Pusit and Lechon Kawali. Stomach is happy #filipinofood #yum #blessed #mmm #ooogurl #sofine");
 		samplePosts.add("Ramen for four ");
 		samplePosts
 				.add("All I think about is food... #food #gyoza #frieddumplings #mysunshine #onacloudyday");
@@ -72,4 +75,12 @@ public class TestController {
 		}
 	}
 	
+	@RequestMapping(value = "/test4")
+	public void test3() throws ImageHandlerException{
+		BufferedImage image = new BufferedImage(10,10,10);
+		String encodedImage = ImageHandler.encodeBufferedImage(image);
+		System.out.println(encodedImage);
+		String filePath = ImageHandler.saveImage_ReturnFilePath(encodedImage);
+		System.out.println(filePath);
+	}
 }
