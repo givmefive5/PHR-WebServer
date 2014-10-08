@@ -87,7 +87,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		try {
 			Connection conn = getConnection();
 			String query = "UPDATE activitytracker SET activityID = ?, durationInSeconds = ?,  calorieBurnedPerHour = ?, dateAdded =? , status = ?, photo = ?)"
-					+ "WHERE id = ?";
+					+ " WHERE id = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -107,8 +107,11 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			else
 				pstmt.setNull(6, Types.NULL);
 			
+<<<<<<< HEAD
 			pstmt.setInt(7, activityTrackerEntry.getEntryID());
 
+=======
+>>>>>>> origin/master
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			throw new DataAccessException(
