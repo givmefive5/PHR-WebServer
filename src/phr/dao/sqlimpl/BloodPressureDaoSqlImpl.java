@@ -89,7 +89,16 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(2, bloodPressure.getDiastolic());
 			pstmt.setTimestamp(3, bloodPressure.getTimestamp());
 			pstmt.setString(4, bloodPressure.getStatus());
-			pstmt.setString(5, bloodPressure.getImage().getFileName());
+			if(bloodPressure.getImage()!= null)
+			{
+				String encodedImage = bloodPressure.getImage().getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				bloodPressure.getImage().setFileName(fileName);
+				pstmt.setString(5, bloodPressure.getImage().getFileName());
+			}
+			else
+				pstmt.setString(5, null);
 			pstmt.setInt(6, bloodPressure.getEntryID());
 
 			pstmt.executeUpdate();

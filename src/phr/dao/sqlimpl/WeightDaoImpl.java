@@ -88,7 +88,16 @@ public class WeightDaoImpl extends BaseDaoSqlImpl implements WeightDao {
 			pstmt.setDouble(1, weight.getWeightInPounds());
 			pstmt.setTimestamp(2, weight.getTimestamp());
 			pstmt.setString(3, weight.getStatus());
-			pstmt.setString(4, weight.getImage().getFileName());
+			if (weight.getImage() != null) {
+				String encodedImage = weight.getImage()
+						.getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				weight.getImage().setFileName(fileName);
+				pstmt.setString(4, weight.getImage().getFileName());
+			}
+			else
+				pstmt.setNull(4, Types.NULL);
 			pstmt.setInt(5, weight.getEntryID());
 
 			pstmt.executeUpdate();

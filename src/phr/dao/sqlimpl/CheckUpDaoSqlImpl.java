@@ -90,7 +90,16 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 			pstmt.setString(3, checkUp.getNotes());
 			pstmt.setTimestamp(4, checkUp.getTimestamp());
 			pstmt.setString(5, checkUp.getStatus());
-			pstmt.setString(6, checkUp.getImage().getFileName());
+			if (checkUp.getImage() != null) {
+				String encodedImage = checkUp.getImage()
+						.getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				checkUp.getImage().setFileName(fileName);
+				pstmt.setString(6, checkUp.getImage().getFileName());
+			}
+			else
+				pstmt.setNull(6, Types.NULL);
 			pstmt.setInt(7, checkUp.getEntryID());
 
 			pstmt.executeUpdate();

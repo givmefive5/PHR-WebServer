@@ -106,7 +106,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			}
 			else
 				pstmt.setNull(6, Types.NULL);
-
+			
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			throw new DataAccessException(

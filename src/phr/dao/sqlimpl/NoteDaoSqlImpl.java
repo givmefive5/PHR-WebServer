@@ -87,7 +87,16 @@ public class NoteDaoSqlImpl extends BaseDaoSqlImpl implements NoteDao {
 			pstmt.setString(1, note.getNote());
 			pstmt.setTimestamp(2, note.getTimestamp());
 			pstmt.setString(3, note.getStatus());
-			pstmt.setString(4, note.getImage().getFileName());
+			if(note.getImage()!= null)
+			{
+				String encodedImage = note.getImage().getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				note.getImage().setFileName(fileName);
+				pstmt.setString(4, note.getImage().getFileName());
+			}
+			else
+				pstmt.setNull(4, Types.NULL);
 			pstmt.setInt(5, note.getEntryID());
 
 			pstmt.executeUpdate();

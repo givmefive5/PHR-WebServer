@@ -80,7 +80,7 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE bloodsugartracker SET bloodsugar = ?, type = ?,  dateAdded = ?, status=?, photo=?"
+			String query = "UPDATE bloodsugartracker SET bloodsugar = ?, type = ?,  dateAdded = ?, status=?, photo=? "
 					+ "WHERE id = ?";
 
 			PreparedStatement pstmt;
@@ -89,7 +89,16 @@ public class BloodSugarDaoImpl extends BaseDaoSqlImpl implements BloodSugarDao {
 			pstmt.setString(2, bloodSugar.getType());
 			pstmt.setTimestamp(3, bloodSugar.getTimestamp());
 			pstmt.setString(4, bloodSugar.getStatus());
-			pstmt.setString(5, bloodSugar.getImage().getFileName());
+			if (bloodSugar.getImage() != null) {
+				String encodedImage = bloodSugar.getImage()
+						.getEncodedImage();
+				String fileName = ImageHandler
+						.saveImage_ReturnFilePath(encodedImage);
+				bloodSugar.getImage().setFileName(fileName);
+				pstmt.setString(5, bloodSugar.getImage().getFileName());
+			}
+			else
+				pstmt.setNull(5, Types.NULL);
 			pstmt.setInt(6, bloodSugar.getEntryID());
 
 			pstmt.executeUpdate();
