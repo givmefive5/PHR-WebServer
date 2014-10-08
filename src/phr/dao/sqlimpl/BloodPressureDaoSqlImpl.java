@@ -81,7 +81,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 		try {
 			Connection conn = getConnection();
 			String query = "UPDATE bloodpressuretracker SET systolic = ?, diastolic = ?, dateAdded = ?, status=?, photo=?"
-					+ "WHERE id = ?";
+					+ " WHERE id = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -98,7 +98,7 @@ public class BloodPressureDaoSqlImpl extends BaseDaoSqlImpl implements
 				pstmt.setString(5, bloodPressure.getImage().getFileName());
 			}
 			else
-				pstmt.setString(5, null);
+				pstmt.setNull(5, Types.NULL);
 			pstmt.setInt(6, bloodPressure.getEntryID());
 
 			pstmt.executeUpdate();

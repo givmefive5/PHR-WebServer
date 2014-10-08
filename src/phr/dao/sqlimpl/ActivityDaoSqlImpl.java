@@ -87,7 +87,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		try {
 			Connection conn = getConnection();
 			String query = "UPDATE activitytracker SET activityID = ?, durationInSeconds = ?,  calorieBurnedPerHour = ?, dateAdded =? , status = ?, photo = ?)"
-					+ "WHERE id = ?";
+					+ " WHERE id = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
