@@ -12,15 +12,14 @@ import phr.web.models.Food;
 
 public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements RestaurantDao {
 
-	
-	// sort by the count column
 	@Override
 	public List<Food> getFood(int restaurantID) throws DataAccessException {
 		List<Food> foods = new ArrayList<Food>();
 		
 		try{
 			Connection conn = getConnection();
-			String query = "SELECT * FROM foodList WHERE restaurantID = ?";
+			String query = "SELECT * FROM foodList WHERE restaurantID = ? "
+					+ "ORDER BY countUsed DESC";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -38,7 +37,8 @@ public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements RestaurantDa
 						rs.getString("servingUnit"),
 						rs.getDouble("servingSize"),
 						rs.getInt("restaurantID"),
-						rs.getBoolean("fromFatsecret")));
+						rs.getBoolean("fromFatsecret"),
+						rs.getInt("countUsed")));
 			}
 		}catch(Exception e){
 			throw new DataAccessException(

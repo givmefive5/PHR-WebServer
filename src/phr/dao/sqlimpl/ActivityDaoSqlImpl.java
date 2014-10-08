@@ -19,7 +19,6 @@ import phr.tools.ImageHandler;
 import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
 import phr.web.models.FBPost;
-import phr.web.models.Food;
 import phr.web.models.PHRImage;
 import phr.web.models.PHRImageType;
 
@@ -217,13 +216,14 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO activitylist(name, MET) VALUES (?, ?)";
+			String query = "INSERT INTO activitylist(name, MET, countUsed) VALUES (?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query,
 					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, activity.getName());
 			pstmt.setDouble(2, activity.getMET());
+			pstmt.setInt(3, 0);
 
 			pstmt.executeUpdate();
 
@@ -258,7 +258,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				activities.add(new Activity(rs.getInt("id"), rs
-						.getString("name"), rs.getDouble("MET")));
+						.getString("name"), rs.getDouble("MET"), rs.getInt("countUsed")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(

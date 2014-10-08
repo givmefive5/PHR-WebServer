@@ -210,7 +210,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, servingUnit, servingSize, restaurantID, fromFatsecret) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, servingUnit, servingSize, restaurantID, fromFatsecret, countUsed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -223,6 +223,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			pstmt.setDouble(7, food.getServingSize());
 			pstmt.setInt(8, food.getRestaurantID());
 			pstmt.setBoolean(9, food.getFromFatsecret());
+			pstmt.setInt(10, 0);
 		
 			pstmt.executeUpdate();
 			
@@ -275,7 +276,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		
 		try{
 			Connection conn = getConnection();
-			String query = "SELECT id, name, calorie, servingUnit, servingSize, restaurantID, fromFatsecret FROM foodList";
+			String query = "SELECT id, name, calorie, servingUnit, servingSize, restaurantID, fromFatsecret, countUsed FROM foodList";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -292,7 +293,8 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 						rs.getString("servingUnit"),
 						rs.getDouble("servingSize"),
 						rs.getInt("restaurantID"),
-						rs.getBoolean("fromFatsecret")));	
+						rs.getBoolean("fromFatsecret"),
+						rs.getInt("countUsed")));	
 			}
 		}catch (Exception e){
 			throw new DataAccessException(
@@ -360,7 +362,8 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 						rs.getString("servingUnit"),
 						rs.getDouble("servingSize"),
 						rs.getInt("restaurantID"),
-						rs.getBoolean("fromFatsecret")));
+						rs.getBoolean("fromFatsecret"),
+						rs.getInt("countUsed")));
 			}
 		}catch (Exception e){
 			throw new DataAccessException(

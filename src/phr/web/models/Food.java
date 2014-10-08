@@ -12,6 +12,7 @@ public class Food {
 	double servingSize;
 	Integer restaurantID;
 	Boolean fromFatsecret;
+	int countUsed;
 	
 	public Food(Integer entryID){
 		super();
@@ -20,7 +21,7 @@ public class Food {
 	
 	public Food(Integer entryID, String name, double calorie, double protein,
 			double fat, double carbohydrate, String servingUnit,
-			double servingSize, Integer restaurantID, Boolean fromFatsecret) {
+			double servingSize, Integer restaurantID, Boolean fromFatsecret, int countUsed) {
 		super();
 		this.entryID = entryID;
 		this.name = name;
@@ -32,11 +33,12 @@ public class Food {
 		this.servingSize = servingSize;
 		this.restaurantID = restaurantID;
 		this.fromFatsecret = fromFatsecret;
+		this.countUsed = countUsed;
 	}
 	
 	public Food(String name, double calorie, double protein, double fat,
 			double carbohydrate, String servingUnit, double servingSize,
-			Integer restaurantID, Boolean fromFatsecret) {
+			Integer restaurantID, Boolean fromFatsecret, int countUsed) {
 		super();
 		this.name = name;
 		this.calorie = calorie;
@@ -47,6 +49,7 @@ public class Food {
 		this.servingSize = servingSize;
 		this.restaurantID = restaurantID;
 		this.fromFatsecret = fromFatsecret;
+		this.countUsed = countUsed;
 	}
 
 	public Integer getEntryID() {
@@ -127,6 +130,14 @@ public class Food {
 
 	public void setFromFatsecret(Boolean fromFatsecret) {
 		this.fromFatsecret = fromFatsecret;
+	}
+
+	public int getCountUsed() {
+		return countUsed;
+	}
+
+	public void setCountUsed(int countUsed) {
+		this.countUsed = countUsed;
 	}
 	
 }
