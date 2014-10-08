@@ -6,9 +6,13 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import phr.dao.RestaurantDao;
 import phr.exceptions.DataAccessException;
 import phr.web.models.Food;
+
+@Repository ("restaurantDao")
 
 public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements RestaurantDao {
 
