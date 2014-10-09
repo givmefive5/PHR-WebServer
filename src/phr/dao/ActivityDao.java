@@ -15,4 +15,6 @@ public interface ActivityDao extends TrackerDao<ActivityTrackerEntry> {
 	
 	public Activity getActivity(int entryID) throws DataAccessException;
 	
+	public List<Activity> search(String serachQuery) throws DataAccessException;
+	
 }

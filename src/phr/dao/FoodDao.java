@@ -10,7 +10,7 @@ public interface FoodDao extends TrackerDao<FoodTrackerEntry> {
 	
 	public int addFoodListEntryReturnEntryID(Food food) throws DataAccessException;
 	
-	public Boolean foodEntryExists(Food food) throws DataAccessException;
+	public int foodEntryExists(Food food) throws DataAccessException;
 	
 	public List<Food> getAllFood () throws DataAccessException;
 	

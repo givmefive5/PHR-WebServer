@@ -297,4 +297,12 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 		return activity;
 	}
+
+	@Override
+	public List<Activity> search(String serachQuery) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }

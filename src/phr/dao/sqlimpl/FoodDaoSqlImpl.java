@@ -208,24 +208,62 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	@Override
 	public int addFoodListEntryReturnEntryID(Food food) throws DataAccessException {
 		
+		int entryID = foodEntryExists(food);
+		
+		if(entryID != -1){
+			return entryID; 
+		}else{
+			
+			try {
+				Connection conn = getConnection();
+				String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, servingUnit, servingSize, restaurantID, fromFatsecret, countUsed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				PreparedStatement pstmt;
+
+				pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				pstmt.setString(1, food.getName());
+				pstmt.setDouble(2, food.getCalorie());
+				pstmt.setDouble(3, food.getProtein());
+				pstmt.setDouble(4, food.getFat());
+				pstmt.setDouble(5, food.getCarbohydrate());
+				pstmt.setString(6, food.getServingUnit());
+				pstmt.setDouble(7, food.getServingSize());
+				pstmt.setInt(8, food.getRestaurantID());
+				pstmt.setBoolean(9, food.getFromFatsecret());
+				pstmt.setInt(10, 0);
+			
+				pstmt.executeUpdate();
+				
+				ResultSet rs = pstmt.getGeneratedKeys();
+				
+				if (rs.next())
+					entryID = rs.getInt(1);
+				
+				return entryID;
+
+			} catch (Exception e) {
+				throw new DataAccessException(
+						"An error has occured while trying to access data from the database",
+						e);
+			}
+		}		
+	}
+
+	@Override
+	public int foodEntryExists(Food food) throws DataAccessException {
+		
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, servingUnit, servingSize, restaurantID, fromFatsecret, countUsed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "SELECT * FROM foodlist WHERE "
+					+ "name = ?, calorie = ?, protein = ?, fat = ?, carbohydrate = ?, servingUnit = ?, servingSize = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, food.getName());
 			pstmt.setDouble(2, food.getCalorie());
-			pstmt.setDouble(3, food.getProtein());
-			pstmt.setDouble(4, food.getFat());
-			pstmt.setDouble(5, food.getCarbohydrate());
-			pstmt.setString(6, food.getServingUnit());
-			pstmt.setDouble(7, food.getServingSize());
-			pstmt.setInt(8, food.getRestaurantID());
-			pstmt.setBoolean(9, food.getFromFatsecret());
-			pstmt.setInt(10, 0);
-		
-			pstmt.executeUpdate();
+			pstmt.setDouble(3, food.getFat());
+			pstmt.setDouble(4, food.getCarbohydrate());
+			pstmt.setString(5, food.getServingUnit());
+			pstmt.setDouble(6, food.getServingSize());
 			
 			ResultSet rs = pstmt.getGeneratedKeys();
 
@@ -235,33 +273,6 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			
 			return entryID;
 
-		} catch (Exception e) {
-			throw new DataAccessException(
-					"An error has occured while trying to access data from the database",
-					e);
-		}
-		
-	}
-
-	@Override
-	public Boolean foodEntryExists(Food food) throws DataAccessException {
-		
-		try {
-			Connection conn = getConnection();
-			String query = "SELECT * FROM foodlist WHERE "
-					+ "name = ?";
-			PreparedStatement pstmt;
-
-			pstmt = conn.prepareStatement(query);
-
-			pstmt.setString(1, food.getName());
-			
-			ResultSet rs = pstmt.executeQuery();
-
-			if (rs.next())
-				return rs.getBoolean(1);
-			else
-				return null;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -372,6 +383,27 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			}
 		
 		return foods;
+	}
+	
+	public void incrementCountUsed(Food food) throws DataAccessException{
+		
+		try{
+			Connection conn = getConnection();
+			String query = "UPDATE foodList SET countUsed = ? WHERE id = ? ";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, food.getCountUsed() + 1);
+			pstmt.setInt(2, food.getEntryID());
+			
+			pstmt.executeUpdate();
+			
+		}catch (Exception e){
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+			}
+
 	}
 
 }

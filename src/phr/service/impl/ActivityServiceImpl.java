@@ -12,6 +12,7 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.ActivityService;
+import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
 import phr.web.models.User;
 
@@ -107,5 +108,31 @@ public class ActivityServiceImpl implements ActivityService {
 						"Error has occurred while getting the entry id a activity entry",
 						e);
 			}
+	}
+
+	@Override
+	public List<Activity> search(String searchQuery) throws ServiceException {
+		
+		List<Activity> activities = new ArrayList<Activity>();
+		
+		try {
+			activities = activityDao.search(searchQuery);
+		} catch (DataAccessException e) {
+			throw new ServiceException(
+					"Error has occured while searching for activities entries", e);
+		}
+		return activities;
+	}
+
+	@Override
+	public int addActivityListEntryReturnEntryID(Activity activity)
+			throws ServiceException {
+		try {
+			return activityDao.addActivityListEntryReturnEntryID(activity);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while adding a activity entry in the list", e);
+		}
 	}
 }

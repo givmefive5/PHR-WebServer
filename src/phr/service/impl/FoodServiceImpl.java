@@ -32,13 +32,7 @@ public class FoodServiceImpl implements FoodService {
 		
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
-			foodTrackerEntry.setUser(new User(userID));
-			
-			if(foodTrackerEntry.getFood().getEntryID() == null){
-				if(!foodDao.foodEntryExists(foodTrackerEntry.getFood()))
-				foodTrackerEntry.getFood().setEntryID(foodDao.addFoodListEntryReturnEntryID(foodTrackerEntry.getFood()));
-			}
-				
+			foodTrackerEntry.setUser(new User(userID));	
 			return foodDao.addReturnsEntryID(foodTrackerEntry);
 			
 		} catch (DataAccessException e) {
@@ -124,5 +118,18 @@ public class FoodServiceImpl implements FoodService {
 		}
 		return foods;
 	}
+
+	@Override
+	public int addFoodListEntryReturnEntryID(Food food) throws ServiceException {
+		
+		try {
+			return foodDao.addFoodListEntryReturnEntryID(food);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while adding a food entry in the list", e);
+		}
+	}
+	
 
 }
