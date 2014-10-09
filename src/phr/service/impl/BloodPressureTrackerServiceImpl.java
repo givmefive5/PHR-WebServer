@@ -6,20 +6,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import phr.dao.BloodPressureDao;
+import phr.dao.BloodPressureTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
-import phr.service.BloodPressureService;
+import phr.service.BloodPressureTrackerService;
 import phr.web.models.BloodPressure;
 import phr.web.models.User;
 
 @Service("bloodPressureService")
-public class BloodPressureServiceImpl implements BloodPressureService {
+public class BloodPressureTrackerServiceImpl implements BloodPressureTrackerService {
 
 	@Autowired
-	BloodPressureDao bloodPressureDao;
+	BloodPressureTrackerDao bloodPressureTrackerDao;
 
 	@Autowired
 	UserDao userDao;
@@ -30,7 +30,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodPressure.setUser(new User(userID));
-			return bloodPressureDao.addReturnsEntryID(bloodPressure);
+			return bloodPressureTrackerDao.addReturnsEntryID(bloodPressure);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -45,7 +45,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodPressure.setUser(new User(userID));
-			bloodPressureDao.edit(bloodPressure);
+			bloodPressureTrackerDao.edit(bloodPressure);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -60,7 +60,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodPressure.setUser(new User(userID));
-			bloodPressureDao.delete(bloodPressure);
+			bloodPressureTrackerDao.delete(bloodPressure);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -75,7 +75,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 		List<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
 		
 		try{
-			bloodpressures = bloodPressureDao.getAll(accessToken);
+			bloodpressures = bloodPressureTrackerDao.getAll(accessToken);
 		}catch(DataAccessException e){
 			e.printStackTrace();
 			throw new ServiceException(
@@ -93,7 +93,7 @@ public class BloodPressureServiceImpl implements BloodPressureService {
 			return bloodPressure.getEntryID();
 		else
 			try {
-				return bloodPressureDao.getEntryId(bloodPressure);
+				return bloodPressureTrackerDao.getEntryId(bloodPressure);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
 						"Error has occurred while getting the entry id a blood pressure entry",

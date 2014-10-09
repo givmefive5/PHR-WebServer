@@ -11,52 +11,52 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import phr.dao.CheckUpDao;
+import phr.dao.BloodPressureTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.tools.ImageHandler;
-import phr.web.models.CheckUp;
+import phr.web.models.BloodPressure;
 import phr.web.models.FBPost;
 import phr.web.models.PHRImage;
 import phr.web.models.PHRImageType;
 
-@Repository("checkup")
-public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
+@Repository("bloodPressureTrackerDao")
+public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
+		BloodPressureTrackerDao {
 
 	@Autowired
 	UserDao userDao;
 
 	@Override
-	public int addReturnsEntryID(CheckUp checkUp) throws DataAccessException {
+	public int addReturnsEntryID(BloodPressure bloodPressure)
+			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO checkuptracker(purpose, doctorsName, notes, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query,
 					Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, checkUp.getPurpose());
-			pstmt.setString(2, checkUp.getDoctorsName());
-			pstmt.setString(3, checkUp.getNotes());
-			pstmt.setTimestamp(4, checkUp.getTimestamp());
-			pstmt.setString(5, checkUp.getStatus());
-			pstmt.setInt(6, checkUp.getUserID());
-			if (checkUp.getFbPost() != null)
-				pstmt.setInt(7, checkUp.getFbPost().getId());
+			pstmt.setInt(1, bloodPressure.getSystolic());
+			pstmt.setInt(2, bloodPressure.getDiastolic());
+			pstmt.setTimestamp(3, bloodPressure.getTimestamp());
+			pstmt.setString(4, bloodPressure.getStatus());
+			pstmt.setInt(5, bloodPressure.getUserID());
+			if (bloodPressure.getFbPost() != null)
+				pstmt.setInt(6, bloodPressure.getFbPost().getId());
 			else
-				pstmt.setNull(7, Types.NULL);
-
-			if (checkUp.getImage() != null) {
-				String encodedImage = checkUp.getImage().getEncodedImage();
+				pstmt.setNull(6, Types.NULL);
+			
+			if(bloodPressure.getImage()!= null){
+				String encodedImage = bloodPressure.getImage().getEncodedImage();
 				String fileName = ImageHandler
 						.saveImage_ReturnFilePath(encodedImage);
-				checkUp.getImage().setFileName(fileName);
-				pstmt.setString(8, checkUp.getImage().getFileName());
+				bloodPressure.getImage().setFileName(fileName);
+				pstmt.setString(7, bloodPressure.getImage().getFileName());
 			}
 			else
-				pstmt.setNull(8, Types.NULL);
-			
+				pstmt.setString(7, null);
 			
 			pstmt.executeUpdate();
 
@@ -76,31 +76,30 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 	}
 
 	@Override
-	public void edit(CheckUp checkUp) throws DataAccessException,
+	public void edit(BloodPressure bloodPressure) throws DataAccessException,
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE checkuptracker SET purpose = ?, doctorName = ?, notes = ?,  dateAdded = ?, status=?, photo=?"
-					+ "WHERE id = ?";
+			String query = "UPDATE bloodpressuretracker SET systolic = ?, diastolic = ?, dateAdded = ?, status=?, photo=?"
+					+ " WHERE id = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, checkUp.getPurpose());
-			pstmt.setString(2, checkUp.getDoctorsName());
-			pstmt.setString(3, checkUp.getNotes());
-			pstmt.setTimestamp(4, checkUp.getTimestamp());
-			pstmt.setString(5, checkUp.getStatus());
-			if (checkUp.getImage() != null) {
-				String encodedImage = checkUp.getImage()
-						.getEncodedImage();
+			pstmt.setInt(1, bloodPressure.getSystolic());
+			pstmt.setInt(2, bloodPressure.getDiastolic());
+			pstmt.setTimestamp(3, bloodPressure.getTimestamp());
+			pstmt.setString(4, bloodPressure.getStatus());
+			if(bloodPressure.getImage()!= null)
+			{
+				String encodedImage = bloodPressure.getImage().getEncodedImage();
 				String fileName = ImageHandler
 						.saveImage_ReturnFilePath(encodedImage);
-				checkUp.getImage().setFileName(fileName);
-				pstmt.setString(6, checkUp.getImage().getFileName());
+				bloodPressure.getImage().setFileName(fileName);
+				pstmt.setString(5, bloodPressure.getImage().getFileName());
 			}
 			else
-				pstmt.setNull(6, Types.NULL);
-			pstmt.setInt(7, checkUp.getEntryID());
+				pstmt.setNull(5, Types.NULL);
+			pstmt.setInt(6, bloodPressure.getEntryID());
 
 			pstmt.executeUpdate();
 
@@ -111,15 +110,15 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 	}
 
 	@Override
-	public void delete(CheckUp checkUp) throws DataAccessException,
+	public void delete(BloodPressure bloodPressure) throws DataAccessException,
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "DELETE FROM checkuptracker WHERE id = ?";
+			String query = "DELETE FROM bloodpressuretracker WHERE id = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, checkUp.getEntryID());
+			pstmt.setInt(1, bloodPressure.getEntryID());
 
 			pstmt.executeUpdate();
 
@@ -130,13 +129,13 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 	}
 
 	@Override
-	public List<CheckUp> getAll(String userAccessToken)
+	public List<BloodPressure> getAll(String userAccessToken)
 			throws DataAccessException {
-		
-		List<CheckUp> checkups = new ArrayList<CheckUp>();
+
+		List<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, fbPostID, purpose, doctorsName, notes, status, photo, dateAdded FROM checkuptracker WHERE userID = ?";
+			String query = "SELECT id, fbPostID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -151,10 +150,11 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
-				checkups.add(new CheckUp(rs.getInt("id"), new FBPost(rs
-						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
-						.getString("status"), image, rs.getString("purpose"),
-						rs.getString("doctorsName"), rs.getString("notes")));
+				bloodpressures.add(new BloodPressure(rs.getInt("id"),
+						new FBPost(rs.getInt("fbPostID")), rs
+								.getTimestamp("dateAdded"), rs
+								.getString("status"), image, rs
+								.getInt("systolic"), rs.getInt("diastolic")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -162,21 +162,22 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 					e);
 		}
 
-		return checkups;
+		return bloodpressures;
 	}
 
 	@Override
-	public Integer getEntryId(CheckUp checkUp) throws DataAccessException {
+	public Integer getEntryId(BloodPressure bloodPressure)
+			throws DataAccessException {
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id FROM checkuptracker WHERE "
+			String query = "SELECT id FROM bloodpressuretracker WHERE "
 					+ "userID = ? AND dateAdded = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, checkUp.getUserID());
-			pstmt.setTimestamp(2, checkUp.getTimestamp());
+			pstmt.setInt(1, bloodPressure.getUserID());
+			pstmt.setTimestamp(2, bloodPressure.getTimestamp());
 
 			ResultSet rs = pstmt.executeQuery();
 
@@ -189,6 +190,7 @@ public class CheckUpDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpDao {
 					"An error has occured while trying to access data from the database",
 					e);
 		}
+
 	}
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import phr.dao.FoodDao;
+import phr.dao.FoodTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
@@ -22,9 +22,9 @@ import phr.web.models.FoodTrackerEntry;
 import phr.web.models.PHRImage;
 import phr.web.models.PHRImageType;
 
-@Repository("foodDao")
+@Repository("foodTrackerDao")
 
-public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
+public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTrackerDao {
 	
 	@Autowired
 	UserDao userDao;

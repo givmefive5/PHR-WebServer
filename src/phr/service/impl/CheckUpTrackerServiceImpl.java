@@ -6,20 +6,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import phr.dao.CheckUpDao;
+import phr.dao.CheckUpTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
-import phr.service.CheckUpService;
+import phr.service.CheckUpTrackerService;
 import phr.web.models.CheckUp;
 import phr.web.models.User;
 
 @Service("checkUpService")
-public class CheckUpServiceImpl implements CheckUpService {
+public class CheckUpTrackerServiceImpl implements CheckUpTrackerService {
 	
 	@Autowired
-	CheckUpDao checkUpDao;
+	CheckUpTrackerDao checkUpTrackerDao;
 
 	@Autowired
 	UserDao userDao;
@@ -29,7 +29,7 @@ public class CheckUpServiceImpl implements CheckUpService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			checkUp.setUser(new User(userID));
-			return checkUpDao.addReturnsEntryID(checkUp);
+			return checkUpTrackerDao.addReturnsEntryID(checkUp);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -44,7 +44,7 @@ public class CheckUpServiceImpl implements CheckUpService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			checkUp.setUser(new User(userID));
-			checkUpDao.edit(checkUp);
+			checkUpTrackerDao.edit(checkUp);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -60,7 +60,7 @@ public class CheckUpServiceImpl implements CheckUpService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			checkUp.setUser(new User(userID));
-			checkUpDao.delete(checkUp);
+			checkUpTrackerDao.delete(checkUp);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -76,7 +76,7 @@ public class CheckUpServiceImpl implements CheckUpService {
 		List<CheckUp> checkups = new ArrayList<CheckUp>();
 		
 		try{
-			checkups = checkUpDao.getAll(accessToken);
+			checkups = checkUpTrackerDao.getAll(accessToken);
 		}catch(DataAccessException e){
 			e.printStackTrace();
 			throw new ServiceException(
@@ -92,7 +92,7 @@ public class CheckUpServiceImpl implements CheckUpService {
 			return checkUp.getEntryID();
 		else
 			try {
-				return checkUpDao.getEntryId(checkUp);
+				return checkUpTrackerDao.getEntryId(checkUp);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
 						"Error has occurred while getting the entry id of a checkup entry",

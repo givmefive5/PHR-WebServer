@@ -19,8 +19,8 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.NoteService;
-import phr.service.UserService;
+import phr.service.NoteTrackerService;
+import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -30,10 +30,10 @@ import phr.web.models.Note;
 public class NoteController {
 	
 	@Autowired
-	NoteService noteService;
+	NoteTrackerService noteService;
 	
 	@Autowired
-	UserService userService;
+	UserTrackerService userService;
 
 	@RequestMapping(value = "/tracker/addNote", method = RequestMethod.POST)
 	public void addNote(HttpServletRequest request,

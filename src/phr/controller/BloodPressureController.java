@@ -19,8 +19,8 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.BloodPressureService;
-import phr.service.UserService;
+import phr.service.BloodPressureTrackerService;
+import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -30,9 +30,9 @@ import phr.web.models.BloodPressure;
 public class BloodPressureController {
 
 	@Autowired
-	BloodPressureService bloodPressureService;
+	BloodPressureTrackerService bloodPressureService;
 	@Autowired
-	UserService userService;
+	UserTrackerService userService;
 
 	@RequestMapping(value = "/tracker/addBloodPressure", method = RequestMethod.POST)
 	public void addBloodPressure(HttpServletRequest request,

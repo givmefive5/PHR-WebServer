@@ -7,19 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.UserDao;
-import phr.dao.WeightDao;
+import phr.dao.WeightTrackerDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
-import phr.service.WeightService;
+import phr.service.WeightTrackerService;
 import phr.web.models.User;
 import phr.web.models.Weight;
 
 @Service("weightService")
-public class WeightServiceImpl implements WeightService {
+public class WeightTrackerServiceImpl implements WeightTrackerService {
 	
 	@Autowired
-	WeightDao weightDao;
+	WeightTrackerDao weightTrackerDao;
 
 	@Autowired
 	UserDao userDao;
@@ -29,7 +29,7 @@ public class WeightServiceImpl implements WeightService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			weight.setUser(new User(userID));
-			return weightDao.addReturnsEntryID(weight);
+			return weightTrackerDao.addReturnsEntryID(weight);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -42,7 +42,7 @@ public class WeightServiceImpl implements WeightService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			weight.setUser(new User(userID));
-			weightDao.edit(weight);
+			weightTrackerDao.edit(weight);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -57,7 +57,7 @@ public class WeightServiceImpl implements WeightService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			weight.setUser(new User(userID));
-			weightDao.delete(weight);
+			weightTrackerDao.delete(weight);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -71,7 +71,7 @@ public class WeightServiceImpl implements WeightService {
 		List<Weight> weights = new ArrayList<Weight>();
 		
 		try{
-			weights = weightDao.getAll(accessToken);
+			weights = weightTrackerDao.getAll(accessToken);
 		}catch(DataAccessException e){
 			e.printStackTrace();
 			throw new ServiceException(
@@ -87,7 +87,7 @@ public class WeightServiceImpl implements WeightService {
 			return weight.getEntryID();
 		else
 			try {
-				return weightDao.getEntryId(weight);
+				return weightTrackerDao.getEntryId(weight);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
 						"Error has occurred while getting the entry id of a weight entry",

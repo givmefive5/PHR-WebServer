@@ -6,22 +6,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import phr.dao.FoodDao;
+import phr.dao.FoodTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
-import phr.service.FoodService;
+import phr.service.FoodTrackerService;
 import phr.web.models.Food;
 import phr.web.models.FoodTrackerEntry;
 import phr.web.models.User;
 
 @Service("foodService")
 
-public class FoodServiceImpl implements FoodService {
+public class FoodTrackerServiceImpl implements FoodTrackerService {
 	
 	@Autowired 
-	FoodDao foodDao;
+	FoodTrackerDao foodTrackerDao;
 	
 	@Autowired
 	UserDao userDao;
@@ -33,7 +33,7 @@ public class FoodServiceImpl implements FoodService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			foodTrackerEntry.setUser(new User(userID));	
-			return foodDao.addReturnsEntryID(foodTrackerEntry);
+			return foodTrackerDao.addReturnsEntryID(foodTrackerEntry);
 			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -50,7 +50,7 @@ public class FoodServiceImpl implements FoodService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			foodTrackerEntry.setUser(new User(userID));
-			foodDao.edit(foodTrackerEntry);
+			foodTrackerDao.edit(foodTrackerEntry);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -66,7 +66,7 @@ public class FoodServiceImpl implements FoodService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			foodTrackerEntry.setUser(new User(userID));
-			foodDao.delete(foodTrackerEntry);
+			foodTrackerDao.delete(foodTrackerEntry);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -81,7 +81,7 @@ public class FoodServiceImpl implements FoodService {
 		List<FoodTrackerEntry> foods = new ArrayList<FoodTrackerEntry>();
 		
 		try{
-			foods = foodDao.getAll(accessToken);
+			foods = foodTrackerDao.getAll(accessToken);
 		}catch(DataAccessException e){
 			e.printStackTrace();
 			throw new ServiceException(
@@ -97,7 +97,7 @@ public class FoodServiceImpl implements FoodService {
 			return foodTrackerEntry.getEntryID();
 		else
 			try {
-				return foodDao.getEntryId(foodTrackerEntry);
+				return foodTrackerDao.getEntryId(foodTrackerEntry);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
 						"Error has occurred while getting the entry id of a food entry",
@@ -111,7 +111,7 @@ public class FoodServiceImpl implements FoodService {
 		
 		List<Food> foods = new ArrayList<Food>();
 		try {
-			foods = foodDao.search(searchQuery);
+			foods = foodTrackerDao.search(searchQuery);
 		} catch (DataAccessException e) {
 			throw new ServiceException(
 					"Error has occured while searching for food entries", e);
@@ -123,7 +123,7 @@ public class FoodServiceImpl implements FoodService {
 	public int addFoodListEntryReturnEntryID(Food food) throws ServiceException {
 		
 		try {
-			return foodDao.addFoodListEntryReturnEntryID(food);
+			return foodTrackerDao.addFoodListEntryReturnEntryID(food);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(

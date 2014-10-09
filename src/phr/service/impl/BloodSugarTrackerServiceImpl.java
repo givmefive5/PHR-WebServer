@@ -6,20 +6,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import phr.dao.BloodSugarDao;
+import phr.dao.BloodSugarTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
-import phr.service.BloodSugarService;
+import phr.service.BloodSugarTrackerService;
 import phr.web.models.BloodSugar;
 import phr.web.models.User;
 
 @Service("bloodSugarService")
-public class BloodSugarServiceImpl implements BloodSugarService {
+public class BloodSugarTrackerServiceImpl implements BloodSugarTrackerService {
 
 	@Autowired
-	BloodSugarDao bloodSugarDao;
+	BloodSugarTrackerDao bloodSugarTrackerDao;
 
 	@Autowired
 	UserDao userDao;
@@ -30,7 +30,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodSugar.setUser(new User(userID));
-			return bloodSugarDao.addReturnsEntryID(bloodSugar);
+			return bloodSugarTrackerDao.addReturnsEntryID(bloodSugar);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -44,7 +44,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodSugar.setUser(new User(userID));
-			bloodSugarDao.edit(bloodSugar);
+			bloodSugarTrackerDao.edit(bloodSugar);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -59,7 +59,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			bloodSugar.setUser(new User(userID));
-			bloodSugarDao.delete(bloodSugar);
+			bloodSugarTrackerDao.delete(bloodSugar);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -74,7 +74,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 		List<BloodSugar> bloodsugars = new ArrayList<BloodSugar>();
 		
 		try{
-			bloodsugars = bloodSugarDao.getAll(accessToken);
+			bloodsugars = bloodSugarTrackerDao.getAll(accessToken);
 		}catch(DataAccessException e){
 			e.printStackTrace();
 			throw new ServiceException(
@@ -91,7 +91,7 @@ public class BloodSugarServiceImpl implements BloodSugarService {
 			return bloodSugar.getEntryID();
 		else
 			try {
-				return bloodSugarDao.getEntryId(bloodSugar);
+				return bloodSugarTrackerDao.getEntryId(bloodSugar);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
 						"Error has occurred while getting the entry id of a blood sugar entry",

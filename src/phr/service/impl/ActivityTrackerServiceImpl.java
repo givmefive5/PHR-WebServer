@@ -6,21 +6,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import phr.dao.ActivityDao;
+import phr.dao.ActivityTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
-import phr.service.ActivityService;
+import phr.service.ActivityTrackerService;
 import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
 import phr.web.models.User;
 
 @Service("activityService")
-public class ActivityServiceImpl implements ActivityService {
+public class ActivityTrackerServiceImpl implements ActivityTrackerService {
 	
 	@Autowired
-	ActivityDao activityDao;
+	ActivityTrackerDao activityTrackerDao;
 	
 	@Autowired 
 	UserDao userDao;
@@ -34,9 +34,9 @@ public class ActivityServiceImpl implements ActivityService {
 			activityTrackerEntry.setUser(new User(userID));
 			
 			if(activityTrackerEntry.getActivity().getEntryID() == null)
-				activityTrackerEntry.getActivity().setEntryID(activityDao.addActivityListEntryReturnEntryID(activityTrackerEntry.getActivity()));
+				activityTrackerEntry.getActivity().setEntryID(activityTrackerDao.addActivityListEntryReturnEntryID(activityTrackerEntry.getActivity()));
 			
-			return activityDao.addReturnsEntryID(activityTrackerEntry); 
+			return activityTrackerDao.addReturnsEntryID(activityTrackerEntry); 
 			
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -52,7 +52,7 @@ public class ActivityServiceImpl implements ActivityService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			activityTrackerEntry.setUser(new User(userID));
-			activityDao.edit(activityTrackerEntry);
+			activityTrackerDao.edit(activityTrackerEntry);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -68,7 +68,7 @@ public class ActivityServiceImpl implements ActivityService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			activityTrackerEntry.setUser(new User(userID));
-			activityDao.delete(activityTrackerEntry);
+			activityTrackerDao.delete(activityTrackerEntry);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -85,7 +85,7 @@ public class ActivityServiceImpl implements ActivityService {
 		List<ActivityTrackerEntry> activities = new ArrayList<ActivityTrackerEntry>();
 		
 		try{
-			activities = activityDao.getAll(accessToken);
+			activities = activityTrackerDao.getAll(accessToken);
 		}catch(DataAccessException e){
 			e.printStackTrace();
 			throw new ServiceException(
@@ -102,7 +102,7 @@ public class ActivityServiceImpl implements ActivityService {
 			return activityTrackerEntry.getEntryID();
 		else
 			try {
-				return activityDao.getEntryId(activityTrackerEntry);
+				return activityTrackerDao.getEntryId(activityTrackerEntry);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
 						"Error has occurred while getting the entry id a activity entry",
@@ -116,7 +116,7 @@ public class ActivityServiceImpl implements ActivityService {
 		List<Activity> activities = new ArrayList<Activity>();
 		
 		try {
-			activities = activityDao.search(searchQuery);
+			activities = activityTrackerDao.search(searchQuery);
 		} catch (DataAccessException e) {
 			throw new ServiceException(
 					"Error has occured while searching for activities entries", e);
@@ -128,7 +128,7 @@ public class ActivityServiceImpl implements ActivityService {
 	public int addActivityListEntryReturnEntryID(Activity activity)
 			throws ServiceException {
 		try {
-			return activityDao.addActivityListEntryReturnEntryID(activity);
+			return activityTrackerDao.addActivityListEntryReturnEntryID(activity);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(

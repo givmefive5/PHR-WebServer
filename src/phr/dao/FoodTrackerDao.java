@@ -6,7 +6,7 @@ import phr.exceptions.DataAccessException;
 import phr.web.models.Food;
 import phr.web.models.FoodTrackerEntry;
 
-public interface FoodDao extends TrackerDao<FoodTrackerEntry> {
+public interface FoodTrackerDao extends TrackerDao<FoodTrackerEntry> {
 	
 	public int addFoodListEntryReturnEntryID(Food food) throws DataAccessException;
 	

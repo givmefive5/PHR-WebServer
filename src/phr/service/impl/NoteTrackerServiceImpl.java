@@ -6,20 +6,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import phr.dao.NoteDao;
+import phr.dao.NoteTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
-import phr.service.NoteService;
+import phr.service.NoteTrackerService;
 import phr.web.models.Note;
 import phr.web.models.User;
 
 @Service("noteService")
-public class NoteServiceImpl implements NoteService {
+public class NoteTrackerServiceImpl implements NoteTrackerService {
 	
 	@Autowired
-	NoteDao noteDao;
+	NoteTrackerDao noteTrackerDao;
 
 	@Autowired
 	UserDao userDao;
@@ -29,7 +29,7 @@ public class NoteServiceImpl implements NoteService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			note.setUser(new User(userID));
-			return noteDao.addReturnsEntryID(note);
+			return noteTrackerDao.addReturnsEntryID(note);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -43,7 +43,7 @@ public class NoteServiceImpl implements NoteService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			note.setUser(new User(userID));
-			noteDao.edit(note);
+			noteTrackerDao.edit(note);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -58,7 +58,7 @@ public class NoteServiceImpl implements NoteService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			note.setUser(new User(userID));
-			noteDao.delete(note);
+			noteTrackerDao.delete(note);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -72,7 +72,7 @@ public class NoteServiceImpl implements NoteService {
 		List<Note> notes = new ArrayList<Note>();
 		
 		try{
-			notes = noteDao.getAll(accessToken);
+			notes = noteTrackerDao.getAll(accessToken);
 		}catch(DataAccessException e){
 			e.printStackTrace();
 			throw new ServiceException(
@@ -88,7 +88,7 @@ public class NoteServiceImpl implements NoteService {
 			return note.getEntryID();
 		else
 			try {
-				return noteDao.getEntryId(note);
+				return noteTrackerDao.getEntryId(note);
 			} catch (DataAccessException e) {
 				throw new ServiceException(
 						"Error has occurred while getting the entry id of a note entry",

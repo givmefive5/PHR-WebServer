@@ -17,7 +17,7 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
-import phr.service.UserService;
+import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.ImageHandler;
 import phr.tools.JSONParser;
@@ -29,7 +29,7 @@ import phr.web.models.User;
 public class UserController {
 
 	@Autowired
-	UserService userService;
+	UserTrackerService userService;
 
 	ImageHandler imageHandler = new ImageHandler();
 

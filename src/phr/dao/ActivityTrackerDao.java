@@ -7,7 +7,7 @@ import phr.exceptions.DataAccessException;
 import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
 
-public interface ActivityDao extends TrackerDao<ActivityTrackerEntry> {
+public interface ActivityTrackerDao extends TrackerDao<ActivityTrackerEntry> {
 	
 	public int addActivityListEntryReturnEntryID(Activity activity) throws DataAccessException;
 	

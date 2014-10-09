@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.FoodService;
-import phr.service.UserService;
+import phr.service.FoodTrackerService;
+import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -29,10 +29,10 @@ import phr.web.models.FoodTrackerEntry;
 public class FoodController {
 	
 	@Autowired
-	FoodService foodService;
+	FoodTrackerService foodService;
 	
 	@Autowired
-	UserService userService;
+	UserTrackerService userService;
 
 	@RequestMapping(value = "/foodlist/search")
 	public void search(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException{

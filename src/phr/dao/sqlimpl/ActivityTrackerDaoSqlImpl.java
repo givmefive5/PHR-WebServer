@@ -11,7 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import phr.dao.ActivityDao;
+import phr.dao.ActivityTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
@@ -22,8 +22,8 @@ import phr.web.models.FBPost;
 import phr.web.models.PHRImage;
 import phr.web.models.PHRImageType;
 
-@Repository("activityDao")
-public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
+@Repository("activityTrackerDao")
+public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements ActivityTrackerDao {
 
 	@Autowired
 	UserDao userDao;

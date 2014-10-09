@@ -19,8 +19,8 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.UserService;
-import phr.service.WeightService;
+import phr.service.UserTrackerService;
+import phr.service.WeightTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -30,10 +30,10 @@ import phr.web.models.Weight;
 public class WeightController {
 
 	@Autowired
-	WeightService weightService;
+	WeightTrackerService weightService;
 	
 	@Autowired
-	UserService userService;
+	UserTrackerService userService;
 
 	@RequestMapping(value = "/tracker/addWeight", method = RequestMethod.POST)
 	public void addWeight(HttpServletRequest request,

@@ -19,8 +19,8 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.BloodSugarService;
-import phr.service.UserService;
+import phr.service.BloodSugarTrackerService;
+import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -29,10 +29,10 @@ import phr.web.models.BloodSugar;
 public class BloodSugarController {
 	
 	@Autowired
-	BloodSugarService bloodSugarService;
+	BloodSugarTrackerService bloodSugarService;
 	
 	@Autowired
-	UserService userService;
+	UserTrackerService userService;
 
 	@RequestMapping(value = "/tracker/addBloodSugar", method = RequestMethod.POST)
 	public void addBloodSugar(HttpServletRequest request,

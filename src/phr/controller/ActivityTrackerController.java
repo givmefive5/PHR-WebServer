@@ -18,8 +18,8 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.ActivityService;
-import phr.service.UserService;
+import phr.service.ActivityTrackerService;
+import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -28,10 +28,10 @@ import phr.web.models.ActivityTrackerEntry;
 public class ActivityTrackerController {
 	
 	@Autowired
-	ActivityService activityService;
+	ActivityTrackerService activityService;
 	
 	@Autowired
-	UserService userService;
+	UserTrackerService userService;
 
 	@RequestMapping(value = "/tracker/addActivityTrackerEntry", method = RequestMethod.POST)
 	public void addActivity(HttpServletRequest request,
