@@ -34,11 +34,6 @@ public class FoodController {
 	@Autowired
 	UserService userService;
 
-	@RequestMapping(value="/foodlist/add")
-	public void add(HttpServletRequest request, HttpServletResponse response){
-		
-	}
-	
 	@RequestMapping(value = "/foodlist/search")
 	public void search(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException{
 		PrintWriter writer = response.getWriter();
