@@ -29,7 +29,7 @@ import phr.web.models.BloodSugar;
 public class BloodSugarController {
 	
 	@Autowired
-	BloodSugarTrackerService bloodSugarService;
+	BloodSugarTrackerService bloodSugarTrackerService;
 	
 	@Autowired
 	UserTrackerService userService;
@@ -52,7 +52,7 @@ public class BloodSugarController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								BloodSugar.class);
-				int entryID = bloodSugarService.addReturnEntryID(accessToken,
+				int entryID = bloodSugarTrackerService.addReturnEntryID(accessToken,
 						bloodSugar);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -97,7 +97,7 @@ public class BloodSugarController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToEdit"),
 								BloodSugar.class);
-				bloodSugarService.edit(accessToken, bloodSugar);
+				bloodSugarTrackerService.edit(accessToken, bloodSugar);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -143,7 +143,7 @@ public class BloodSugarController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								BloodSugar.class);
-				bloodSugarService.delete(accessToken, bloodSugar);
+				bloodSugarTrackerService.delete(accessToken, bloodSugar);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -185,7 +185,7 @@ public class BloodSugarController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				List<BloodSugar> bloodSugarList = bloodSugarService
+				List<BloodSugar> bloodSugarList = bloodSugarTrackerService
 						.getAll(accessToken);
 				JSONArray jsonArray = GSONConverter
 						.convertListToJSONArray(bloodSugarList);

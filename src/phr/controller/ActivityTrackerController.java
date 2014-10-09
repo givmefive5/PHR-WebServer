@@ -28,7 +28,7 @@ import phr.web.models.ActivityTrackerEntry;
 public class ActivityTrackerController {
 	
 	@Autowired
-	ActivityTrackerService activityService;
+	ActivityTrackerService activityTrackerService;
 	
 	@Autowired
 	UserTrackerService userService;
@@ -51,7 +51,7 @@ public class ActivityTrackerController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								ActivityTrackerEntry.class);
-				int entryID = activityService.addReturnEntryID(accessToken,
+				int entryID = activityTrackerService.addReturnEntryID(accessToken,
 						activity);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -96,7 +96,7 @@ public class ActivityTrackerController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToEdit"),
 								ActivityTrackerEntry.class);
-				activityService.edit(accessToken, activity);
+				activityTrackerService.edit(accessToken, activity);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -142,7 +142,7 @@ public class ActivityTrackerController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								ActivityTrackerEntry.class);
-				activityService.delete(accessToken, activity);
+				activityTrackerService.delete(accessToken, activity);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -184,7 +184,7 @@ public class ActivityTrackerController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				List<ActivityTrackerEntry> activityList = activityService
+				List<ActivityTrackerEntry> activityList = activityTrackerService
 						.getAll(accessToken);
 				JSONArray jsonArray = GSONConverter
 						.convertListToJSONArray(activityList);

@@ -15,7 +15,7 @@ import phr.service.WeightTrackerService;
 import phr.web.models.User;
 import phr.web.models.Weight;
 
-@Service("weightService")
+@Service("weightTrackerService")
 public class WeightTrackerServiceImpl implements WeightTrackerService {
 	
 	@Autowired

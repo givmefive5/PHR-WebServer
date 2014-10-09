@@ -15,7 +15,7 @@ import phr.service.BloodPressureTrackerService;
 import phr.web.models.BloodPressure;
 import phr.web.models.User;
 
-@Service("bloodPressureService")
+@Service("bloodPressureTrackerService")
 public class BloodPressureTrackerServiceImpl implements BloodPressureTrackerService {
 
 	@Autowired

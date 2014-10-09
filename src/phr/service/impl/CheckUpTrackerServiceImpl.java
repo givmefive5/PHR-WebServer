@@ -15,7 +15,7 @@ import phr.service.CheckUpTrackerService;
 import phr.web.models.CheckUp;
 import phr.web.models.User;
 
-@Service("checkUpService")
+@Service("checkUpTrackerService")
 public class CheckUpTrackerServiceImpl implements CheckUpTrackerService {
 	
 	@Autowired

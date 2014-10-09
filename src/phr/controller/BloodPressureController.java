@@ -30,7 +30,8 @@ import phr.web.models.BloodPressure;
 public class BloodPressureController {
 
 	@Autowired
-	BloodPressureTrackerService bloodPressureService;
+	BloodPressureTrackerService bloodPressureTrackerService;
+	
 	@Autowired
 	UserTrackerService userService;
 
@@ -52,7 +53,7 @@ public class BloodPressureController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								BloodPressure.class);
-				int entryID = bloodPressureService.addReturnEntryID(accessToken,
+				int entryID = bloodPressureTrackerService.addReturnEntryID(accessToken,
 						bloodPressure);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -97,7 +98,7 @@ public class BloodPressureController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToEdit"),
 								BloodPressure.class);
-				bloodPressureService.edit(accessToken, bloodPressure);
+				bloodPressureTrackerService.edit(accessToken, bloodPressure);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -143,7 +144,7 @@ public class BloodPressureController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								BloodPressure.class);
-				bloodPressureService.delete(accessToken, bloodPressure);
+				bloodPressureTrackerService.delete(accessToken, bloodPressure);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -185,7 +186,7 @@ public class BloodPressureController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				List<BloodPressure> bpList = bloodPressureService
+				List<BloodPressure> bpList = bloodPressureTrackerService
 						.getAll(accessToken);
 				JSONArray jsonArray = GSONConverter
 						.convertListToJSONArray(bpList);

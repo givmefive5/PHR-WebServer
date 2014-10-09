@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.service.FoodTrackerService;
+import phr.service.FoodService;
 import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
@@ -29,7 +29,7 @@ import phr.web.models.FoodTrackerEntry;
 public class FoodController {
 	
 	@Autowired
-	FoodTrackerService foodService;
+	FoodService foodService;
 	
 	@Autowired
 	UserTrackerService userService;

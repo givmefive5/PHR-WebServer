@@ -29,7 +29,7 @@ import phr.web.models.CheckUp;
 public class CheckUpController {
 
 	@Autowired
-	CheckUpTrackerService checkUpService;
+	CheckUpTrackerService checkUpTrackerService;
 	
 	@Autowired
 	UserTrackerService userService;
@@ -52,7 +52,7 @@ public class CheckUpController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								CheckUp.class);
-				int entryID = checkUpService.addReturnEntryID(accessToken,
+				int entryID = checkUpTrackerService.addReturnEntryID(accessToken,
 						checkUp);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -97,7 +97,7 @@ public class CheckUpController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToEdit"),
 								CheckUp.class);
-				checkUpService.edit(accessToken, checkUp);
+				checkUpTrackerService.edit(accessToken, checkUp);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -143,7 +143,7 @@ public class CheckUpController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								CheckUp.class);
-				checkUpService.delete(accessToken, checkUp);
+				checkUpTrackerService.delete(accessToken, checkUp);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -185,7 +185,7 @@ public class CheckUpController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				List<CheckUp> checkUpList = checkUpService
+				List<CheckUp> checkUpList = checkUpTrackerService
 						.getAll(accessToken);
 				JSONArray jsonArray = GSONConverter
 						.convertListToJSONArray(checkUpList);

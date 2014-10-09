@@ -15,7 +15,7 @@ import phr.service.NoteTrackerService;
 import phr.web.models.Note;
 import phr.web.models.User;
 
-@Service("noteService")
+@Service("noteTrackerService")
 public class NoteTrackerServiceImpl implements NoteTrackerService {
 	
 	@Autowired

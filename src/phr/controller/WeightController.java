@@ -30,7 +30,7 @@ import phr.web.models.Weight;
 public class WeightController {
 
 	@Autowired
-	WeightTrackerService weightService;
+	WeightTrackerService weightTrackerService;
 	
 	@Autowired
 	UserTrackerService userService;
@@ -53,7 +53,7 @@ public class WeightController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								Weight.class);
-				int entryID = weightService.addReturnEntryID(accessToken,
+				int entryID = weightTrackerService.addReturnEntryID(accessToken,
 						weight);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -98,7 +98,7 @@ public class WeightController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToEdit"),
 								Weight.class);
-				weightService.edit(accessToken, weight);
+				weightTrackerService.edit(accessToken, weight);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -144,7 +144,7 @@ public class WeightController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								Weight.class);
-				weightService.delete(accessToken, weight);
+				weightTrackerService.delete(accessToken, weight);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -186,7 +186,7 @@ public class WeightController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				List<Weight> weightList = weightService
+				List<Weight> weightList = weightTrackerService
 						.getAll(accessToken);
 				JSONArray jsonArray = GSONConverter
 						.convertListToJSONArray(weightList);

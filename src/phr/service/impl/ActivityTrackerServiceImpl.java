@@ -12,11 +12,10 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.service.ActivityTrackerService;
-import phr.web.models.Activity;
 import phr.web.models.ActivityTrackerEntry;
 import phr.web.models.User;
 
-@Service("activityService")
+@Service("activityTrackerService")
 public class ActivityTrackerServiceImpl implements ActivityTrackerService {
 	
 	@Autowired
@@ -32,10 +31,6 @@ public class ActivityTrackerServiceImpl implements ActivityTrackerService {
 		try {
 			int userID = userDao.getUserIDGivenAccessToken(accessToken);
 			activityTrackerEntry.setUser(new User(userID));
-			
-			if(activityTrackerEntry.getActivity().getEntryID() == null)
-				activityTrackerEntry.getActivity().setEntryID(activityTrackerDao.addActivityListEntryReturnEntryID(activityTrackerEntry.getActivity()));
-			
 			return activityTrackerDao.addReturnsEntryID(activityTrackerEntry); 
 			
 		} catch (DataAccessException e) {
@@ -108,31 +103,5 @@ public class ActivityTrackerServiceImpl implements ActivityTrackerService {
 						"Error has occurred while getting the entry id a activity entry",
 						e);
 			}
-	}
-
-	@Override
-	public List<Activity> search(String searchQuery) throws ServiceException {
-		
-		List<Activity> activities = new ArrayList<Activity>();
-		
-		try {
-			activities = activityTrackerDao.search(searchQuery);
-		} catch (DataAccessException e) {
-			throw new ServiceException(
-					"Error has occured while searching for activities entries", e);
-		}
-		return activities;
-	}
-
-	@Override
-	public int addActivityListEntryReturnEntryID(Activity activity)
-			throws ServiceException {
-		try {
-			return activityTrackerDao.addActivityListEntryReturnEntryID(activity);
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-			throw new ServiceException(
-					"Error has occurred while adding a activity entry in the list", e);
-		}
 	}
 }

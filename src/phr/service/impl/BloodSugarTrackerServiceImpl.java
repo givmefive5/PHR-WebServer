@@ -15,7 +15,7 @@ import phr.service.BloodSugarTrackerService;
 import phr.web.models.BloodSugar;
 import phr.web.models.User;
 
-@Service("bloodSugarService")
+@Service("bloodSugarTrackerService")
 public class BloodSugarTrackerServiceImpl implements BloodSugarTrackerService {
 
 	@Autowired

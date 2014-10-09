@@ -30,7 +30,7 @@ import phr.web.models.Note;
 public class NoteController {
 	
 	@Autowired
-	NoteTrackerService noteService;
+	NoteTrackerService noteTrackerService;
 	
 	@Autowired
 	UserTrackerService userService;
@@ -53,7 +53,7 @@ public class NoteController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								Note.class);
-				int entryID = noteService.addReturnEntryID(accessToken,
+				int entryID = noteTrackerService.addReturnEntryID(accessToken,
 						note);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -98,7 +98,7 @@ public class NoteController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToEdit"),
 								Note.class);
-				noteService.edit(accessToken, note);
+				noteTrackerService.edit(accessToken, note);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -144,7 +144,7 @@ public class NoteController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								Note.class);
-				noteService.delete(accessToken, note);
+				noteTrackerService.delete(accessToken, note);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -186,7 +186,7 @@ public class NoteController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				List<Note> noteList = noteService
+				List<Note> noteList = noteTrackerService
 						.getAll(accessToken);
 				JSONArray jsonArray = GSONConverter
 						.convertListToJSONArray(noteList);

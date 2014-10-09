@@ -29,7 +29,7 @@ import phr.web.models.FoodTrackerEntry;
 public class FoodTrackerController {
 	
 	@Autowired
-	FoodTrackerService foodService;
+	FoodTrackerService foodTrackerService;
 	
 	@Autowired
 	UserTrackerService userService;
@@ -52,7 +52,7 @@ public class FoodTrackerController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								FoodTrackerEntry.class);
-				int entryID = foodService.addReturnEntryID(accessToken,
+				int entryID = foodTrackerService.addReturnEntryID(accessToken,
 						food);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -97,7 +97,7 @@ public class FoodTrackerController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToEdit"),
 								FoodTrackerEntry.class);
-				foodService.edit(accessToken, food);
+				foodTrackerService.edit(accessToken, food);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -143,7 +143,7 @@ public class FoodTrackerController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								FoodTrackerEntry.class);
-				foodService.delete(accessToken, food);
+				foodTrackerService.delete(accessToken, food);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -185,7 +185,7 @@ public class FoodTrackerController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				List<FoodTrackerEntry> foodList = foodService
+				List<FoodTrackerEntry> foodList = foodTrackerService
 						.getAll(accessToken);
 				JSONArray jsonArray = GSONConverter
 						.convertListToJSONArray(foodList);
