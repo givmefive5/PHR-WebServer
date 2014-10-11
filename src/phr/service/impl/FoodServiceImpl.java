@@ -33,7 +33,7 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	@Override
-	public int addFoodListEntryReturnEntryID(Food food) throws ServiceException {
+	public int addReturnEntryID(Food food) throws ServiceException {
 		
 		try {
 			return foodDao.addFoodListEntryReturnEntryID(food);

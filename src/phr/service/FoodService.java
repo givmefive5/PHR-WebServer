@@ -7,9 +7,9 @@ import phr.web.models.Food;
 
 public interface FoodService {
 	
-	List<Food> search(String searchQuery) throws ServiceException;
+	public List<Food> search(String searchQuery) throws ServiceException;
 	
-	int addFoodListEntryReturnEntryID(Food food) throws ServiceException;
+	public int addReturnEntryID(Food food) throws ServiceException;
 
 
 }
