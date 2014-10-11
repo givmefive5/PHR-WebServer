@@ -44,4 +44,13 @@ public class FoodServiceImpl implements FoodService {
 		}
 	}
 
+	@Override
+	public List<Food> getAll() throws ServiceException{
+		try {
+			return foodDao.getAllFood();
+		} catch (DataAccessException e) {
+			throw new ServiceException("An error has occurred", e);
+		}
+	}
+
 }
