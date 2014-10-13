@@ -79,7 +79,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE notestracker SET note = ?, dateAdded = ?, status=?, photo=?"
+			String query = "UPDATE notestracker SET note = ?, dateAdded = ?, status=?, photo=? "
 					+ "WHERE id = ?";
 
 			PreparedStatement pstmt;

@@ -80,7 +80,7 @@ public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpT
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE checkuptracker SET purpose = ?, doctorName = ?, notes = ?,  dateAdded = ?, status=?, photo=?"
+			String query = "UPDATE checkuptracker SET purpose = ?, doctorsName = ?, notes = ?,  dateAdded = ?, status=?, photo=? "
 					+ "WHERE id = ?";
 
 			PreparedStatement pstmt;
