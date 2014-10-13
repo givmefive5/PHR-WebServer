@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import phr.exceptions.DataAccessException;
 import phr.exceptions.SNSException;
+import phr.models.FBPost;
 import phr.sns.datamining.dao.FacebookFetcherDao;
 import phr.sns.datamining.daoimpl.FacebookFetcherDaoImpl;
 import phr.sns.datamining.service.FacebookFetcherService;
-import phr.web.models.FBPost;
 
 @Service("facebookFetcherService")
 public class FacebookFetcherServiceImpl implements FacebookFetcherService {

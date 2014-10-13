@@ -17,13 +17,13 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
+import phr.models.User;
 import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.ImageHandler;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
 import phr.tools.UUIDGenerator;
-import phr.web.models.User;
 
 @Controller
 public class UserController {

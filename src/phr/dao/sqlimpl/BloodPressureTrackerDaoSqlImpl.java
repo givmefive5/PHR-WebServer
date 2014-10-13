@@ -15,11 +15,11 @@ import phr.dao.BloodPressureTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.models.BloodPressure;
+import phr.models.FBPost;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
 import phr.tools.ImageHandler;
-import phr.web.models.BloodPressure;
-import phr.web.models.FBPost;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
 
 @Repository("bloodPressureTrackerDao")
 public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements

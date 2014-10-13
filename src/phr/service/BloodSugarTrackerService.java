@@ -1,6 +1,6 @@
 package phr.service;
 
-import phr.web.models.BloodSugar;
+import phr.models.BloodSugar;
 
 public interface BloodSugarTrackerService extends TrackerService<BloodSugar> {
 }

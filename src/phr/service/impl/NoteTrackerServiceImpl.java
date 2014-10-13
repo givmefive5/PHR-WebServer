@@ -11,9 +11,9 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
+import phr.models.Note;
+import phr.models.User;
 import phr.service.NoteTrackerService;
-import phr.web.models.Note;
-import phr.web.models.User;
 
 @Service("noteTrackerService")
 public class NoteTrackerServiceImpl implements NoteTrackerService {

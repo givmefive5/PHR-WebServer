@@ -2,7 +2,7 @@ package phr.dao;
 
 import phr.exceptions.DataAccessException;
 import phr.exceptions.UsernameAlreadyExistsException;
-import phr.web.models.User;
+import phr.models.User;
 
 public interface UserDao {
 

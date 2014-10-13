@@ -1,6 +1,6 @@
 package phr.dao;
 
-import phr.web.models.Note;
+import phr.models.Note;
 
 public interface NoteTrackerDao extends TrackerDao <Note>{
 

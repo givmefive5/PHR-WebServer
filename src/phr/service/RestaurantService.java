@@ -3,7 +3,7 @@ package phr.service;
 import java.util.List;
 
 import phr.exceptions.ServiceException;
-import phr.web.models.Food;
+import phr.models.Food;
 
 public interface RestaurantService {
 	

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import phr.dao.ActivityDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
+import phr.models.Activity;
 import phr.service.ActivityService;
-import phr.web.models.Activity;
 
 @Service("activityService")
 public class ActivityServiceImpl implements ActivityService {

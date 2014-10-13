@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import phr.exceptions.SNSException;
-import phr.web.models.FBPost;
+import phr.models.FBPost;
 
 public interface FacebookFetcherService {
 

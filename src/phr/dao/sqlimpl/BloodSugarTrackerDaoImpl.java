@@ -15,11 +15,11 @@ import phr.dao.BloodSugarTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.models.BloodSugar;
+import phr.models.FBPost;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
 import phr.tools.ImageHandler;
-import phr.web.models.BloodSugar;
-import phr.web.models.FBPost;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
 
 @Repository("bloodSugarTrackerDao")
 public class BloodSugarTrackerDaoImpl extends BaseDaoSqlImpl implements BloodSugarTrackerDao {

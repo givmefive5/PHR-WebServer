@@ -3,7 +3,7 @@ package phr.service;
 import java.util.List;
 
 import phr.exceptions.ServiceException;
-import phr.web.models.Activity;
+import phr.models.Activity;
 
 public interface ActivityService {
 

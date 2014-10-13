@@ -1,4 +1,4 @@
-package phr.web.models;
+package phr.models;
 
 public class Activity {
 	

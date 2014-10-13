@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
+import phr.models.Activity;
 import phr.service.ActivityService;
 import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
-import phr.web.models.Activity;
 
 @Controller
 public class ActivityController {

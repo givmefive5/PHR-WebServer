@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import phr.dao.RestaurantDao;
 import phr.exceptions.DataAccessException;
-import phr.web.models.Food;
+import phr.models.Food;
 
 @Repository ("restaurantDao")
 

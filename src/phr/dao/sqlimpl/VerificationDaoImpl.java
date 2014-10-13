@@ -3,7 +3,7 @@ package phr.dao.sqlimpl;
 import java.util.List;
 
 import phr.dao.VerificationDao;
-import phr.web.models.FBPost;
+import phr.models.FBPost;
 
 public class VerificationDaoImpl implements VerificationDao {
 

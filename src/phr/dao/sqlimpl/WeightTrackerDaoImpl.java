@@ -15,11 +15,11 @@ import phr.dao.UserDao;
 import phr.dao.WeightTrackerDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.models.FBPost;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
+import phr.models.Weight;
 import phr.tools.ImageHandler;
-import phr.web.models.FBPost;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
-import phr.web.models.Weight;
 
 @Repository("weightTrackerDao")
 public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTrackerDao {

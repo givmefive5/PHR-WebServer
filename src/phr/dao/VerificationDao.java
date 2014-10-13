@@ -2,7 +2,7 @@ package phr.dao;
 
 import java.util.List;
 
-import phr.web.models.FBPost;
+import phr.models.FBPost;
 
 public interface VerificationDao {
 

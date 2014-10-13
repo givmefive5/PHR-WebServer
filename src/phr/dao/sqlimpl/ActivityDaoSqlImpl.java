@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import phr.dao.ActivityDao;
 import phr.exceptions.DataAccessException;
-import phr.web.models.Activity;
+import phr.models.Activity;
 
 
 @Repository("activityDao")

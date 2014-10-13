@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.UsernameAlreadyExistsException;
+import phr.models.User;
 import phr.tools.Hasher;
-import phr.web.models.User;
 
 @Repository("userDao")
 public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {

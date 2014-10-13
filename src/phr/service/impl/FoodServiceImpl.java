@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import phr.dao.FoodDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
+import phr.models.Food;
 import phr.service.FoodService;
-import phr.web.models.Food;
 
 @Service("foodService")
 public class FoodServiceImpl implements FoodService {

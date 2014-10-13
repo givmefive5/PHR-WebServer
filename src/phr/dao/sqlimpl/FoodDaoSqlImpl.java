@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import phr.dao.FoodDao;
 import phr.exceptions.DataAccessException;
-import phr.web.models.Food;
+import phr.models.Food;
 
 @Repository("foodDao")
 public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {

@@ -19,12 +19,12 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
+import phr.models.BloodSugar;
 import phr.service.BloodSugarTrackerService;
 import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
-import phr.web.models.BloodSugar;
 @Controller
 public class BloodSugarController {
 	
