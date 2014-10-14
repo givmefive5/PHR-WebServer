@@ -36,7 +36,7 @@ public class Food {
 
 	public Food(String name, double calorie, double protein, double fat,
 			double carbohydrate, String servingUnit, double servingSize,
-			Integer restaurantID, Boolean fromFatsecret, int countUsed) {
+			Integer restaurantID, Boolean fromFatsecret) {
 		super();
 		this.name = name;
 		this.calorie = calorie;

@@ -17,17 +17,15 @@ import phr.models.Food;
 public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 	@Override
-<<<<<<< HEAD
+
 	public int addReturnEntryID(Food food) throws DataAccessException {
 		
-=======
-	public int addFoodListEntryReturnEntryID(Food food)
-			throws DataAccessException {
-
->>>>>>> origin/master
 		int entryID = foodEntryExists(food);
 
 		if (entryID != -1) {
+			
+			incrementCountUsed(food);
+			
 			return entryID;
 		} else {
 
@@ -193,22 +191,21 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	public void incrementCountUsed(Food food) throws DataAccessException {
-		// NEED TO BE CHANGED , UPDATE countUsed = countUsed+1 where foodid =
-		// id;
-		/*
-		 * try { Connection conn = getConnection(); String query =
-		 * "UPDATE foodList SET countUsed = ? WHERE id = ? ";
-		 * 
-		 * PreparedStatement pstmt; pstmt = conn.prepareStatement(query);
-		 * pstmt.setInt(1, food.getCountUsed() + 1); pstmt.setInt(2,
-		 * food.getEntryID());
-		 * 
-		 * pstmt.executeUpdate();
-		 * 
-		 * } catch (Exception e) { throw new DataAccessException(
-		 * "An error has occured while trying to access data from the database",
-		 * e); }
-		 */
+		
+		try{
+			Connection conn = getConnection();
+			String query = "UPDATE foodlist SET countUsed = countUsed + 1 WHERE id = ? ";
+			
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, food.getEntryID() );
+			
+			pstmt.executeUpdate();
+			
+		}catch (Exception e){
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database", e);
+		}
 	}
 
 }

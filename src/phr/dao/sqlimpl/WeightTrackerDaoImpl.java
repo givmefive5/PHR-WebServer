@@ -80,7 +80,7 @@ public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTracke
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE weighttracker SET weightInPounds = ?, dateAdded = ?, status=?, photo=?"
+			String query = "UPDATE weighttracker SET weightInPounds = ?, dateAdded = ?, status = ?, photo = ? "
 					+ "WHERE id = ?";
 
 			PreparedStatement pstmt;

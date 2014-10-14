@@ -131,22 +131,21 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	}
 
 	public void incrementCountUsed(Activity activity)
-			throws DataAccessException {
-		// Change implementation, countused = countused + 1 where id = id
-		/*
-		 * try { Connection conn = getConnection(); String query =
-		 * "UPDATE activityList SET countUsed = ? WHERE id = ? ";
-		 * 
-		 * PreparedStatement pstmt; pstmt = conn.prepareStatement(query);
-		 * pstmt.setInt(1, activity.getCountUsed() + 1); pstmt.setInt(2,
-		 * activity.getEntryID());
-		 * 
-		 * pstmt.executeUpdate();
-		 * 
-		 * } catch (Exception e) { throw new DataAccessException(
-		 * "An error has occured while trying to access data from the database",
-		 * e); }
-		 */
+			throws DataAccessException {		
+		try{
+			Connection conn = getConnection();
+			String query = "UPDATE activityList SET countUsed = countUsed + 1 WHERE id = ? ";
+			
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, activity.getEntryID() );
+			
+			pstmt.executeUpdate();
+			
+		}catch (Exception e){
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database", e);
+		}
 	}
 
 	@Override
