@@ -1,6 +1,6 @@
 package phr.service;
 
-import phr.web.models.BloodPressure;
+import phr.models.BloodPressure;
 
 public interface BloodPressureTrackerService extends TrackerService<BloodPressure> {
 

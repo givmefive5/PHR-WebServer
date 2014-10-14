@@ -11,9 +11,9 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
+import phr.models.BloodPressure;
+import phr.models.User;
 import phr.service.BloodPressureTrackerService;
-import phr.web.models.BloodPressure;
-import phr.web.models.User;
 
 @Service("bloodPressureTrackerService")
 public class BloodPressureTrackerServiceImpl implements BloodPressureTrackerService {

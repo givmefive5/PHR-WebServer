@@ -1,6 +1,6 @@
 package phr.service;
 
-import phr.web.models.Weight;;
+import phr.models.Weight;
 
 public interface WeightTrackerService extends TrackerService<Weight> {
 

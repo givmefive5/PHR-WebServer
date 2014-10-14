@@ -11,9 +11,9 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
+import phr.models.BloodSugar;
+import phr.models.User;
 import phr.service.BloodSugarTrackerService;
-import phr.web.models.BloodSugar;
-import phr.web.models.User;
 
 @Service("bloodSugarTrackerService")
 public class BloodSugarTrackerServiceImpl implements BloodSugarTrackerService {

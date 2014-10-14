@@ -11,9 +11,9 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
+import phr.models.CheckUp;
+import phr.models.User;
 import phr.service.CheckUpTrackerService;
-import phr.web.models.CheckUp;
-import phr.web.models.User;
 
 @Service("checkUpTrackerService")
 public class CheckUpTrackerServiceImpl implements CheckUpTrackerService {

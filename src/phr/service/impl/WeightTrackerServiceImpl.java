@@ -11,9 +11,9 @@ import phr.dao.WeightTrackerDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
+import phr.models.User;
+import phr.models.Weight;
 import phr.service.WeightTrackerService;
-import phr.web.models.User;
-import phr.web.models.Weight;
 
 @Service("weightTrackerService")
 public class WeightTrackerServiceImpl implements WeightTrackerService {

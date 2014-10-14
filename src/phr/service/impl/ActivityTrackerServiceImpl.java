@@ -11,9 +11,9 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
+import phr.models.ActivityTrackerEntry;
+import phr.models.User;
 import phr.service.ActivityTrackerService;
-import phr.web.models.ActivityTrackerEntry;
-import phr.web.models.User;
 
 @Service("activityTrackerService")
 public class ActivityTrackerServiceImpl implements ActivityTrackerService {

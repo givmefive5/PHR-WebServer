@@ -1,6 +1,6 @@
 package phr.dao;
 
-import phr.web.models.CheckUp;
+import phr.models.CheckUp;
 
 public interface CheckUpTrackerDao extends TrackerDao<CheckUp> {
 

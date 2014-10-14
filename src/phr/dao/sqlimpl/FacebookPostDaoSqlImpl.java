@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import phr.dao.FacebookPostDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
-import phr.web.models.FBPost;
+import phr.models.FBPost;
 
 public class FacebookPostDaoSqlImpl implements FacebookPostDao {
 

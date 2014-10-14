@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ImageHandlerException;
+import phr.models.FBPost;
+import phr.models.FBPostType;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
 import phr.sns.datamining.dao.FacebookFetcherDao;
 import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.tools.ImageHandler;
-import phr.web.models.FBPost;
-import phr.web.models.FBPostType;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;

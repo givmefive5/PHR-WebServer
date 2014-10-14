@@ -19,12 +19,12 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
+import phr.models.CheckUp;
 import phr.service.CheckUpTrackerService;
 import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
-import phr.web.models.CheckUp;
 @Controller
 public class CheckUpController {
 

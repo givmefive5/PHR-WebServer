@@ -15,11 +15,11 @@ import phr.dao.CheckUpTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.models.CheckUp;
+import phr.models.FBPost;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
 import phr.tools.ImageHandler;
-import phr.web.models.CheckUp;
-import phr.web.models.FBPost;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
 
 @Repository("checkupTrackerDao")
 public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpTrackerDao {
@@ -80,7 +80,7 @@ public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpT
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE checkuptracker SET purpose = ?, doctorName = ?, notes = ?,  dateAdded = ?, status=?, photo=?"
+			String query = "UPDATE checkuptracker SET purpose = ?, doctorsName = ?, notes = ?,  dateAdded = ?, status=?, photo=? "
 					+ "WHERE id = ?";
 
 			PreparedStatement pstmt;

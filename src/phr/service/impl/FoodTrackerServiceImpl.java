@@ -11,9 +11,9 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
+import phr.models.FoodTrackerEntry;
+import phr.models.User;
 import phr.service.FoodTrackerService;
-import phr.web.models.FoodTrackerEntry;
-import phr.web.models.User;
 
 @Service("foodTrackerService")
 

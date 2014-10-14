@@ -3,7 +3,7 @@ package phr.dao;
 import java.util.List;
 
 import phr.exceptions.DataAccessException;
-import phr.web.models.Food;
+import phr.models.Food;
 
 public interface RestaurantDao {
 	

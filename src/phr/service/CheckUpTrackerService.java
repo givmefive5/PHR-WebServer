@@ -1,6 +1,6 @@
 package phr.service;
 
-import phr.web.models.CheckUp;
+import phr.models.CheckUp;
 
 public interface CheckUpTrackerService extends TrackerService<CheckUp>  {
 

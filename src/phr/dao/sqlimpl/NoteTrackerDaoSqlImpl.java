@@ -15,11 +15,11 @@ import phr.dao.NoteTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.models.FBPost;
+import phr.models.Note;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
 import phr.tools.ImageHandler;
-import phr.web.models.FBPost;
-import phr.web.models.Note;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
 
 @Repository("noteTrackerDao")
 public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTrackerDao {
@@ -79,7 +79,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 			EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE notestracker SET note = ?, dateAdded = ?, status=?, photo=?"
+			String query = "UPDATE notestracker SET note = ?, dateAdded = ?, status=?, photo=? "
 					+ "WHERE id = ?";
 
 			PreparedStatement pstmt;

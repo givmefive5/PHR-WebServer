@@ -2,7 +2,7 @@ package phr.service;
 
 import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
-import phr.web.models.User;
+import phr.models.User;
 
 public interface UserTrackerService {
 

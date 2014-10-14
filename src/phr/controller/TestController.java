@@ -14,17 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+
 import phr.exceptions.DataAccessException;
 import phr.exceptions.FatSecretFetcherException;
 import phr.exceptions.ImageHandlerException;
 import phr.exceptions.SNSException;
 import phr.fatsecret.FatSecretFetcher;
 import phr.fatsecret.FatSecretFood;
+import phr.models.FBPost;
 import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.sns.datamining.service.FacebookFetcherService;
 import phr.sns.datamining.serviceimpl.FacebookFetcherServiceImpl;
 import phr.tools.ImageHandler;
-import phr.web.models.FBPost;
 
 @Controller
 public class TestController {

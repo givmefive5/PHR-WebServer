@@ -19,12 +19,12 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
+import phr.models.Weight;
 import phr.service.UserTrackerService;
 import phr.service.WeightTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
-import phr.web.models.Weight;
 
 @Controller
 public class WeightController {

@@ -19,12 +19,12 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
+import phr.models.FoodTrackerEntry;
 import phr.service.FoodTrackerService;
 import phr.service.UserTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
-import phr.web.models.FoodTrackerEntry;
 @Controller
 public class FoodTrackerController {
 	

@@ -1,4 +1,4 @@
-package phr.web.models;
+package phr.models;
 
 public enum PHRImageType {
 	IMAGE, FILENAME;

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import phr.dao.FoodDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
+import phr.models.Food;
 import phr.service.FoodService;
-import phr.web.models.Food;
 
 @Service("foodService")
 public class FoodServiceImpl implements FoodService {
@@ -33,7 +33,7 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	@Override
-	public int addFoodListEntryReturnEntryID(Food food) throws ServiceException {
+	public int addReturnEntryID(Food food) throws ServiceException {
 		
 		try {
 			return foodDao.addReturnEntryID(food);
@@ -41,6 +41,15 @@ public class FoodServiceImpl implements FoodService {
 			e.printStackTrace();
 			throw new ServiceException(
 					"Error has occurred while adding a food entry in the list", e);
+		}
+	}
+
+	@Override
+	public List<Food> getAll() throws ServiceException{
+		try {
+			return foodDao.getAllFood();
+		} catch (DataAccessException e) {
+			throw new ServiceException("An error has occurred", e);
 		}
 	}
 

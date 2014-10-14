@@ -1,6 +1,6 @@
 package phr.service;
 
-import phr.web.models.Note;
+import phr.models.Note;
 
 public interface NoteTrackerService extends TrackerService<Note> {
 

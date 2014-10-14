@@ -16,12 +16,12 @@ import phr.dao.FoodTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.models.FBPost;
+import phr.models.Food;
+import phr.models.FoodTrackerEntry;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
 import phr.tools.ImageHandler;
-import phr.web.models.FBPost;
-import phr.web.models.Food;
-import phr.web.models.FoodTrackerEntry;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
 
 @Repository("foodTrackerDao")
 

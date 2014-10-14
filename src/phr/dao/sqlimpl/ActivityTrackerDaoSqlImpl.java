@@ -16,12 +16,12 @@ import phr.dao.ActivityTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
+import phr.models.Activity;
+import phr.models.ActivityTrackerEntry;
+import phr.models.FBPost;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
 import phr.tools.ImageHandler;
-import phr.web.models.Activity;
-import phr.web.models.ActivityTrackerEntry;
-import phr.web.models.FBPost;
-import phr.web.models.PHRImage;
-import phr.web.models.PHRImageType;
 
 @Repository("activityTrackerDao")
 public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements ActivityTrackerDao {
