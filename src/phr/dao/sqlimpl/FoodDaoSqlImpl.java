@@ -17,7 +17,7 @@ import phr.web.models.Food;
 public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	
 	@Override
-	public int addFoodListEntryReturnEntryID(Food food) throws DataAccessException {
+	public int addReturnEntryID(Food food) throws DataAccessException {
 		
 		int entryID = foodEntryExists(food);
 		

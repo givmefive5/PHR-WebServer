@@ -7,11 +7,13 @@ import phr.web.models.Activity;
 
 public interface ActivityDao {
 	
-	public int addActivityListEntryReturnEntryID(Activity activity) throws DataAccessException;
+	public int addReturnEntryID(Activity activity) throws DataAccessException;
 	
 	public List<Activity> getAllActivity() throws DataAccessException;
 	
 	public Activity getActivity(int entryID) throws DataAccessException;
+	
+	public int ActivityEntryExistsReturnEntryID(Activity activity) throws DataAccessException;
 	
 	public List<Activity> search(String serachQuery) throws DataAccessException;
 

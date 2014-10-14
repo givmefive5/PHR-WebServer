@@ -36,7 +36,7 @@ public class ActivityServiceImpl implements ActivityService {
 	public int addActivityListEntryReturnEntryID(Activity activity)
 			throws ServiceException {
 		try {
-			return activityDao.addActivityListEntryReturnEntryID(activity);
+			return activityDao.addReturnEntryID(activity);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(

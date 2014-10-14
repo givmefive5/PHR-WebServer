@@ -7,7 +7,7 @@ import phr.web.models.Food;
 
 public interface FoodDao {
 	
-	public int addFoodListEntryReturnEntryID(Food food) throws DataAccessException;
+	public int addReturnEntryID(Food food) throws DataAccessException;
 	
 	public int foodEntryExists(Food food) throws DataAccessException;
 	

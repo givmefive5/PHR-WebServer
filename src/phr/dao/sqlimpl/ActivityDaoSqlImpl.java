@@ -19,7 +19,7 @@ import phr.web.models.Activity;
 public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	
 	@Override
-	public int addActivityListEntryReturnEntryID(Activity activity)
+	public int addReturnEntryID(Activity activity)
 			throws DataAccessException {
 
 		try {
@@ -153,6 +153,13 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 					"An error has occured while trying to access data from the database",
 					e);
 			}
+	}
+
+	@Override
+	public int ActivityEntryExistsReturnEntryID(Activity activity)
+			throws DataAccessException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

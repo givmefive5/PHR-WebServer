@@ -36,7 +36,7 @@ public class FoodServiceImpl implements FoodService {
 	public int addFoodListEntryReturnEntryID(Food food) throws ServiceException {
 		
 		try {
-			return foodDao.addFoodListEntryReturnEntryID(food);
+			return foodDao.addReturnEntryID(food);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
