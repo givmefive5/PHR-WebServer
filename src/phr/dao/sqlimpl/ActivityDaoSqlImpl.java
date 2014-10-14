@@ -13,11 +13,9 @@ import phr.dao.ActivityDao;
 import phr.exceptions.DataAccessException;
 import phr.models.Activity;
 
-
 @Repository("activityDao")
-
 public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
-	
+
 	@Override
 	public int addActivityListEntryReturnEntryID(Activity activity)
 			throws DataAccessException {
@@ -66,7 +64,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				activities.add(new Activity(rs.getInt("id"), rs
-						.getString("name"), rs.getDouble("MET"), rs.getInt("countUsed")));
+						.getString("name"), rs.getDouble("MET")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -78,13 +76,12 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 	}
 
-	
 	@Override
 	public Activity getActivity(int entryID) throws DataAccessException {
-		
+
 		Activity activity = new Activity(entryID);
-		
-		try{
+
+		try {
 			Connection conn = getConnection();
 			String query = "SELECT name, MET FROM activityList WHERE id = ?";
 
@@ -94,10 +91,10 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-			    activity.setName(rs.getString("name"));
-			    activity.setMET(rs.getDouble("MET"));
+				activity.setName(rs.getString("name"));
+				activity.setMET(rs.getDouble("MET"));
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
 					e);
@@ -108,10 +105,10 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 	@Override
 	public List<Activity> search(String serachQuery) throws DataAccessException {
-		
+
 		List<Activity> activities = new ArrayList<Activity>();
-		
-		try{
+
+		try {
 			Connection conn = getConnection();
 			String query = "SELECT * FROM activityList WHERE name LIKE ? ORDER BY countUsed DESC";
 
@@ -121,38 +118,35 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-			   activities.add(new Activity(
-					   rs.getInt("id"),
-					   rs.getString("name"),
-					   rs.getDouble("MET"),
-					   rs.getInt("countUsed")));
+				activities.add(new Activity(rs.getInt("id"), rs
+						.getString("name"), rs.getDouble("MET")));
 			}
-		}catch(Exception e){
-			throw new DataAccessException(
-					"An error has occured while trying to access data from the database",e);
-		}
-		
-		return activities;
-	}
-	
-	public void incrementCountUsed(Activity activity) throws DataAccessException{
-		
-		try{
-			Connection conn = getConnection();
-			String query = "UPDATE activityList SET countUsed = ? WHERE id = ? ";
-
-			PreparedStatement pstmt;
-			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, activity.getCountUsed() + 1);
-			pstmt.setInt(2, activity.getEntryID());
-			
-			pstmt.executeUpdate();
-			
-		}catch (Exception e){
+		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
 					e);
-			}
+		}
+
+		return activities;
+	}
+
+	public void incrementCountUsed(Activity activity)
+			throws DataAccessException {
+		// Change implementation, countused = countused + 1 where id = id
+		/*
+		 * try { Connection conn = getConnection(); String query =
+		 * "UPDATE activityList SET countUsed = ? WHERE id = ? ";
+		 * 
+		 * PreparedStatement pstmt; pstmt = conn.prepareStatement(query);
+		 * pstmt.setInt(1, activity.getCountUsed() + 1); pstmt.setInt(2,
+		 * activity.getEntryID());
+		 * 
+		 * pstmt.executeUpdate();
+		 * 
+		 * } catch (Exception e) { throw new DataAccessException(
+		 * "An error has occured while trying to access data from the database",
+		 * e); }
+		 */
 	}
 
 }

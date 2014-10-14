@@ -12,15 +12,15 @@ import phr.dao.RestaurantDao;
 import phr.exceptions.DataAccessException;
 import phr.models.Food;
 
-@Repository ("restaurantDao")
-
-public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements RestaurantDao {
+@Repository("restaurantDao")
+public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements
+		RestaurantDao {
 
 	@Override
 	public List<Food> getFood(int restaurantID) throws DataAccessException {
 		List<Food> foods = new ArrayList<Food>();
-		
-		try{
+
+		try {
 			Connection conn = getConnection();
 			String query = "SELECT * FROM foodList WHERE restaurantID = ? "
 					+ "ORDER BY countUsed DESC";
@@ -28,25 +28,20 @@ public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements RestaurantDa
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, restaurantID);
-			
+
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				foods.add(new Food(
-						rs.getInt("id"),
-						rs.getString("name"),
-						rs.getDouble("calorie"),
-						rs.getDouble("protein"),
-						rs.getDouble("fat"),
-						rs.getDouble("carbohydrate"),
-						rs.getString("servingUnit"),
-						rs.getDouble("servingSize"),
-						rs.getInt("restaurantID"),
-						rs.getBoolean("fromFatsecret"),
-						rs.getInt("countUsed")));
+				foods.add(new Food(rs.getInt("id"), rs.getString("name"), rs
+						.getDouble("calorie"), rs.getDouble("protein"), rs
+						.getDouble("fat"), rs.getDouble("carbohydrate"), rs
+						.getString("servingUnit"), rs.getDouble("servingSize"),
+						rs.getInt("restaurantID"), rs
+								.getBoolean("fromFatsecret")));
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			throw new DataAccessException(
-					"An error has occured while trying to access data from the database",e);
+					"An error has occured while trying to access data from the database",
+					e);
 		}
 		return foods;
 	}
@@ -54,7 +49,7 @@ public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements RestaurantDa
 	@Override
 	public Integer getRestaurantID(String restaurantName)
 			throws DataAccessException {
-		
+
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id FROM restaurantlist WHERE name = ?";

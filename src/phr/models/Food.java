@@ -1,7 +1,7 @@
 package phr.models;
 
 public class Food {
-	
+
 	Integer entryID;
 	String name;
 	double calorie;
@@ -12,16 +12,15 @@ public class Food {
 	double servingSize;
 	Integer restaurantID;
 	Boolean fromFatsecret;
-	int countUsed;
-	
-	public Food(Integer entryID){
+
+	public Food(Integer entryID) {
 		super();
 		this.entryID = entryID;
 	}
-	
+
 	public Food(Integer entryID, String name, double calorie, double protein,
 			double fat, double carbohydrate, String servingUnit,
-			double servingSize, Integer restaurantID, Boolean fromFatsecret, int countUsed) {
+			double servingSize, Integer restaurantID, Boolean fromFatsecret) {
 		super();
 		this.entryID = entryID;
 		this.name = name;
@@ -33,9 +32,8 @@ public class Food {
 		this.servingSize = servingSize;
 		this.restaurantID = restaurantID;
 		this.fromFatsecret = fromFatsecret;
-		this.countUsed = countUsed;
 	}
-	
+
 	public Food(String name, double calorie, double protein, double fat,
 			double carbohydrate, String servingUnit, double servingSize,
 			Integer restaurantID, Boolean fromFatsecret, int countUsed) {
@@ -49,7 +47,6 @@ public class Food {
 		this.servingSize = servingSize;
 		this.restaurantID = restaurantID;
 		this.fromFatsecret = fromFatsecret;
-		this.countUsed = countUsed;
 	}
 
 	public Integer getEntryID() {
@@ -132,12 +129,4 @@ public class Food {
 		this.fromFatsecret = fromFatsecret;
 	}
 
-	public int getCountUsed() {
-		return countUsed;
-	}
-
-	public void setCountUsed(int countUsed) {
-		this.countUsed = countUsed;
-	}
-	
 }
