@@ -10,58 +10,58 @@ public class ActivityTrackerEntry extends TrackerEntry {
 	
 	public ActivityTrackerEntry(Integer entryID, User user, FBPost fbPost,
 			Timestamp timestamp, String status, PHRImage image,
-			Activity activity, double calorisBurnedPerHour,
+			Activity activity, double caloriesBurnedPerHour,
 			int durationInSeconds) {
 		super(entryID, user, fbPost, timestamp, status, image);
 		this.activity = activity;
-		this.calorieBurnedPerHour = calorisBurnedPerHour;
+		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
 	}
 
 	public ActivityTrackerEntry(User user, FBPost fbPost, Timestamp timestamp,
 			String status, PHRImage image, Activity activity,
-			double calorisBurnedPerHour, int durationInSeconds) {
+			double caloriesBurnedPerHour, int durationInSeconds) {
 		super(user, fbPost, timestamp, status, image);
 		this.activity = activity;
-		this.calorieBurnedPerHour = calorisBurnedPerHour;
+		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
 	}
 
 	public ActivityTrackerEntry(Integer entryID, FBPost fbPost,
 			Timestamp timestamp, String status, PHRImage image,
-			Activity activity, double calorisBurnedPerHour,
+			Activity activity, double caloriesBurnedPerHour,
 			int durationInSeconds) {
 		super(entryID, fbPost, timestamp, status, image);
 		this.activity = activity;
-		this.calorieBurnedPerHour = calorisBurnedPerHour;
+		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
 	}
 
 	public ActivityTrackerEntry(Integer entryID, User user,
 			Timestamp timestamp, String status, PHRImage image,
-			Activity activity, double calorisBurnedPerHour,
+			Activity activity, double caloriesBurnedPerHour,
 			int durationInSeconds) {
 		super(entryID, user, timestamp, status, image);
 		this.activity = activity;
-		this.calorieBurnedPerHour = calorisBurnedPerHour;
+		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
 	}
 
 	public ActivityTrackerEntry(FBPost fbPost, Timestamp timestamp,
 			String status, PHRImage image, Activity activity,
-			double calorisBurnedPerHour, int durationInSeconds) {
+			double caloriesBurnedPerHour, int durationInSeconds) {
 		super(fbPost, timestamp, status, image);
 		this.activity = activity;
-		this.calorieBurnedPerHour = calorisBurnedPerHour;
+		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
 	}
 
 	public ActivityTrackerEntry(Timestamp timestamp, String status,
-			PHRImage image, Activity activity, double calorisBurnedPerHour,
+			PHRImage image, Activity activity, double caloriesBurnedPerHour,
 			int durationInSeconds) {
 		super(timestamp, status, image);
 		this.activity = activity;
-		this.calorieBurnedPerHour = calorisBurnedPerHour;
+		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
 	}
 
@@ -77,8 +77,8 @@ public class ActivityTrackerEntry extends TrackerEntry {
 		return calorieBurnedPerHour;
 	}
 
-	public void setCalorisBurnedPerHour(double calorisBurnedPerHour) {
-		this.calorieBurnedPerHour = calorisBurnedPerHour;
+	public void setCalorisBurnedPerHour(double caloriesBurnedPerHour) {
+		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 	}
 
 	public int getDurationInSeconds() {

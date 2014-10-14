@@ -11,7 +11,9 @@ public interface ActivityDao {
 	
 	public List<Activity> getAllActivity() throws DataAccessException;
 	
-	public Activity getActivity(int entryID) throws DataAccessException;
+	public Activity getActivity(int entryId) throws DataAccessException;
+	
+	public Double getActivityMET(String activityName) throws DataAccessException;
 	
 	public int ActivityEntryExistsReturnEntryID(Activity activity) throws DataAccessException;
 	

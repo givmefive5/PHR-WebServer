@@ -155,4 +155,31 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		return 0;
 	}
 
+	@Override
+	public Double getActivityMET(String activityName)
+			throws DataAccessException {
+		
+		Double MET = -1.0;
+		
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT MET FROM activityList WHERE name = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, activityName);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				MET = rs.getDouble("MET");
+			}
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+
+		return MET;
+	}
+
 }
