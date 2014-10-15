@@ -4,6 +4,10 @@ import java.util.List;
 
 import phr.exceptions.ServiceException;
 import phr.models.FBPost;
+import phr.models.UnverifiedActivityEntry;
+import phr.models.UnverifiedFoodEntry;
+import phr.models.UnverifiedRestaurantEntry;
+import phr.models.UnverifiedSportsEstablishmentEntry;
 
 public interface VerificationService {
 
@@ -12,12 +16,15 @@ public interface VerificationService {
 
 	public void delete(FBPost fbPost);
 
-	public List<FBPost> getAllUnverifiedFoodPosts(String userAccessToken);
+	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
+			String userAccessToken) throws ServiceException;
 
-	public List<FBPost> getAllUnverifiedActivityPosts(String userAccessToken);
+	public List<UnverifiedActivityEntry> getAllUnverifiedActivityPosts(
+			String userAccessToken) throws ServiceException;
 
-	public List<FBPost> getAllUnverifiedRestaurantPosts(String userAccessToken);
+	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
+			String userAccessToken) throws ServiceException;
 
-	public List<FBPost> getAllUnverifiedSportsEstablishmentPosts(
-			String userAccessToken);
+	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
+			String userAccessToken) throws ServiceException;
 }

@@ -17,6 +17,10 @@ import phr.exceptions.DataAccessException;
 import phr.models.Activity;
 import phr.models.ActivityTrackerEntry;
 import phr.models.FBPost;
+import phr.models.UnverifiedActivityEntry;
+import phr.models.UnverifiedFoodEntry;
+import phr.models.UnverifiedRestaurantEntry;
+import phr.models.UnverifiedSportsEstablishmentEntry;
 import phr.models.User;
 import phr.tools.ImageHandler;
 
@@ -135,25 +139,28 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public List<FBPost> getAllUnverifiedFoodPosts(String userAccessToken) {
+	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
+			String userAccessToken) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<FBPost> getAllUnverifiedActivityPosts(String userAccessToken) {
+	public List<UnverifiedActivityEntry> getAllUnverifiedActivityPosts(
+			String userAccessToken) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<FBPost> getAllUnverifiedRestaurantPosts(String userAccessToken) {
+	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
+			String userAccessToken) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<FBPost> getAllUnverifiedSportsEstablishmentPosts(
+	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) {
 		// TODO Auto-generated method stub
 		return null;

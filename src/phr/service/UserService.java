@@ -4,7 +4,7 @@ import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.models.User;
 
-public interface UserTrackerService {
+public interface UserService {
 
 	public void addUser(User user) throws UsernameAlreadyExistsException,
 			UserServiceException;

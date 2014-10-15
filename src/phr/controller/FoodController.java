@@ -21,7 +21,7 @@ import phr.models.BloodPressure;
 import phr.models.Food;
 import phr.models.FoodTrackerEntry;
 import phr.service.FoodService;
-import phr.service.UserTrackerService;
+import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -33,7 +33,7 @@ public class FoodController {
 	FoodService foodService;
 	
 	@Autowired
-	UserTrackerService userService;
+	UserService userService;
 
 	@RequestMapping(value = "/foodlist/add")
 	public void add(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException{

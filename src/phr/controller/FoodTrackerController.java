@@ -21,7 +21,7 @@ import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
 import phr.models.FoodTrackerEntry;
 import phr.service.FoodTrackerService;
-import phr.service.UserTrackerService;
+import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -32,7 +32,7 @@ public class FoodTrackerController {
 	FoodTrackerService foodTrackerService;
 	
 	@Autowired
-	UserTrackerService userService;
+	UserService userService;
 
 	@RequestMapping(value = "/tracker/addFoodTrackerEntry", method = RequestMethod.POST)
 	public void addFood(HttpServletRequest request,

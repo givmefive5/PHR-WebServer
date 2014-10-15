@@ -18,7 +18,7 @@ import phr.exceptions.JSONConverterException;
 import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.models.User;
-import phr.service.UserTrackerService;
+import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.ImageHandler;
 import phr.tools.JSONParser;
@@ -29,7 +29,7 @@ import phr.tools.UUIDGenerator;
 public class UserController {
 
 	@Autowired
-	UserTrackerService userService;
+	UserService userService;
 
 	ImageHandler imageHandler = new ImageHandler();
 

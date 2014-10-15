@@ -8,10 +8,10 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.models.User;
-import phr.service.UserTrackerService;
+import phr.service.UserService;
 
 @Service("userService")
-public class UserServiceImpl implements UserTrackerService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserDao userDao;

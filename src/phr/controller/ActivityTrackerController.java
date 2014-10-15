@@ -20,7 +20,7 @@ import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
 import phr.models.ActivityTrackerEntry;
 import phr.service.ActivityTrackerService;
-import phr.service.UserTrackerService;
+import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -31,7 +31,7 @@ public class ActivityTrackerController {
 	ActivityTrackerService activityTrackerService;
 	
 	@Autowired
-	UserTrackerService userService;
+	UserService userService;
 
 	@RequestMapping(value = "/tracker/addActivityTrackerEntry", method = RequestMethod.POST)
 	public void addActivity(HttpServletRequest request,

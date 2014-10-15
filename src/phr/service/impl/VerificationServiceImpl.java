@@ -9,6 +9,10 @@ import phr.dao.VerificationDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
 import phr.models.FBPost;
+import phr.models.UnverifiedActivityEntry;
+import phr.models.UnverifiedFoodEntry;
+import phr.models.UnverifiedRestaurantEntry;
+import phr.models.UnverifiedSportsEstablishmentEntry;
 import phr.service.VerificationService;
 
 @Service("verificationService")
@@ -33,22 +37,25 @@ public class VerificationServiceImpl implements VerificationService {
 	}
 
 	@Override
-	public List<FBPost> getAllUnverifiedFoodPosts(String userAccessToken) {
+	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
+			String userAccessToken) {
 		return verificationDao.getAllUnverifiedFoodPosts(userAccessToken);
 	}
 
 	@Override
-	public List<FBPost> getAllUnverifiedActivityPosts(String userAccessToken) {
+	public List<UnverifiedActivityEntry> getAllUnverifiedActivityPosts(
+			String userAccessToken) {
 		return verificationDao.getAllUnverifiedActivityPosts(userAccessToken);
 	}
 
 	@Override
-	public List<FBPost> getAllUnverifiedRestaurantPosts(String userAccessToken) {
+	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
+			String userAccessToken) {
 		return verificationDao.getAllUnverifiedRestaurantPosts(userAccessToken);
 	}
 
 	@Override
-	public List<FBPost> getAllUnverifiedSportsEstablishmentPosts(
+	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) {
 		return verificationDao
 				.getAllUnverifiedSportsEstablishmentPosts(userAccessToken);

@@ -20,7 +20,7 @@ import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
 import phr.models.Weight;
-import phr.service.UserTrackerService;
+import phr.service.UserService;
 import phr.service.WeightTrackerService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
@@ -33,7 +33,7 @@ public class WeightController {
 	WeightTrackerService weightTrackerService;
 	
 	@Autowired
-	UserTrackerService userService;
+	UserService userService;
 
 	@RequestMapping(value = "/tracker/addWeight", method = RequestMethod.POST)
 	public void addWeight(HttpServletRequest request,

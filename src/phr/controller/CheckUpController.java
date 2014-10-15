@@ -21,7 +21,7 @@ import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
 import phr.models.CheckUp;
 import phr.service.CheckUpTrackerService;
-import phr.service.UserTrackerService;
+import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -32,7 +32,7 @@ public class CheckUpController {
 	CheckUpTrackerService checkUpTrackerService;
 	
 	@Autowired
-	UserTrackerService userService;
+	UserService userService;
 
 	@RequestMapping(value = "/tracker/addCheckUp", method = RequestMethod.POST)
 	public void addCheckUp(HttpServletRequest request,

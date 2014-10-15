@@ -21,7 +21,7 @@ import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
 import phr.models.BloodSugar;
 import phr.service.BloodSugarTrackerService;
-import phr.service.UserTrackerService;
+import phr.service.UserService;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -32,7 +32,7 @@ public class BloodSugarController {
 	BloodSugarTrackerService bloodSugarTrackerService;
 	
 	@Autowired
-	UserTrackerService userService;
+	UserService userService;
 
 	@RequestMapping(value = "/tracker/addBloodSugar", method = RequestMethod.POST)
 	public void addBloodSugar(HttpServletRequest request,
