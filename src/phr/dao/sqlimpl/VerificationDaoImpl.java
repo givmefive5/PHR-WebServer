@@ -8,6 +8,7 @@ import java.sql.Types;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import phr.dao.ActivityDao;
 import phr.dao.UserDao;
@@ -19,6 +20,7 @@ import phr.models.FBPost;
 import phr.models.User;
 import phr.tools.ImageHandler;
 
+@Repository("verificationDao")
 public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 		VerificationDao {
 

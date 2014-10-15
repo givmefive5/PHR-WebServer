@@ -2,12 +2,13 @@ package phr.service;
 
 import java.util.List;
 
+import phr.exceptions.ServiceException;
 import phr.models.FBPost;
 
 public interface VerificationService {
 
 	public void addNewUnverifiedPosts(String userAccessToken,
-			List<FBPost> newFbPosts);
+			List<FBPost> newFbPosts) throws ServiceException;
 
 	public void delete(FBPost fbPost);
 
