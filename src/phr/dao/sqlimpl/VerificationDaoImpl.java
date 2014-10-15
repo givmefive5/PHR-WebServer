@@ -19,38 +19,34 @@ import phr.models.FBPost;
 import phr.models.User;
 import phr.tools.ImageHandler;
 
-public class VerificationDaoImpl extends BaseDaoSqlImpl implements VerificationDao {
-	
+public class VerificationDaoImpl extends BaseDaoSqlImpl implements
+		VerificationDao {
+
 	@Autowired
 	UserDao userDao;
-	
+
 	@Autowired
 	ActivityDao activityDao;
 
 	@Override
-	public void setNewUnverifiedPosts(String userAccessToken,
-			List<FBPost> newFbPosts) {
+	public void addNewUnverifiedPosts(String userAccessToken,
+			List<FBPost> newFbPosts) throws DataAccessException {
 
 		for (FBPost fbPost : newFbPosts) {
 			switch (fbPost.getPostType()) {
 
 			// continue on...
 			case FOOD:
-				createNewFoodVerificationEntry(fbPost);
+				addNewFoodVerificationEntry(fbPost);
 				break;
 			case RESTAURANT:
-				createNewRestaurantEntry(fbPost);
+				addNewRestaurantEntry(fbPost);
 				break;
 			case ACTIVITY:
-				try {
-					createNewActivityEntry(fbPost, userAccessToken);
-				} catch (DataAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				addNewActivityEntry(fbPost, userAccessToken);
 				break;
 			case SPORTS_ESTABLISHMENTS:
-				createNewSportsEstablishmentEntry(fbPost);
+				addNewSportsEstablishmentEntry(fbPost);
 				break;
 			default:
 				break;
@@ -58,27 +54,25 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements VerificationD
 		}
 	}
 
-	private void createNewSportsEstablishmentEntry(FBPost fbPost) {
+	private void addNewSportsEstablishmentEntry(FBPost fbPost) {
 		// TODO Auto-generated method stub
 
 	}
 
-	private void createNewActivityEntry(FBPost fbPost, String userAccessToken) throws DataAccessException {
-		
-		for(String extractedWord : fbPost.extractedWords){
-			
+	private void addNewActivityEntry(FBPost fbPost, String userAccessToken)
+			throws DataAccessException {
+
+		for (String extractedWord : fbPost.extractedWords) {
+
 			Timestamp timestamp = null;
 			ActivityTrackerEntry activityTrackerEntry = new ActivityTrackerEntry(
 					new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
-					fbPost,
-					timestamp,
-					//fbPost.getDatetime(),
-					fbPost.getStatus(),
-					fbPost.getImage(),
-					new Activity(extractedWord, activityDao.getActivityMET(extractedWord)),
-					0.0,
-					0);
-			
+					fbPost, timestamp,
+					// fbPost.getDatetime(),
+					fbPost.getStatus(), fbPost.getImage(), new Activity(
+							extractedWord, activityDao
+									.getActivityMET(extractedWord)), 0.0, 0);
+
 			try {
 				Connection conn = getConnection();
 				String query = "INSERT INTO activitytracker(activityName, MET, durationInSeconds, calorieBurnedPerHour, dateAdded, status, userID, fbPostID, photo) "
@@ -90,7 +84,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements VerificationD
 				pstmt.setString(1, activityTrackerEntry.getActivity().getName());
 				pstmt.setDouble(2, activityTrackerEntry.getActivity().getMET());
 				pstmt.setInt(3, activityTrackerEntry.getDurationInSeconds());
-				pstmt.setDouble(4, activityTrackerEntry.getCalorisBurnedPerHour());
+				pstmt.setDouble(4,
+						activityTrackerEntry.getCalorisBurnedPerHour());
 				pstmt.setTimestamp(5, activityTrackerEntry.getTimestamp());
 				pstmt.setString(6, activityTrackerEntry.getStatus());
 				pstmt.setInt(7, activityTrackerEntry.getUserID());
@@ -98,16 +93,16 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements VerificationD
 					pstmt.setInt(8, activityTrackerEntry.getFbPost().getId());
 				else
 					pstmt.setNull(8, Types.NULL);
-				
-				if (activityTrackerEntry.getImage()!= null) {
+
+				if (activityTrackerEntry.getImage() != null) {
 					String encodedImage = activityTrackerEntry.getImage()
 							.getEncodedImage();
 					String fileName = ImageHandler
 							.saveImage_ReturnFilePath(encodedImage);
 					activityTrackerEntry.getImage().setFileName(fileName);
-					pstmt.setString(9, activityTrackerEntry.getImage().getFileName());
-				}
-				else
+					pstmt.setString(9, activityTrackerEntry.getImage()
+							.getFileName());
+				} else
 					pstmt.setNull(9, Types.NULL);
 
 				pstmt.executeUpdate();
@@ -120,13 +115,45 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements VerificationD
 		}
 	}
 
-	private void createNewRestaurantEntry(FBPost fbPost) {
+	private void addNewRestaurantEntry(FBPost fbPost) {
 		// TODO Auto-generated method stub
 
 	}
 
-	private void createNewFoodVerificationEntry(FBPost fbPost) {
+	private void addNewFoodVerificationEntry(FBPost fbPost) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void delete(FBPost fbPost) {
+		// TODO Auto-generated method stub
+		// Check Type to see which table to delete from, then use ID to find
+		// entry to delete
+	}
+
+	@Override
+	public List<FBPost> getAllUnverifiedFoodPosts(String userAccessToken) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FBPost> getAllUnverifiedActivityPosts(String userAccessToken) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FBPost> getAllUnverifiedRestaurantPosts(String userAccessToken) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FBPost> getAllUnverifiedSportsEstablishmentPosts(
+			String userAccessToken) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -27,7 +27,7 @@ import facebook4j.auth.AccessToken;
 @Repository("facebookFetcherDao")
 public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
-	private KeywordsExtractor keywordsExtractor = new KeywordsExtractor();
+	private final KeywordsExtractor keywordsExtractor = new KeywordsExtractor();
 	private static final String appID = "458502710946706";
 	private static final String appSecret = "c41ccfbd5ff58c87342f4df5911d2d88";
 
@@ -73,6 +73,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 		for (Post p : feed) {
 			if (p != null) {
+				Date date = p.getCreatedTime();
+				Timestamp timestamp = new Timestamp(date.getTime());
 				FBPost post;
 				String encodedImage = null;
 				if (p.getPicture() != null) {
@@ -85,7 +87,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 					String[] foodWordsFound = keywordsExtractor
 							.extractFoodNames(p.getMessage());
 					if (foodWordsFound.length > 0) {
-						post = new FBPost(p.getMessage(), p.getCreatedTime(),
+						post = new FBPost(p.getMessage(), timestamp,
 								FBPostType.FOOD, new PHRImage(encodedImage,
 										PHRImageType.IMAGE), foodWordsFound);
 						posts.add(post);
@@ -94,7 +96,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 					String[] restaurantsWordsFound = keywordsExtractor
 							.extractRestaurantNames(p.getMessage());
 					if (restaurantsWordsFound.length > 0) {
-						post = new FBPost(p.getMessage(), p.getCreatedTime(),
+						post = new FBPost(p.getMessage(), timestamp,
 								FBPostType.RESTAURANT, new PHRImage(
 										encodedImage, PHRImageType.IMAGE),
 								restaurantsWordsFound);
@@ -104,7 +106,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 					String[] activityWordsFound = keywordsExtractor
 							.extractActivityNames(p.getMessage());
 					if (activityWordsFound.length > 0) {
-						post = new FBPost(p.getMessage(), p.getCreatedTime(),
+						post = new FBPost(p.getMessage(), timestamp,
 								FBPostType.ACTIVITY, new PHRImage(encodedImage,
 										PHRImageType.IMAGE), activityWordsFound);
 						posts.add(post);
@@ -113,7 +115,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 					String[] sportsEstablishmentsWordsFound = keywordsExtractor
 							.extractSportsEstablishmentsNames(p.getMessage());
 					if (sportsEstablishmentsWordsFound.length > 0) {
-						post = new FBPost(p.getMessage(), p.getCreatedTime(),
+						post = new FBPost(p.getMessage(), timestamp,
 								FBPostType.SPORTS_ESTABLISHMENTS, new PHRImage(
 										encodedImage, PHRImageType.IMAGE),
 								sportsEstablishmentsWordsFound);
@@ -121,7 +123,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						continue;
 					}
 
-					post = new FBPost(p.getMessage(), p.getCreatedTime(),
+					post = new FBPost(p.getMessage(), timestamp,
 							FBPostType.UNRELATED, new PHRImage(encodedImage,
 									PHRImageType.IMAGE), null);
 					posts.add(post);

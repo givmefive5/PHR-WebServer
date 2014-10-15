@@ -1,12 +1,12 @@
 package phr.models;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class FBPost {
 
 	public Integer id;
 	public String status;
-	public Date datetime;
+	public Timestamp timestamp;
 	public FBPostType postType;
 	public PHRImage image;
 	public String[] extractedWords;
@@ -16,22 +16,22 @@ public class FBPost {
 		this.id = id;
 	}
 
-	public FBPost(Integer id, String status, Date datetime,
+	public FBPost(Integer id, String status, Timestamp timestamp,
 			FBPostType postType, PHRImage image, String[] extractedWords) {
 		super();
 		this.id = id;
 		this.status = status;
-		this.datetime = datetime;
+		this.timestamp = timestamp;
 		this.postType = postType;
 		this.image = image;
 		this.extractedWords = extractedWords;
 	}
 
-	public FBPost(String status, Date datetime, FBPostType postType,
+	public FBPost(String status, Timestamp timestamp, FBPostType postType,
 			PHRImage image, String[] extractedWords) {
 		super();
 		this.status = status;
-		this.datetime = datetime;
+		this.timestamp = timestamp;
 		this.postType = postType;
 		this.image = image;
 		this.extractedWords = extractedWords;
@@ -53,12 +53,12 @@ public class FBPost {
 		this.status = status;
 	}
 
-	public Date getDatetime() {
-		return datetime;
+	public Timestamp getTimestamp() {
+		return timestamp;
 	}
 
-	public void setDatetime(Date datetime) {
-		this.datetime = datetime;
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public FBPostType getPostType() {

@@ -1,14 +1,13 @@
-package phr.dao;
+package phr.service;
 
 import java.util.List;
 
-import phr.exceptions.DataAccessException;
 import phr.models.FBPost;
 
-public interface VerificationDao {
+public interface VerificationService {
 
 	public void addNewUnverifiedPosts(String userAccessToken,
-			List<FBPost> newFbPosts) throws DataAccessException;
+			List<FBPost> newFbPosts);
 
 	public void delete(FBPost fbPost);
 
@@ -20,5 +19,4 @@ public interface VerificationDao {
 
 	public List<FBPost> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken);
-
 }
