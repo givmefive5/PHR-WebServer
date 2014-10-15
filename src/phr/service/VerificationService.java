@@ -14,7 +14,7 @@ public interface VerificationService {
 	public void addNewUnverifiedPosts(String userAccessToken,
 			List<FBPost> newFbPosts) throws ServiceException;
 
-	public void delete(FBPost fbPost);
+	public void delete(FBPost fbPost) throws ServiceException;
 
 	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
 			String userAccessToken) throws ServiceException;

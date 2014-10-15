@@ -1,7 +1,5 @@
 package phr.models;
 
-import java.util.List;
-
 public class Restaurant {
 	
 	Integer entryID;

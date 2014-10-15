@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import phr.dao.VerificationDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.models.FBPost;
 import phr.models.UnverifiedActivityEntry;
@@ -32,20 +33,34 @@ public class VerificationServiceImpl implements VerificationService {
 	}
 
 	@Override
-	public void delete(FBPost fbPost) {
-		verificationDao.delete(fbPost);
+	public void delete(FBPost fbPost) throws ServiceException {
+		try {
+			verificationDao.delete(fbPost);
+		} catch (EntryNotFoundException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting a activity entry", e);
+		}
 	}
 
 	@Override
 	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
-			String userAccessToken) {
-		return verificationDao.getAllUnverifiedFoodPosts(userAccessToken);
+			String userAccessToken) throws ServiceException {
+		try {
+			return verificationDao.getAllUnverifiedFoodPosts(userAccessToken);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Unable to perform action", e);
+		}
 	}
 
 	@Override
 	public List<UnverifiedActivityEntry> getAllUnverifiedActivityPosts(
-			String userAccessToken) {
-		return verificationDao.getAllUnverifiedActivityPosts(userAccessToken);
+			String userAccessToken) throws ServiceException {
+		try {
+			return verificationDao.getAllUnverifiedActivityPosts(userAccessToken);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Unable to perform action", e);
+		}
 	}
 
 	@Override

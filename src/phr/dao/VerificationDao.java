@@ -3,6 +3,7 @@ package phr.dao;
 import java.util.List;
 
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.models.FBPost;
 import phr.models.UnverifiedActivityEntry;
 import phr.models.UnverifiedFoodEntry;
@@ -14,13 +15,13 @@ public interface VerificationDao {
 	public void addNewUnverifiedPosts(String userAccessToken,
 			List<FBPost> newFbPosts) throws DataAccessException;
 
-	public void delete(FBPost fbPost);
+	public void delete(FBPost fbPost) throws EntryNotFoundException;
 
 	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
-			String userAccessToken);
+			String userAccessToken) throws DataAccessException;
 
 	public List<UnverifiedActivityEntry> getAllUnverifiedActivityPosts(
-			String userAccessToken);
+			String userAccessToken) throws DataAccessException;
 
 	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
 			String userAccessToken);

@@ -189,4 +189,44 @@ public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTracke
 		}
 	}
 
+	@Override
+	public Weight getLatestWeight(String userAccessToken) throws DataAccessException {
+		
+		Weight weight = null;
+		
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT LAST(weightInPounds) FROM weighttracker WHERE "
+					+ "userID = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(userAccessToken));
+
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				PHRImage image = null;
+				if(rs.getString("photo") == null)
+					image = null;
+				else{
+					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
+				}
+				
+				weight.setEntryID(rs.getInt("id"));
+				weight.setFbPost(new FBPost(rs.getInt("fbPost")));
+				weight.setTimestamp(rs.getTimestamp("dateAdded"));
+				weight.setStatus(rs.getString("status"));
+				weight.setImage(image);
+				weight.setWeightInPounds(rs.getShort("weightInPounds"));
+			}
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return weight;
+	}
+
 }
