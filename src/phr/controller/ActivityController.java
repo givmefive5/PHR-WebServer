@@ -130,7 +130,7 @@ public class ActivityController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				String searchQuery = data.getString("searchQuery");
+				String searchQuery = data.getString("query");
 				List<Activity> activityList = activityService
 						.search(searchQuery);
 				JSONArray jsonArray = GSONConverter

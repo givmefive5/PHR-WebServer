@@ -12,7 +12,6 @@ public class DMFilter {
 			throws InterruptedException {
 		LengthComparator comparator = new LengthComparator();
 		Collections.sort(corpus, comparator);
-
 		List<String> hashtags = getHashtagsFromMessage(message);
 		message = removeHashtags(message);
 		List<String> wordsFoundInHashtags = findWordsInHashtags(hashtags,
@@ -124,7 +123,7 @@ public class DMFilter {
 		String newMessage = "";
 		for (int i = 0; i < words.length; i++) {
 			String s = words[i];
-			if (s.charAt(0) == '#')
+			if (s != "" && s.charAt(0) == '#')
 				s = "*";
 
 			if (i == words.length - 1)
@@ -141,7 +140,7 @@ public class DMFilter {
 		String[] tokens = message.split(" ");
 		List<String> hashtags = new ArrayList<>();
 		for (String s : tokens) {
-			if (s.charAt(0) == '#')
+			if (s != "" && s.charAt(0) == '#')
 				hashtags.add(s);
 		}
 		return hashtags;

@@ -35,11 +35,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			throws DataAccessException {
 		Facebook facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId(appID, appSecret);
-		String permissions = "email,user_groups,user_status,read_stream";
+		String permissions = "email,user_groups,user_status,read_stream,user_actions:instapp";
 		facebook.setOAuthPermissions(permissions);
 
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
-
 		try {
 
 			ResponseList<Post> feed = facebook.getPosts();

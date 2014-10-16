@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.models.BloodPressure;
 import phr.models.Food;
-import phr.models.FoodTrackerEntry;
 import phr.service.FoodService;
 import phr.service.UserService;
 import phr.tools.GSONConverter;
@@ -28,15 +26,16 @@ import phr.tools.JSONResponseCreator;
 
 @Controller
 public class FoodController {
-	
+
 	@Autowired
 	FoodService foodService;
-	
+
 	@Autowired
 	UserService userService;
 
 	@RequestMapping(value = "/foodlist/add")
-	public void add(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException{
+	public void add(HttpServletRequest request, HttpServletResponse response)
+			throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -47,10 +46,8 @@ public class FoodController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				Food food = GSONConverter
-						.getGSONObjectGivenJsonObject(
-								data.getJSONObject("objectToAdd"),
-								Food.class);
+				Food food = GSONConverter.getGSONObjectGivenJsonObject(
+						data.getJSONObject("objectToAdd"), Food.class);
 				int entryID = foodService.addReturnEntryID(food);
 
 				JSONObject dataForResponse = new JSONObject();
@@ -77,9 +74,10 @@ public class FoodController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
-	
+
 	@RequestMapping(value = "/foodlist/getAll")
-	public void getAll(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException{
+	public void getAll(HttpServletRequest request, HttpServletResponse response)
+			throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -118,9 +116,10 @@ public class FoodController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
-	
+
 	@RequestMapping(value = "/foodlist/search")
-	public void search(HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException{
+	public void search(HttpServletRequest request, HttpServletResponse response)
+			throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -131,9 +130,8 @@ public class FoodController {
 			String accessToken = data.getString("accessToken");
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
-				String searchQuery = data.getString("searchQuery");
-				List<Food> foodList = foodService
-						.search(searchQuery);
+				String searchQuery = data.getString("query");
+				List<Food> foodList = foodService.search(searchQuery);
 				JSONArray jsonArray = GSONConverter
 						.convertListToJSONArray(foodList);
 
