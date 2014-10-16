@@ -75,7 +75,7 @@ public class KeywordsExtractor {
 
 		String newMessage = "";
 		for (String s : message.split(" ")) {
-			if (s != "" && s.charAt(0) == '#') {
+			if (s.length() > 0 && s.charAt(0) == '#') {
 				s = Assist.cleanWord(s);
 				if (hasAMatchedWord(s, singleWordsFromCorpus))
 					newMessage += s + " ";

@@ -20,6 +20,7 @@ import phr.tools.ImageHandler;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
+import facebook4j.Photo;
 import facebook4j.Post;
 import facebook4j.ResponseList;
 import facebook4j.auth.AccessToken;
@@ -43,6 +44,12 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 			ResponseList<Post> feed = facebook.getPosts();
 			System.out.println("Number of Posts Retrieved: " + feed.size());
+
+			ResponseList<Photo> photos = facebook.getUploadedPhotos();
+			for (Photo p : photos) {
+				System.out.println(p.getName());
+			}
+
 			return feed;
 		} catch (FacebookException e) {
 			throw new DataAccessException(
