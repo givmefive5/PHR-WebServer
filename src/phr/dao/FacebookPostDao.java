@@ -1,8 +1,11 @@
 package phr.dao;
 
+import java.util.List;
+
+import phr.exceptions.DataAccessException;
 import phr.models.FBPost;
 
-public interface FacebookPostDao extends TrackerDao<FBPost> {
-
-	public FBPost get(int entryID);
+public interface FacebookPostDao {
+	
+	public List<String> getAllFacebookID (String AccessToken) throws DataAccessException;
 }
