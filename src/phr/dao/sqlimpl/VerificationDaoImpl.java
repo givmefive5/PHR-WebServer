@@ -92,12 +92,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			throws DataAccessException {
 
 		for (String extractedWord : fbPost.extractedWords) {
-			
-			
-			System.out.println("MET " + activityDao.getActivityMET(extractedWord));
-			System.out.println("WEIGHT " + weightTrackerDao.getLatestWeight(userAccessToken).getWeightInPounds() * KG);
-
-		
+	
 			UnverifiedActivityEntry unverifiedActivityEntry = new UnverifiedActivityEntry(
 					fbPost.getTimestamp(),
 					extractedWord,
@@ -196,9 +191,6 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 		for(String extractedWord : fbPost.getExtractedWords()){
 
 			Food food = foodDao.search(extractedWord).get(0);
-			
-			System.out.println("fbPost ID is " + fbPost.getFacebookId());
-
 			UnverifiedFoodEntry unverifiedFoodEntry = new UnverifiedFoodEntry(
 					fbPost.getTimestamp(),
 					extractedWord,

@@ -1,8 +1,8 @@
 package phr.service.impl;
 
+import java.sql.Timestamp;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.VerificationDao;
@@ -16,17 +16,46 @@ import phr.models.UnverifiedFoodEntry;
 import phr.models.UnverifiedRestaurantEntry;
 import phr.models.UnverifiedSportsEstablishmentEntry;
 import phr.service.VerificationService;
+import phr.sns.datamining.dao.FacebookFetcherDao;
+import phr.sns.datamining.daoimpl.FacebookFetcherDaoImpl;
 
 @Service("verificationService")
 public class VerificationServiceImpl implements VerificationService {
 
-	//@Autowired
-	//VerificationDao verificationDao;
-	
+	// @Autowired
+	// VerificationDao verificationDao;
+
 	VerificationDao verificationDao = new VerificationDaoImpl();
 
+	FacebookFetcherDao facebookFetcherDao = new FacebookFetcherDaoImpl();
+
 	@Override
-	public void addNewUnverifiedPosts(String userAccessToken,
+	public void updateListOfUnverifiedPosts(String userAccessToken,
+			String userFBAccessToken, Timestamp startDate)
+			throws ServiceException {
+
+		try {
+			List<FBPost> fbPosts = facebookFetcherDao.getNewPostsAfterDate(
+					startDate, userFBAccessToken);
+
+			for (FBPost p : fbPosts) {
+				System.out
+						.println(p.getStatus() + " Class: " + p.getPostType());
+				System.out.println("Extracted Words: ");
+				if (p.getExtractedWords() != null)
+					for (String s : p.getExtractedWords()) {
+						System.out.println(s);
+					}
+			}
+
+			addNewUnverifiedPosts(userAccessToken, fbPosts);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException("Error in fetching fbPosts", e);
+		}
+	}
+
+	private void addNewUnverifiedPosts(String userAccessToken,
 			List<FBPost> newFbPosts) throws ServiceException {
 		try {
 			verificationDao.addNewUnverifiedPosts(userAccessToken, newFbPosts);
@@ -60,7 +89,8 @@ public class VerificationServiceImpl implements VerificationService {
 	public List<UnverifiedActivityEntry> getAllUnverifiedActivityPosts(
 			String userAccessToken) throws ServiceException {
 		try {
-			return verificationDao.getAllUnverifiedActivityPosts(userAccessToken);
+			return verificationDao
+					.getAllUnverifiedActivityPosts(userAccessToken);
 		} catch (DataAccessException e) {
 			throw new ServiceException("Unable to perform action", e);
 		}
@@ -70,7 +100,8 @@ public class VerificationServiceImpl implements VerificationService {
 	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
 			String userAccessToken) throws ServiceException {
 		try {
-			return verificationDao.getAllUnverifiedRestaurantPosts(userAccessToken);
+			return verificationDao
+					.getAllUnverifiedRestaurantPosts(userAccessToken);
 		} catch (DataAccessException e) {
 			throw new ServiceException("Unable to perform action", e);
 		}

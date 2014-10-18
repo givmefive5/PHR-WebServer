@@ -1,5 +1,6 @@
 package phr.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import phr.exceptions.ServiceException;
@@ -11,8 +12,9 @@ import phr.models.UnverifiedSportsEstablishmentEntry;
 
 public interface VerificationService {
 
-	public void addNewUnverifiedPosts(String userAccessToken,
-			List<FBPost> newFbPosts) throws ServiceException;
+	public void updateListOfUnverifiedPosts(String userAccessToken,
+			String userFBAccessToken, Timestamp startDate)
+			throws ServiceException;
 
 	public void delete(FBPost fbPost) throws ServiceException;
 
