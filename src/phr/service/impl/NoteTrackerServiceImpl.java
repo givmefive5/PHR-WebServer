@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import phr.dao.NoteTrackerDao;
 import phr.dao.UserDao;
+import phr.dao.sqlimpl.NoteTrackerDaoSqlImpl;
+import phr.dao.sqlimpl.UserDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -18,11 +20,14 @@ import phr.service.NoteTrackerService;
 @Service("noteTrackerService")
 public class NoteTrackerServiceImpl implements NoteTrackerService {
 	
-	@Autowired
-	NoteTrackerDao noteTrackerDao;
+	//@Autowired
+	//NoteTrackerDao noteTrackerDao;
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	NoteTrackerDao noteTrackerDao = new NoteTrackerDaoSqlImpl();
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public int addReturnEntryID(String accessToken, Note note) throws ServiceException {

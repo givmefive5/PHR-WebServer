@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import phr.dao.CheckUpTrackerDao;
 import phr.dao.UserDao;
+import phr.dao.sqlimpl.CheckUpTrackerDaoSqlImpl;
+import phr.dao.sqlimpl.UserDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -18,11 +20,14 @@ import phr.service.CheckUpTrackerService;
 @Service("checkUpTrackerService")
 public class CheckUpTrackerServiceImpl implements CheckUpTrackerService {
 	
-	@Autowired
-	CheckUpTrackerDao checkUpTrackerDao;
+	//@Autowired
+	//CheckUpTrackerDao checkUpTrackerDao;
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
+	CheckUpTrackerDao checkUpTrackerDao = new CheckUpTrackerDaoSqlImpl();
 
 	@Override
 	public int addReturnEntryID(String accessToken, CheckUp checkUp) throws ServiceException {

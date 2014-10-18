@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.ActivityDao;
+import phr.dao.sqlimpl.ActivityDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
 import phr.models.Activity;
@@ -15,8 +16,10 @@ import phr.service.ActivityService;
 @Service("activityService")
 public class ActivityServiceImpl implements ActivityService {
 
-	@Autowired
-	ActivityDao activityDao;
+	//@Autowired
+	//ActivityDao activityDao;
+	
+	ActivityDao activityDao = new ActivityDaoSqlImpl();
 
 	@Override
 	public List<Activity> search(String searchQuery) throws ServiceException {

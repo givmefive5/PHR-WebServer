@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import phr.dao.ActivityTrackerDao;
 import phr.dao.UserDao;
+import phr.dao.sqlimpl.ActivityTrackerDaoSqlImpl;
+import phr.dao.sqlimpl.UserDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -18,11 +20,14 @@ import phr.service.ActivityTrackerService;
 @Service("activityTrackerService")
 public class ActivityTrackerServiceImpl implements ActivityTrackerService {
 	
-	@Autowired
-	ActivityTrackerDao activityTrackerDao;
+	//@Autowired
+	//ActivityTrackerDao activityTrackerDao;
 	
-	@Autowired 
-	UserDao userDao;
+	//@Autowired 
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
+	ActivityTrackerDao activityTrackerDao = new ActivityTrackerDaoSqlImpl();
 	
 
 	@Override

@@ -31,11 +31,11 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 			try {
 				Connection conn = getConnection();
-				String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, servingUnit, servingSize, restaurantID, fromFatsecret, countUsed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, servingUnit, servingSize, restaurantID, fromFatsecret, countUsed) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
-				pstmt = conn.prepareStatement(query,
-						Statement.RETURN_GENERATED_KEYS);
+				pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				pstmt.setString(1, food.getName());
 				pstmt.setDouble(2, food.getCalorie());
 				pstmt.setDouble(3, food.getProtein());
@@ -73,8 +73,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 					+ "name = ?, calorie = ?, protein = ?, fat = ?, carbohydrate = ?, servingUnit = ?, servingSize = ?";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query,
-					Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, food.getName());
 			pstmt.setDouble(2, food.getCalorie());
 			pstmt.setDouble(3, food.getFat());

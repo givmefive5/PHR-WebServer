@@ -24,8 +24,10 @@ import phr.tools.ImageHandler;
 @Repository("checkupTrackerDao")
 public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpTrackerDao {
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(CheckUp checkUp) throws DataAccessException {

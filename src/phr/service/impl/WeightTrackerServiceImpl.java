@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import phr.dao.UserDao;
 import phr.dao.WeightTrackerDao;
+import phr.dao.sqlimpl.UserDaoSqlImpl;
+import phr.dao.sqlimpl.WeightTrackerDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -18,11 +20,14 @@ import phr.service.WeightTrackerService;
 @Service("weightTrackerService")
 public class WeightTrackerServiceImpl implements WeightTrackerService {
 	
-	@Autowired
-	WeightTrackerDao weightTrackerDao;
+	//@Autowired
+	//WeightTrackerDao weightTrackerDao;
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	WeightTrackerDao weightTrackerDao = new WeightTrackerDaoSqlImpl();
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public int addReturnEntryID(String accessToken, Weight weight) throws ServiceException {

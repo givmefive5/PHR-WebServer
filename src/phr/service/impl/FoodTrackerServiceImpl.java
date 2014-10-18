@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import phr.dao.FoodTrackerDao;
 import phr.dao.UserDao;
+import phr.dao.sqlimpl.FoodTrackerDaoSqlImpl;
+import phr.dao.sqlimpl.UserDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -19,11 +21,14 @@ import phr.service.FoodTrackerService;
 
 public class FoodTrackerServiceImpl implements FoodTrackerService {
 	
-	@Autowired 
-	FoodTrackerDao foodTrackerDao;
+	//@Autowired 
+	//FoodTrackerDao foodTrackerDao;
 	
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
+	FoodTrackerDao foodTrackerDao = new FoodTrackerDaoSqlImpl();
 
 	@Override
 	public int addReturnEntryID(String accessToken, FoodTrackerEntry foodTrackerEntry)

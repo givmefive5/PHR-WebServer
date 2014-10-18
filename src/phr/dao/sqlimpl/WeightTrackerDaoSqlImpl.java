@@ -155,7 +155,8 @@ public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTra
 					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
-				weights.add(new Weight(rs.getInt("id"), 
+				weights.add(new Weight(
+						rs.getInt("id"), 
 						rs.getString("facebookID"),
 						rs.getTimestamp("dateAdded"), 
 						rs.getString("status"),

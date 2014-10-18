@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.RestaurantDao;
+import phr.dao.sqlimpl.RestaurantDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
 import phr.models.Food;
@@ -16,8 +17,10 @@ import phr.service.RestaurantService;
 
 public class RestaurantServiceImpl implements RestaurantService {
 
-	@Autowired 
-	RestaurantDao restaurantDao;
+	//@Autowired 
+	//RestaurantDao restaurantDao;
+	
+	RestaurantDao restaurantDao = new RestaurantDaoSqlImpl();
 	
 	@Override
 	public List<Food> getFood(int restaurantID) throws ServiceException {

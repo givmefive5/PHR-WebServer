@@ -26,11 +26,14 @@ import phr.tools.ImageHandler;
 @Repository("activityTrackerDao")
 public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements ActivityTrackerDao {
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
 	
-	@Autowired
-	ActivityDao activityDao;
+	//@Autowired
+	//ActivityDao activityDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
+	ActivityDao activityDao = new ActivityDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(ActivityTrackerEntry activityTrackerEntry)

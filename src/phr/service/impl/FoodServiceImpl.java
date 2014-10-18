@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.FoodDao;
+import phr.dao.sqlimpl.FoodDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ServiceException;
 import phr.models.Food;
@@ -15,8 +16,10 @@ import phr.service.FoodService;
 @Service("foodService")
 public class FoodServiceImpl implements FoodService {
 	
-	@Autowired
-	FoodDao foodDao;
+	//@Autowired
+	//FoodDao foodDao;
+	
+	FoodDao foodDao = new FoodDaoSqlImpl();
 	
 	@Override
 	public List<Food> search(String searchQuery)

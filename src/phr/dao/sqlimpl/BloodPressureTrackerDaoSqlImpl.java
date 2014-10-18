@@ -25,8 +25,10 @@ import phr.tools.ImageHandler;
 public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 		BloodPressureTrackerDao {
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(BloodPressure bloodPressure)
@@ -133,6 +135,7 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			throws DataAccessException {
 
 		List<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
+		
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT id, facebookID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
@@ -150,11 +153,14 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
-				bloodpressures.add(new BloodPressure(rs.getInt("id"),
-						rs.getString("facebookID"), rs
-								.getTimestamp("dateAdded"), rs
-								.getString("status"), image, rs
-								.getInt("systolic"), rs.getInt("diastolic")));
+				bloodpressures.add(new BloodPressure(
+						rs.getInt("id"),
+						rs.getString("facebookID"), 
+						rs.getTimestamp("dateAdded"), 
+						rs.getString("status"), 
+						image, 
+						rs.getInt("systolic"), 
+						rs.getInt("diastolic")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(

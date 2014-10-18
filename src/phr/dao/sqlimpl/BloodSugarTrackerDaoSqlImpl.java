@@ -22,10 +22,12 @@ import phr.models.PHRImageType;
 import phr.tools.ImageHandler;
 
 @Repository("bloodSugarTrackerDao")
-public class BloodSugarTrackerDaoImpl extends BaseDaoSqlImpl implements BloodSugarTrackerDao {
+public class BloodSugarTrackerDaoSqlImpl extends BaseDaoSqlImpl implements BloodSugarTrackerDao {
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(BloodSugar bloodSugar)

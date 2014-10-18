@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import phr.dao.BloodPressureTrackerDao;
 import phr.dao.UserDao;
+import phr.dao.sqlimpl.BloodPressureTrackerDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -18,11 +19,13 @@ import phr.service.BloodPressureTrackerService;
 @Service("bloodPressureTrackerService")
 public class BloodPressureTrackerServiceImpl implements BloodPressureTrackerService {
 
-	@Autowired
-	BloodPressureTrackerDao bloodPressureTrackerDao;
+	//@Autowired
+	//BloodPressureTrackerDao bloodPressureTrackerDao;
 
 	@Autowired
 	UserDao userDao;
+	
+	BloodPressureTrackerDao bloodPressureTrackerDao = new BloodPressureTrackerDaoSqlImpl();
 
 	@Override
 	public int addReturnEntryID(String accessToken, BloodPressure bloodPressure)

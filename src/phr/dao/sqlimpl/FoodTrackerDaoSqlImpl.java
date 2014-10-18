@@ -27,11 +27,14 @@ import phr.tools.ImageHandler;
 
 public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTrackerDao {
 	
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
 	
-	@Autowired
-	FoodDao foodDao;
+	//@Autowired
+	//FoodDao foodDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
+	FoodDao foodDao = new FoodDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(FoodTrackerEntry foodTrackerEntry) throws DataAccessException {
@@ -148,7 +151,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 		try{
 			Connection conn = getConnection();
 			String query = "SELECT id, foodID, servingCount, facebookID status, photo, dateAdded "
-					+ " FROM foodList WHERE userID = ? ";
+					+ " FROM foodtracker WHERE userID = ? ";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);

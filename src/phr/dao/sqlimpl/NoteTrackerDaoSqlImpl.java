@@ -24,8 +24,10 @@ import phr.tools.ImageHandler;
 @Repository("noteTrackerDao")
 public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTrackerDao {
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(Note note) throws DataAccessException {
@@ -133,7 +135,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 		List<Note> notes = new ArrayList<Note>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, facebookID, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
+			String query = "SELECT id, facebookID, note, status, photo, dateAdded FROM notestracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);

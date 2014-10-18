@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import phr.dao.BloodSugarTrackerDao;
 import phr.dao.UserDao;
+import phr.dao.sqlimpl.BloodSugarTrackerDaoSqlImpl;
+import phr.dao.sqlimpl.UserDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -18,11 +20,14 @@ import phr.service.BloodSugarTrackerService;
 @Service("bloodSugarTrackerService")
 public class BloodSugarTrackerServiceImpl implements BloodSugarTrackerService {
 
-	@Autowired
-	BloodSugarTrackerDao bloodSugarTrackerDao;
+	//@Autowired
+	//BloodSugarTrackerDao bloodSugarTrackerDao;
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
+	BloodSugarTrackerDao bloodSugarTrackerDao = new BloodSugarTrackerDaoSqlImpl();
 
 	@Override
 	public int addReturnEntryID(String accessToken, BloodSugar bloodSugar)
