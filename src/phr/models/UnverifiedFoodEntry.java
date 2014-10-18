@@ -16,12 +16,12 @@ public class UnverifiedFoodEntry {
 	String status;
 	PHRImage image;
 	User user;
-	Integer fbPostID;
+	String fbPostID;
 	
 	public UnverifiedFoodEntry(Integer entryID, Timestamp timestamp,
 			String foodName, Double calorie, Double protein, Double fat,
 			Double carbohydrate, String servingUnit, Double servingSize,
-			String status, PHRImage image, User user, Integer fbPostID) {
+			String status, PHRImage image, User user, String fbPostID) {
 		super();
 		this.entryID = entryID;
 		this.timestamp = timestamp;
@@ -41,7 +41,7 @@ public class UnverifiedFoodEntry {
 	public UnverifiedFoodEntry(Timestamp timestamp, String foodName,
 			Double calorie, Double protein, Double fat, Double carbohydrate,
 			String servingUnit, Double servingSize, String status,
-			PHRImage image, User user, Integer fbPostID) {
+			PHRImage image, User user, String fbPostID) {
 		super();
 		this.timestamp = timestamp;
 		this.foodName = foodName;
@@ -153,11 +153,11 @@ public class UnverifiedFoodEntry {
 		this.user = user;
 	}
 
-	public Integer getFbPostID() {
+	public String getFbPostID() {
 		return fbPostID;
 	}
 
-	public void setFbPostID(Integer fbPostID) {
+	public void setFbPostID(String fbPostID) {
 		this.fbPostID = fbPostID;
 	}
 	

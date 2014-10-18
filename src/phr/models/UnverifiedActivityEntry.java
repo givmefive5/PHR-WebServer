@@ -12,12 +12,12 @@ public class UnverifiedActivityEntry {
 	String status;
 	PHRImage image;
 	User user;
-	Integer fbPostID;
+	String fbPostID;
 	
 	public UnverifiedActivityEntry(Integer entryID, Timestamp timestamp,
 			String activityName, int durationInSeconds,
 			Double calorieBurnedPerHour, String status, PHRImage image,
-			User user, Integer fbPostID) {
+			User user, String fbPostID) {
 		super();
 		this.entryID = entryID;
 		this.timestamp = timestamp;
@@ -32,7 +32,7 @@ public class UnverifiedActivityEntry {
 
 	public UnverifiedActivityEntry(Timestamp timestamp, String activityName,
 			int durationInSeconds, Double calorieBurnedPerHour, String status,
-			PHRImage image, User user, Integer fbPostID) {
+			PHRImage image, User user, String fbPostID) {
 		super();
 		this.timestamp = timestamp;
 		this.activityName = activityName;
@@ -108,11 +108,11 @@ public class UnverifiedActivityEntry {
 		this.user = user;
 	}
 
-	public Integer getFbPostID() {
+	public String getFbPostID() {
 		return fbPostID;
 	}
 
-	public void setFbPostID(Integer fbPostID) {
+	public void setFbPostID(String fbPostID) {
 		this.fbPostID = fbPostID;
 	}
 	

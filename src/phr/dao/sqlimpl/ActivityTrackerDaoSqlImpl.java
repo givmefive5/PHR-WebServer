@@ -38,7 +38,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO activitytracker(activityID, durationInSeconds, calorieBurnedPerHour, dateAdded, status, userID, fbPostID, photo) "
+			String query = "INSERT INTO activitytracker(activityID, durationInSeconds, calorieBurnedPerHour, dateAdded, status, userID, facebookID, photo) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
@@ -50,8 +50,10 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 			pstmt.setTimestamp(4, activityTrackerEntry.getTimestamp());
 			pstmt.setString(5, activityTrackerEntry.getStatus());
 			pstmt.setInt(6, activityTrackerEntry.getUserID());
-			if (activityTrackerEntry.getFbPost() != null)
-				pstmt.setInt(7, activityTrackerEntry.getFbPost().getId());
+			
+			
+			if (activityTrackerEntry.getFacebookID() != null)
+				pstmt.setString(7, activityTrackerEntry.getFacebookID());
 			else
 				pstmt.setNull(7, Types.NULL);
 			
@@ -150,7 +152,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 		
 		try{
 			Connection conn = getConnection();
-			String query = "SELECT id, activityID, durationInSeconds, calorieBurnedPerHour, fbPostID status, photo, dateAdded "
+			String query = "SELECT id, activityID, durationInSeconds, calorieBurnedPerHour, facebookID status, photo, dateAdded "
 					+ "FROM activityTracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
@@ -169,7 +171,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 				
 				activities.add(new ActivityTrackerEntry(
 						rs.getInt("id"),
-						new FBPost(rs.getInt("fbPostID")),
+						rs.getString("facebookID"),
 						rs.getTimestamp("dateAdded"),
 						rs.getString("status"),
 						image, 

@@ -7,24 +7,24 @@ public class BloodSugar extends TrackerEntry {
 	double bloodSugar;
 	String type;
 	
-	public BloodSugar(Integer entryID, User user, FBPost fbPost,
+	public BloodSugar(Integer entryID, User user, String facebookID,
 			Timestamp timestamp, String status, PHRImage image,
 			double bloodSugar, String type) {
-		super(entryID, user, fbPost, timestamp, status, image);
+		super(entryID, user, facebookID, timestamp, status, image);
 		this.bloodSugar = bloodSugar;
 		this.type = type;
 	}
 
-	public BloodSugar(User user, FBPost fbPost, Timestamp timestamp,
+	public BloodSugar(User user, String facebookID, Timestamp timestamp,
 			String status, PHRImage image, double bloodSugar, String type) {
-		super(user, fbPost, timestamp, status, image);
+		super(user, facebookID, timestamp, status, image);
 		this.bloodSugar = bloodSugar;
 		this.type = type;
 	}
 
-	public BloodSugar(Integer entryID, FBPost fbPost, Timestamp timestamp,
+	public BloodSugar(Integer entryID, String facebookID, Timestamp timestamp,
 			String status, PHRImage image, double bloodSugar, String type) {
-		super(entryID, fbPost, timestamp, status, image);
+		super(entryID, facebookID, timestamp, status, image);
 		this.bloodSugar = bloodSugar;
 		this.type = type;
 	}
@@ -36,9 +36,9 @@ public class BloodSugar extends TrackerEntry {
 		this.type = type;
 	}
 
-	public BloodSugar(FBPost fbPost, Timestamp timestamp, String status,
+	public BloodSugar(String facebookID, Timestamp timestamp, String status,
 			PHRImage image, double bloodSugar, String type) {
-		super(fbPost, timestamp, status, image);
+		super(facebookID, timestamp, status, image);
 		this.bloodSugar = bloodSugar;
 		this.type = type;
 	}

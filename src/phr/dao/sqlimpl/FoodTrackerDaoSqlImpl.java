@@ -38,7 +38,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 		
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO foodtracker(FoodID, servingCount, dateAdded, status, userID, fbPostID, photo) "
+			String query = "INSERT INTO foodtracker(FoodID, servingCount, dateAdded, status, userID, facebookID, photo) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
@@ -48,8 +48,8 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 			pstmt.setTimestamp(3, foodTrackerEntry.getTimestamp());
 			pstmt.setString(4, foodTrackerEntry.getStatus());
 			pstmt.setInt(5, foodTrackerEntry.getUserID());
-			if (foodTrackerEntry.getFbPost() != null)
-				pstmt.setInt(6, foodTrackerEntry.getFbPost().getId());
+			if (foodTrackerEntry.getFacebookID() != null)
+				pstmt.setString(6, foodTrackerEntry.getFacebookID());
 			else
 				pstmt.setNull(6, Types.NULL);
 			if (foodTrackerEntry.getImage() != null) {
@@ -147,7 +147,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 		
 		try{
 			Connection conn = getConnection();
-			String query = "SELECT id, foodID, servingCount, fbPostID status, photo, dateAdded "
+			String query = "SELECT id, foodID, servingCount, facebookID status, photo, dateAdded "
 					+ " FROM foodList WHERE userID = ? ";
 
 			PreparedStatement pstmt;
@@ -166,7 +166,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 
 				foods.add(new FoodTrackerEntry(
 						rs.getInt("id"),
-						new FBPost(rs.getInt("fbPostID")),
+						rs.getString("facebookID"),
 						rs.getTimestamp("dateAdded"),
 						rs.getString("status"),
 						image, 

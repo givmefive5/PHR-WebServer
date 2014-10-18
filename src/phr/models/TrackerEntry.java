@@ -6,37 +6,37 @@ public abstract class TrackerEntry {
 
 	Integer entryID;
 	User user;
-	FBPost fbPost;
+	String facebookID;
 	Timestamp timestamp;
 	String status;
 	PHRImage image;
 
-	public TrackerEntry(Integer entryID, User user, FBPost fbPost,
+	public TrackerEntry(Integer entryID, User user, String facebookID,
 			Timestamp timestamp, String status, PHRImage image) {
 		super();
 		this.entryID = entryID;
 		this.user = user;
-		this.fbPost = fbPost;
+		this.facebookID = facebookID;
 		this.timestamp = timestamp;
 		this.status = status;
 		this.image = image;
 	}
 
-	public TrackerEntry(User user, FBPost fbPost, Timestamp timestamp,
+	public TrackerEntry(User user, String facebookID, Timestamp timestamp,
 			String status, PHRImage image) {
 		super();
 		this.user = user;
-		this.fbPost = fbPost;
+		this.facebookID = facebookID;
 		this.timestamp = timestamp;
 		this.status = status;
 		this.image = image;
 	}
 
-	public TrackerEntry(Integer entryID, FBPost fbPost, Timestamp timestamp,
+	public TrackerEntry(Integer entryID, String facebookID, Timestamp timestamp,
 			String status, PHRImage image) {
 		super();
 		this.entryID = entryID;
-		this.fbPost = fbPost;
+		this.facebookID = facebookID;
 		this.timestamp = timestamp;
 		this.status = status;
 		this.image = image;
@@ -52,10 +52,10 @@ public abstract class TrackerEntry {
 		this.image = image;
 	}
 
-	public TrackerEntry(FBPost fbPost, Timestamp timestamp, String status,
+	public TrackerEntry(String facebookID, Timestamp timestamp, String status,
 			PHRImage image) {
 		super();
-		this.fbPost = fbPost;
+		this.facebookID = facebookID;
 		this.timestamp = timestamp;
 		this.status = status;
 		this.image = image;
@@ -84,12 +84,12 @@ public abstract class TrackerEntry {
 		this.user = user;
 	}
 
-	public FBPost getFbPost() {
-		return fbPost;
+	public String getFacebookID() {
+		return facebookID;
 	}
 
-	public void setFbPost(FBPost fbPost) {
-		this.fbPost = fbPost;
+	public void setFacebookID(String facebookID) {
+		this.facebookID = facebookID;
 	}
 
 	public Timestamp getTimestamp() {

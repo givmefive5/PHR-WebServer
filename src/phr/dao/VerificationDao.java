@@ -24,7 +24,7 @@ public interface VerificationDao {
 			String userAccessToken) throws DataAccessException;
 
 	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
-			String userAccessToken);
+			String userAccessToken) throws DataAccessException;
 
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken);

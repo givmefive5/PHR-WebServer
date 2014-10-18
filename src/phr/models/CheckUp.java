@@ -8,28 +8,28 @@ public class CheckUp extends TrackerEntry {
 	String doctorsName;
 	String notes;
 	
-	public CheckUp(Integer entryID, User user, FBPost fbPost,
+	public CheckUp(Integer entryID, User user, String facebookID,
 			Timestamp timestamp, String status, PHRImage image, String purpose,
 			String doctorsName, String notes) {
-		super(entryID, user, fbPost, timestamp, status, image);
+		super(entryID, user, facebookID, timestamp, status, image);
 		this.purpose = purpose;
 		this.doctorsName = doctorsName;
 		this.notes = notes;
 	}
 
-	public CheckUp(User user, FBPost fbPost, Timestamp timestamp,
+	public CheckUp(User user, String facebookID, Timestamp timestamp,
 			String status, PHRImage image, String purpose, String doctorsName,
 			String notes) {
-		super(user, fbPost, timestamp, status, image);
+		super(user, facebookID, timestamp, status, image);
 		this.purpose = purpose;
 		this.doctorsName = doctorsName;
 		this.notes = notes;
 	}
 
-	public CheckUp(Integer entryID, FBPost fbPost, Timestamp timestamp,
+	public CheckUp(Integer entryID, String facebookID, Timestamp timestamp,
 			String status, PHRImage image, String purpose, String doctorsName,
 			String notes) {
-		super(entryID, fbPost, timestamp, status, image);
+		super(entryID, facebookID, timestamp, status, image);
 		this.purpose = purpose;
 		this.doctorsName = doctorsName;
 		this.notes = notes;
@@ -44,10 +44,10 @@ public class CheckUp extends TrackerEntry {
 		this.notes = notes;
 	}
 
-	public CheckUp(FBPost fbPost, Timestamp timestamp, String status,
+	public CheckUp(String facebookID, Timestamp timestamp, String status,
 			PHRImage image, String purpose, String doctorsName,
 			String notes) {
-		super(fbPost, timestamp, status, image);
+		super(facebookID, timestamp, status, image);
 		this.purpose = purpose;
 		this.doctorsName = doctorsName;
 		this.notes = notes;

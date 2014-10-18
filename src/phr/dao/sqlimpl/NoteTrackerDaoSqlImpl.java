@@ -31,7 +31,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 	public int addReturnsEntryID(Note note) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO notestracker (note, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO notestracker (note, dateAdded, status, userID, facebookID, photo) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query,
@@ -40,8 +40,8 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 			pstmt.setTimestamp(2, note.getTimestamp());
 			pstmt.setString(3, note.getStatus());
 			pstmt.setInt(4, note.getUserID());
-			if (note.getFbPost() != null)
-				pstmt.setInt(5, note.getFbPost().getId());
+			if (note.getFacebookID() != null)
+				pstmt.setString(5, note.getFacebookID());
 			else
 				pstmt.setNull(5, Types.NULL);
 			
@@ -133,7 +133,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 		List<Note> notes = new ArrayList<Note>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, fbPostID, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
+			String query = "SELECT id, facebookID, note, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -148,8 +148,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
-				notes.add(new Note(rs.getInt("id"), new FBPost(rs
-						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+				notes.add(new Note(rs.getInt("id"), rs.getString("facebookID"), rs.getTimestamp("dateAdded"), rs
 						.getString("status"), image, rs.getString("note")));
 			}
 		} catch (Exception e) {

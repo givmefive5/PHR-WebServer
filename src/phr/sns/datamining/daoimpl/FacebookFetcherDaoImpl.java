@@ -83,28 +83,29 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				Timestamp timestamp = new Timestamp(date.getTime());
 				FBPost post;
 				String encodedImage = null;
+				PHRImage phrImage = null;
 				if (p.getPicture() != null) {
 					Image imageFromPost = ImageHandler.getImageFromURL(p
 							.getPicture());
 					encodedImage = ImageHandler
 							.encodeImageToBase64(imageFromPost);
+					if(encodedImage != null)
+						phrImage = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 				if (p.getMessage() != null) {
 					String[] foodWordsFound = keywordsExtractor
 							.extractFoodNames(p.getMessage());
 					if (foodWordsFound.length > 0) {
-						post = new FBPost(p.getMessage(), timestamp,
-								FBPostType.FOOD, new PHRImage(encodedImage,
-										PHRImageType.IMAGE), foodWordsFound);
+						post = new FBPost(p.getId(), p.getMessage(), timestamp,
+								FBPostType.FOOD, phrImage, foodWordsFound);
 						posts.add(post);
 						continue;
 					}
 					String[] restaurantsWordsFound = keywordsExtractor
 							.extractRestaurantNames(p.getMessage());
 					if (restaurantsWordsFound.length > 0) {
-						post = new FBPost(p.getMessage(), timestamp,
-								FBPostType.RESTAURANT, new PHRImage(
-										encodedImage, PHRImageType.IMAGE),
+						post = new FBPost(p.getId(), p.getMessage(), timestamp,
+								FBPostType.RESTAURANT, phrImage,
 								restaurantsWordsFound);
 						posts.add(post);
 						continue;
@@ -112,26 +113,23 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 					String[] activityWordsFound = keywordsExtractor
 							.extractActivityNames(p.getMessage());
 					if (activityWordsFound.length > 0) {
-						post = new FBPost(p.getMessage(), timestamp,
-								FBPostType.ACTIVITY, new PHRImage(encodedImage,
-										PHRImageType.IMAGE), activityWordsFound);
+						post = new FBPost(p.getId(), p.getMessage(), timestamp,
+								FBPostType.ACTIVITY, phrImage, activityWordsFound);
 						posts.add(post);
 						continue;
 					}
 					String[] sportsEstablishmentsWordsFound = keywordsExtractor
 							.extractSportsEstablishmentsNames(p.getMessage());
 					if (sportsEstablishmentsWordsFound.length > 0) {
-						post = new FBPost(p.getMessage(), timestamp,
-								FBPostType.SPORTS_ESTABLISHMENTS, new PHRImage(
-										encodedImage, PHRImageType.IMAGE),
+						post = new FBPost(p.getId(), p.getMessage(), timestamp,
+								FBPostType.SPORTS_ESTABLISHMENTS, phrImage,
 								sportsEstablishmentsWordsFound);
 						posts.add(post);
 						continue;
 					}
 
-					post = new FBPost(p.getMessage(), timestamp,
-							FBPostType.UNRELATED, new PHRImage(encodedImage,
-									PHRImageType.IMAGE), null);
+					post = new FBPost(p.getId(), p.getMessage(), timestamp,
+							FBPostType.UNRELATED, phrImage, null);
 					posts.add(post);
 				}
 			}

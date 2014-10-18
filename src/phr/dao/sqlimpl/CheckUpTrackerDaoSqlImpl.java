@@ -31,7 +31,7 @@ public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpT
 	public int addReturnsEntryID(CheckUp checkUp) throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO checkuptracker(purpose, doctorsName, notes, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO checkuptracker(purpose, doctorsName, notes, dateAdded, status, userID, facebookID, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query,
@@ -42,8 +42,8 @@ public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpT
 			pstmt.setTimestamp(4, checkUp.getTimestamp());
 			pstmt.setString(5, checkUp.getStatus());
 			pstmt.setInt(6, checkUp.getUserID());
-			if (checkUp.getFbPost() != null)
-				pstmt.setInt(7, checkUp.getFbPost().getId());
+			if (checkUp.getFacebookID() != null)
+				pstmt.setString(7, checkUp.getFacebookID());
 			else
 				pstmt.setNull(7, Types.NULL);
 
@@ -136,7 +136,7 @@ public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpT
 		List<CheckUp> checkups = new ArrayList<CheckUp>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, fbPostID, purpose, doctorsName, notes, status, photo, dateAdded FROM checkuptracker WHERE userID = ?";
+			String query = "SELECT id, facebookID, purpose, doctorsName, notes, status, photo, dateAdded FROM checkuptracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -151,8 +151,7 @@ public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpT
 					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
-				checkups.add(new CheckUp(rs.getInt("id"), new FBPost(rs
-						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+				checkups.add(new CheckUp(rs.getInt("id"), rs.getString("faceboookID"), rs.getTimestamp("dateAdded"), rs
 						.getString("status"), image, rs.getString("purpose"),
 						rs.getString("doctorsName"), rs.getString("notes")));
 			}

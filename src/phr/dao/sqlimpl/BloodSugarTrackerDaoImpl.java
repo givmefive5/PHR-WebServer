@@ -32,7 +32,7 @@ public class BloodSugarTrackerDaoImpl extends BaseDaoSqlImpl implements BloodSug
 			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO bloodsugartracker (bloodsugar, type,  dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO bloodsugartracker (bloodsugar, type,  dateAdded, status, userID, facebookID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query,
@@ -42,8 +42,8 @@ public class BloodSugarTrackerDaoImpl extends BaseDaoSqlImpl implements BloodSug
 			pstmt.setTimestamp(3, bloodSugar.getTimestamp());
 			pstmt.setString(4, bloodSugar.getStatus());
 			pstmt.setInt(5, bloodSugar.getUserID());
-			if (bloodSugar.getFbPost() != null)
-				pstmt.setInt(6, bloodSugar.getFbPost().getId());
+			if (bloodSugar.getFacebookID() != null)
+				pstmt.setString(6, bloodSugar.getFacebookID());
 			else
 				pstmt.setNull(6, Types.NULL);
 			
@@ -136,7 +136,7 @@ public class BloodSugarTrackerDaoImpl extends BaseDaoSqlImpl implements BloodSug
 		List<BloodSugar> bloodsugars = new ArrayList<BloodSugar>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, fbPostID, bloodsugar, type,  status, photo, dateAdded FROM bloodsugartracker WHERE userID = ?";
+			String query = "SELECT id, facebookID, bloodsugar, type,  status, photo, dateAdded FROM bloodsugartracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -151,8 +151,7 @@ public class BloodSugarTrackerDaoImpl extends BaseDaoSqlImpl implements BloodSug
 					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
-				bloodsugars.add(new BloodSugar(rs.getInt("id"), new FBPost(rs
-						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
+				bloodsugars.add(new BloodSugar(rs.getInt("id"), rs.getString("facebookID"), rs.getTimestamp("dateAdded"), rs
 						.getString("status"), image,
 						rs.getDouble("bloodsugar"), rs.getString("type")));
 			}

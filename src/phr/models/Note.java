@@ -6,21 +6,21 @@ public class Note extends TrackerEntry {
 
 	String note;
 
-	public Note(Integer entryID, User user, FBPost fbPost, Timestamp timestamp,
+	public Note(Integer entryID, User user, String facebookID, Timestamp timestamp,
 			String status, PHRImage image, String note) {
-		super(entryID, user, fbPost, timestamp, status, image);
+		super(entryID, user, facebookID, timestamp, status, image);
 		this.note = note;
 	}
 
-	public Note(User user, FBPost fbPost, Timestamp timestamp, String status,
+	public Note(User user, String facebookID, Timestamp timestamp, String status,
 			PHRImage image, String note) {
-		super(user, fbPost, timestamp, status, image);
+		super(user, facebookID, timestamp, status, image);
 		this.note = note;
 	}
 
-	public Note(Integer entryID, FBPost fbPost, Timestamp timestamp,
+	public Note(Integer entryID, String facebookID, Timestamp timestamp,
 			String status, PHRImage image, String note) {
-		super(entryID, fbPost, timestamp, status, image);
+		super(entryID, facebookID, timestamp, status, image);
 		this.note = note;
 	}
 
@@ -30,9 +30,9 @@ public class Note extends TrackerEntry {
 		this.note = note;
 	}
 
-	public Note(FBPost fbPost, Timestamp timestamp, String status,
+	public Note(String facebookID, Timestamp timestamp, String status,
 			PHRImage image, String note) {
-		super(fbPost, timestamp, status, image);
+		super(facebookID, timestamp, status, image);
 		this.note = note;
 	}
 

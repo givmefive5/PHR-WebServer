@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class FBPost {
 
 	public Integer id;
+	public String facebookID;
 	public String status;
 	public Timestamp timestamp;
 	public FBPostType postType;
@@ -16,10 +17,11 @@ public class FBPost {
 		this.id = id;
 	}
 
-	public FBPost(Integer id, String status, Timestamp timestamp,
+	public FBPost(Integer id, String facebookId, String status, Timestamp timestamp,
 			FBPostType postType, PHRImage image, String[] extractedWords) {
 		super();
 		this.id = id;
+		this.facebookID = facebookId;
 		this.status = status;
 		this.timestamp = timestamp;
 		this.postType = postType;
@@ -27,9 +29,10 @@ public class FBPost {
 		this.extractedWords = extractedWords;
 	}
 
-	public FBPost(String status, Timestamp timestamp, FBPostType postType,
+	public FBPost(String facebookId, String status, Timestamp timestamp, FBPostType postType,
 			PHRImage image, String[] extractedWords) {
 		super();
+		this.facebookID = facebookId;
 		this.status = status;
 		this.timestamp = timestamp;
 		this.postType = postType;
@@ -43,6 +46,14 @@ public class FBPost {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getFacebookId() {
+		return facebookID;
+	}
+
+	public void setFacebookId(String facebookId) {
+		this.facebookID = facebookId;
 	}
 
 	public String getStatus() {

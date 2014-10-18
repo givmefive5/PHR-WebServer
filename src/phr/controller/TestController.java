@@ -15,13 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 
+
+
+
 import phr.exceptions.DataAccessException;
 import phr.exceptions.FatSecretFetcherException;
 import phr.exceptions.ImageHandlerException;
 import phr.exceptions.SNSException;
+import phr.exceptions.ServiceException;
 import phr.fatsecret.FatSecretFetcher;
 import phr.fatsecret.FatSecretFood;
 import phr.models.FBPost;
+import phr.service.VerificationService;
+import phr.service.impl.VerificationServiceImpl;
 import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.sns.datamining.service.FacebookFetcherService;
 import phr.sns.datamining.serviceimpl.FacebookFetcherServiceImpl;
@@ -36,16 +42,25 @@ public class TestController {
 			throws SNSException, UnsupportedEncodingException,
 			ClientProtocolException, GeneralSecurityException, IOException,
 			JSONException {
+		
 		List<FBPost> posts = fetcher.getAllPosts(userFBAccessToken);
 
+		VerificationService verification = new VerificationServiceImpl();
+	
+		try {
+			verification.addNewUnverifiedPosts("4e443873-82b1-428a-b8e6-3cf4c3e1378e", posts);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+		
 		for (FBPost p : posts) {
 			System.out.println(p.getStatus() + " Class: " + p.getPostType());
 			System.out.println("Extracted Words: ");
 			if (p.getExtractedWords() != null)
 				for (String s : p.getExtractedWords()) {
 					System.out.println(s);
-				}
-		}
+				}			
+		}		
 	}
 
 	@RequestMapping(value = "/test2")
@@ -94,7 +109,7 @@ public class TestController {
 		List<FatSecretFood> foods = FatSecretFetcher.searchFood(searchQuery);
 		for(FatSecretFood food: foods){
 			System.out.println(food.getFood_name());
-		}
+		}	
 	}
 	
 }

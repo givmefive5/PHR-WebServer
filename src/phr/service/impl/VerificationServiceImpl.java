@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.VerificationDao;
+import phr.dao.sqlimpl.VerificationDaoImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
@@ -19,8 +20,10 @@ import phr.service.VerificationService;
 @Service("verificationService")
 public class VerificationServiceImpl implements VerificationService {
 
-	@Autowired
-	VerificationDao verificationDao;
+	//@Autowired
+	//VerificationDao verificationDao;
+	
+	VerificationDao verificationDao = new VerificationDaoImpl();
 
 	@Override
 	public void addNewUnverifiedPosts(String userAccessToken,
@@ -65,8 +68,12 @@ public class VerificationServiceImpl implements VerificationService {
 
 	@Override
 	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
-			String userAccessToken) {
-		return verificationDao.getAllUnverifiedRestaurantPosts(userAccessToken);
+			String userAccessToken) throws ServiceException {
+		try {
+			return verificationDao.getAllUnverifiedRestaurantPosts(userAccessToken);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Unable to perform action", e);
+		}
 	}
 
 	@Override

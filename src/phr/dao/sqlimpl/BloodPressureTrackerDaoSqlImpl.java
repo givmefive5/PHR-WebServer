@@ -33,7 +33,7 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			throws DataAccessException {
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO bloodpressuretracker(systolic, diastolic, dateAdded, status, userID, facebookID, photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query,
@@ -43,8 +43,8 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setTimestamp(3, bloodPressure.getTimestamp());
 			pstmt.setString(4, bloodPressure.getStatus());
 			pstmt.setInt(5, bloodPressure.getUserID());
-			if (bloodPressure.getFbPost() != null)
-				pstmt.setInt(6, bloodPressure.getFbPost().getId());
+			if (bloodPressure.getFacebookID() != null)
+				pstmt.setString(6, bloodPressure.getFacebookID());
 			else
 				pstmt.setNull(6, Types.NULL);
 			
@@ -135,7 +135,7 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 		List<BloodPressure> bloodpressures = new ArrayList<BloodPressure>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, fbPostID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
+			String query = "SELECT id, facebookID, systolic, diastolic, status, photo, dateAdded FROM bloodpressuretracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -151,7 +151,7 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 				bloodpressures.add(new BloodPressure(rs.getInt("id"),
-						new FBPost(rs.getInt("fbPostID")), rs
+						rs.getString("facebookID"), rs
 								.getTimestamp("dateAdded"), rs
 								.getString("status"), image, rs
 								.getInt("systolic"), rs.getInt("diastolic")));

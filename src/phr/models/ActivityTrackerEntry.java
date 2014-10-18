@@ -8,30 +8,30 @@ public class ActivityTrackerEntry extends TrackerEntry {
 	double calorieBurnedPerHour;
 	int durationInSeconds;
 	
-	public ActivityTrackerEntry(Integer entryID, User user, FBPost fbPost,
+	public ActivityTrackerEntry(Integer entryID, User user, String facebookID,
 			Timestamp timestamp, String status, PHRImage image,
 			Activity activity, double caloriesBurnedPerHour,
 			int durationInSeconds) {
-		super(entryID, user, fbPost, timestamp, status, image);
+		super(entryID, user, facebookID, timestamp, status, image);
 		this.activity = activity;
 		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
 	}
 
-	public ActivityTrackerEntry(User user, FBPost fbPost, Timestamp timestamp,
+	public ActivityTrackerEntry(User user, String facebookID, Timestamp timestamp,
 			String status, PHRImage image, Activity activity,
 			double caloriesBurnedPerHour, int durationInSeconds) {
-		super(user, fbPost, timestamp, status, image);
+		super(user, facebookID, timestamp, status, image);
 		this.activity = activity;
 		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
 	}
 
-	public ActivityTrackerEntry(Integer entryID, FBPost fbPost,
+	public ActivityTrackerEntry(Integer entryID, String facebookID,
 			Timestamp timestamp, String status, PHRImage image,
 			Activity activity, double caloriesBurnedPerHour,
 			int durationInSeconds) {
-		super(entryID, fbPost, timestamp, status, image);
+		super(entryID, facebookID, timestamp, status, image);
 		this.activity = activity;
 		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;
@@ -47,10 +47,10 @@ public class ActivityTrackerEntry extends TrackerEntry {
 		this.durationInSeconds = durationInSeconds;
 	}
 
-	public ActivityTrackerEntry(FBPost fbPost, Timestamp timestamp,
+	public ActivityTrackerEntry(String facebookID, Timestamp timestamp,
 			String status, PHRImage image, Activity activity,
 			double caloriesBurnedPerHour, int durationInSeconds) {
-		super(fbPost, timestamp, status, image);
+		super(facebookID, timestamp, status, image);
 		this.activity = activity;
 		this.calorieBurnedPerHour = caloriesBurnedPerHour;
 		this.durationInSeconds = durationInSeconds;

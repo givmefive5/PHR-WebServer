@@ -6,22 +6,22 @@ public class Weight extends TrackerEntry {
 
 	private double weightInPounds;
 
-	public Weight(Integer entryID, User user, FBPost fbPost,
+	public Weight(Integer entryID, User user, String facebookID,
 			Timestamp timestamp, String status, PHRImage image,
 			double weightInPounds) {
-		super(entryID, user, fbPost, timestamp, status, image);
+		super(entryID, user, facebookID, timestamp, status, image);
 		this.weightInPounds = weightInPounds;
 	}
 
-	public Weight(User user, FBPost fbPost, Timestamp timestamp, String status,
+	public Weight(User user, String facebookID, Timestamp timestamp, String status,
 			PHRImage image, double weightInPounds) {
-		super(user, fbPost, timestamp, status, image);
+		super(user, facebookID, timestamp, status, image);
 		this.weightInPounds = weightInPounds;
 	}
 
-	public Weight(Integer entryID, FBPost fbPost, Timestamp timestamp,
+	public Weight(Integer entryID, String facebookID, Timestamp timestamp,
 			String status, PHRImage image, double weightInPounds) {
-		super(entryID, fbPost, timestamp, status, image);
+		super(entryID, facebookID, timestamp, status, image);
 		this.weightInPounds = weightInPounds;
 	}
 
@@ -31,9 +31,9 @@ public class Weight extends TrackerEntry {
 		this.weightInPounds = weightInPounds;
 	}
 
-	public Weight(FBPost fbPost, Timestamp timestamp, String status,
+	public Weight(String facebookID, Timestamp timestamp, String status,
 			PHRImage image, double weightInPounds) {
-		super(fbPost, timestamp, status, image);
+		super(facebookID, timestamp, status, image);
 		this.weightInPounds = weightInPounds;
 	}
 

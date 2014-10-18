@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,17 @@ import phr.exceptions.EntryNotFoundException;
 import phr.models.FBPost;
 import phr.models.PHRImage;
 import phr.models.PHRImageType;
+import phr.models.User;
 import phr.models.Weight;
 import phr.tools.ImageHandler;
 
 @Repository("weightTrackerDao")
-public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTrackerDao {
+public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTrackerDao {
 
-	@Autowired
-	UserDao userDao;
+	//@Autowired
+	//UserDao userDao;
+	
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(Weight weight) throws DataAccessException {
@@ -41,8 +45,9 @@ public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTracke
 			pstmt.setTimestamp(2, weight.getTimestamp());
 			pstmt.setString(3, weight.getStatus());
 			pstmt.setInt(4, weight.getUserID());
-			if (weight.getFbPost() != null)
-				pstmt.setInt(5, weight.getFbPost().getId());
+			
+			if (weight.getFacebookID() != null)
+				pstmt.setString(5, weight.getFacebookID());
 			else
 				pstmt.setNull(5, Types.NULL);
 
@@ -135,7 +140,7 @@ public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTracke
 		List<Weight> weights = new ArrayList<Weight>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, fbPostID, weightInPounds, status, photo, dateAdded FROM weighttracker WHERE userID = ?";
+			String query = "SELECT id, facebookID, weightInPounds, status, photo, dateAdded FROM weighttracker WHERE userID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -150,10 +155,12 @@ public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTracke
 					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
-				weights.add(new Weight(rs.getInt("id"), new FBPost(rs
-						.getInt("fbPostID")), rs.getTimestamp("dateAdded"), rs
-						.getString("status"), image, rs
-						.getDouble("weightInPounds")));
+				weights.add(new Weight(rs.getInt("id"), 
+						rs.getString("facebookID"),
+						rs.getTimestamp("dateAdded"), 
+						rs.getString("status"),
+						image, 
+						rs.getDouble("weightInPounds")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -196,8 +203,9 @@ public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTracke
 		
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT LAST(weightInPounds) FROM weighttracker WHERE "
-					+ "userID = ?";
+			String query = "SELECT * FROM weighttracker WHERE "
+					+ "userID = ? ORDER BY id DESC LIMIT 1";
+			
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -207,6 +215,7 @@ public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTracke
 			
 			while (rs.next()) {
 				PHRImage image = null;
+				
 				if(rs.getString("photo") == null)
 					image = null;
 				else{
@@ -214,12 +223,14 @@ public class WeightTrackerDaoImpl extends BaseDaoSqlImpl implements WeightTracke
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 				
-				weight.setEntryID(rs.getInt("id"));
-				weight.setFbPost(new FBPost(rs.getInt("fbPost")));
-				weight.setTimestamp(rs.getTimestamp("dateAdded"));
-				weight.setStatus(rs.getString("status"));
-				weight.setImage(image);
-				weight.setWeightInPounds(rs.getShort("weightInPounds"));
+				weight = new Weight(
+						rs.getInt("id"), 
+						new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
+						rs.getString("facebookID"),
+						rs.getTimestamp("dateAdded"),
+						rs.getString("status"),
+						image, 
+						rs.getDouble("weightInPounds"));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
