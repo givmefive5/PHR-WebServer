@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+
+import com.sun.org.apache.bcel.internal.generic.Type;
 
 import phr.dao.FoodDao;
 import phr.exceptions.DataAccessException;
@@ -21,7 +24,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	public int addReturnEntryID(Food food) throws DataAccessException {
 		
 		int entryID = foodEntryExists(food);
-
+		
 		if (entryID != -1) {
 			
 			incrementCountUsed(food);
@@ -30,6 +33,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		} else {
 
 			try {
+						
 				Connection conn = getConnection();
 				String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, servingUnit, servingSize, restaurantID, fromFatsecret, countUsed) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -43,7 +47,10 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				pstmt.setDouble(5, food.getCarbohydrate());
 				pstmt.setString(6, food.getServingUnit());
 				pstmt.setDouble(7, food.getServingSize());
-				pstmt.setInt(8, food.getRestaurantID());
+				if(food.getRestaurantID() == null)
+					pstmt.setNull(8, Types.NULL);
+				else
+					pstmt.setInt(8, food.getRestaurantID());
 				pstmt.setBoolean(9, food.getFromFatsecret());
 				pstmt.setInt(10, 1);
 
@@ -117,6 +124,9 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 						rs.getInt("restaurantID"), rs
 								.getBoolean("fromFatsecret")));
 			}
+			for(Food food : foods){
+				
+			}
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -168,7 +178,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, searchQuery);
+			pstmt.setString(1, "%"+searchQuery+"%");
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {

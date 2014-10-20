@@ -104,7 +104,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	}
 
 	@Override
-	public List<Activity> search(String serachQuery) throws DataAccessException {
+	public List<Activity> search(String searchQuery) throws DataAccessException {
 
 		List<Activity> activities = new ArrayList<Activity>();
 
@@ -114,7 +114,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, serachQuery);
+			pstmt.setString(1, "%"+searchQuery+"%");
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {

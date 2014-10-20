@@ -36,7 +36,7 @@ public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTra
 
 		try {
 			Connection conn = getConnection();
-			String query = "INSERT INTO weighttracker(weightInPounds, dateAdded, status, userID, fbPostID, photo) VALUES (?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO weighttracker(weightInPounds, dateAdded, status, userID, facebookID, photo) VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query,

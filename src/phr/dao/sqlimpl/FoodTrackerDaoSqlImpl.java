@@ -90,7 +90,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 		
 		try{	
 			Connection conn = getConnection();
-			String query = "UPDATE foodtracker SET foodID = ?, servingCount = ?, dateAdded =? , status = ?, photo = ?)"
+			String query = "UPDATE foodtracker SET foodID = ?, servingCount = ?, dateAdded =? , status = ?, photo = ?) "
 					+ "WHERE id = ?";
 			PreparedStatement pstmt;
 
