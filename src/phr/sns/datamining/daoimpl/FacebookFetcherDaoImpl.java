@@ -32,29 +32,45 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	private static final String appID = "458502710946706";
 	private static final String appSecret = "c41ccfbd5ff58c87342f4df5911d2d88";
 
-	private ResponseList<Post> getAllPostsFromFB(String userFBAccessToken)
-			throws DataAccessException {
-		Facebook facebook = new FacebookFactory().getInstance();
+	Facebook facebook;
+
+	public FacebookFetcherDaoImpl() {
+		facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId(appID, appSecret);
 		String permissions = "email,user_groups,user_status,read_stream,user_actions:instapp";
 		facebook.setOAuthPermissions(permissions);
+	}
 
+	private ResponseList<Post> getAllPostsFromFB(String userFBAccessToken)
+			throws DataAccessException {
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 		try {
-
 			ResponseList<Post> feed = facebook.getPosts();
 			System.out.println("Number of Posts Retrieved: " + feed.size());
-
-			ResponseList<Photo> photos = facebook.getUploadedPhotos();
-			for (Photo p : photos) {
-				System.out.println(p.getName());
-			}
 
 			return feed;
 		} catch (FacebookException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
+	}
+
+	private ResponseList<Photo> getAllPhotosFromFB(String userFBAccessToken)
+			throws DataAccessException {
+		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
+		ResponseList<Photo> photos;
+		try {
+			photos = facebook.getUploadedPhotos();
+			photos.addAll(facebook.getPhotos());
+			for (Photo p : photos) {
+				System.out.println(p.getName());
+			}
+			return photos;
+		} catch (FacebookException e) {
+			throw new DataAccessException(
+					"An error has occured while retrieving photos", e);
+		}
+
 	}
 
 	@Override
@@ -89,8 +105,9 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.getPicture());
 					encodedImage = ImageHandler
 							.encodeImageToBase64(imageFromPost);
-					if(encodedImage != null)
-						phrImage = new PHRImage(encodedImage, PHRImageType.IMAGE);
+					if (encodedImage != null)
+						phrImage = new PHRImage(encodedImage,
+								PHRImageType.IMAGE);
 				}
 				if (p.getMessage() != null) {
 					String[] foodWordsFound = keywordsExtractor
@@ -114,7 +131,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							.extractActivityNames(p.getMessage());
 					if (activityWordsFound.length > 0) {
 						post = new FBPost(p.getId(), p.getMessage(), timestamp,
-								FBPostType.ACTIVITY, phrImage, activityWordsFound);
+								FBPostType.ACTIVITY, phrImage,
+								activityWordsFound);
 						posts.add(post);
 						continue;
 					}
@@ -137,6 +155,72 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		return posts;
 	}
 
+	private List<FBPost> filterPhotosList(List<Photo> newPhotos)
+			throws ImageHandlerException, DataAccessException {
+		List<FBPost> posts = new ArrayList<>();
+		for (Photo p : newPhotos) {
+			if (p != null) {
+				Date date = p.getCreatedTime();
+				Timestamp timestamp = new Timestamp(date.getTime());
+				FBPost post;
+				String encodedImage = null;
+				PHRImage phrImage = null;
+				if (p.getPicture() != null) {
+					Image imageFromPost = ImageHandler.getImageFromURL(p
+							.getPicture());
+					encodedImage = ImageHandler
+							.encodeImageToBase64(imageFromPost);
+					if (encodedImage != null)
+						phrImage = new PHRImage(encodedImage,
+								PHRImageType.IMAGE);
+				}
+				if (p.getName() != null) {
+					String[] foodWordsFound = keywordsExtractor
+							.extractFoodNames(p.getName());
+					if (foodWordsFound.length > 0) {
+						post = new FBPost(p.getId(), p.getName(), timestamp,
+								FBPostType.FOOD, phrImage, foodWordsFound);
+						posts.add(post);
+						continue;
+					}
+					String[] restaurantsWordsFound = keywordsExtractor
+							.extractRestaurantNames(p.getName());
+					if (restaurantsWordsFound.length > 0) {
+						post = new FBPost(p.getId(), p.getName(), timestamp,
+								FBPostType.RESTAURANT, phrImage,
+								restaurantsWordsFound);
+						posts.add(post);
+						continue;
+					}
+					String[] activityWordsFound = keywordsExtractor
+							.extractActivityNames(p.getName());
+					if (activityWordsFound.length > 0) {
+						post = new FBPost(p.getId(), p.getName(), timestamp,
+								FBPostType.ACTIVITY, phrImage,
+								activityWordsFound);
+						posts.add(post);
+						continue;
+					}
+					String[] sportsEstablishmentsWordsFound = keywordsExtractor
+							.extractSportsEstablishmentsNames(p.getName());
+					if (sportsEstablishmentsWordsFound.length > 0) {
+						post = new FBPost(p.getId(), p.getName(), timestamp,
+								FBPostType.SPORTS_ESTABLISHMENTS, phrImage,
+								sportsEstablishmentsWordsFound);
+						posts.add(post);
+						continue;
+					}
+
+					post = new FBPost(p.getId(), p.getName(), timestamp,
+							FBPostType.UNRELATED, phrImage, null);
+					posts.add(post);
+				}
+			}
+		}
+
+		return posts;
+	}
+
 	@Override
 	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
 			String userFBAccessToken) throws DataAccessException {
@@ -153,13 +237,29 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				}
 			}
 		}
+
+		ResponseList<Photo> photos = getAllPhotosFromFB(userFBAccessToken);
+		List<Photo> newPhotos = new ArrayList<>();
+
+		for (Photo p : photos) {
+			if (p != null) {
+				Date dateLastUpdated = p.getUpdatedTime();
+				Timestamp timeLastUpdated = new Timestamp(
+						dateLastUpdated.getTime());
+				if (timeLastUpdated.after(timestamp)) {
+					newPhotos.add(p);
+				}
+			}
+		}
 		try {
 			List<FBPost> filteredPosts = filterPostsList(newFeed);
+			List<FBPost> filteredPhotos = filterPhotosList(newPhotos);
+			filteredPosts.addAll(filteredPhotos);
 			return filteredPosts;
 		} catch (ImageHandlerException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
-
 	}
+
 }
