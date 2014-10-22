@@ -27,7 +27,8 @@ public class ImageHandler {
 			Image image = ImageIO.read(pictureURL);
 			return toBufferedImage(image);
 		} catch (IOException e) {
-			throw new ImageHandlerException("Unable to get image from URL", e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -54,9 +55,12 @@ public class ImageHandler {
 
 	public static String encodeImageToBase64(Image imageFromPost)
 			throws ImageHandlerException {
-		BufferedImage image = toBufferedImage(imageFromPost);
-		String encodedImage = encodeBufferedImage(image);
-		return encodedImage;
+		if (imageFromPost != null) {
+			BufferedImage image = toBufferedImage(imageFromPost);
+			String encodedImage = encodeBufferedImage(image);
+			return encodedImage;
+		}
+		return null;
 	}
 
 	public static BufferedImage decodeImage(String encodedImage)
@@ -72,18 +76,19 @@ public class ImageHandler {
 		}
 	}
 
-	public static String saveImage_ReturnFilePath(String encodedImage) throws ImageHandlerException {
+	public static String saveImage_ReturnFilePath(String encodedImage)
+			throws ImageHandlerException {
 		long time = TimestampHandler.getCurrentTimestamp().getTime();
 		String uniqueString = UUIDGenerator.generateUniqueString();
 
 		String fileName = time + uniqueString + ".jpg";
-		
+
 		String basePath = "D://PHRFiles/images/";
 		File folder = new File(basePath);
 		if (!folder.exists())
 			folder.mkdir();
 		BufferedImage image = decodeImage(encodedImage);
-		File outputFile = new File(basePath+fileName);
+		File outputFile = new File(basePath + fileName);
 		try {
 			ImageIO.write(image, "png", outputFile);
 		} catch (IOException e) {

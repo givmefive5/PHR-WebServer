@@ -39,17 +39,15 @@ public class TestController {
 			JSONException {
 
 		VerificationService verification = new VerificationServiceImpl();
-		/*
 		try {
 			Timestamp startDate = new Timestamp(0);
-			
+			System.out.println("Hey hey");
 			verification.updateListOfUnverifiedPosts(
 					"4e443873-82b1-428a-b8e6-3cf4c3e1378e", userFBAccessToken,
 					startDate);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
-		*/
 
 	}
 

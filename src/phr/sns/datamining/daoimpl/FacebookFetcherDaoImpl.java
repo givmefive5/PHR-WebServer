@@ -20,9 +20,10 @@ import phr.tools.ImageHandler;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
+import facebook4j.PagableList;
+import facebook4j.Paging;
 import facebook4j.Photo;
 import facebook4j.Post;
-import facebook4j.ResponseList;
 import facebook4j.auth.AccessToken;
 
 @Repository("facebookFetcherDao")
@@ -41,31 +42,44 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		facebook.setOAuthPermissions(permissions);
 	}
 
-	private ResponseList<Post> getAllPostsFromFB(String userFBAccessToken)
+	private List<Post> getAllPostsFromFB(String userFBAccessToken)
 			throws DataAccessException {
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 		try {
-			ResponseList<Post> feed = facebook.getPosts();
-			System.out.println("Number of Posts Retrieved: " + feed.size());
-
-			return feed;
+			List<Post> completeList = new ArrayList<>();
+			PagableList<Post> feed = facebook.getPosts();
+			Paging<Post> paging = null;
+			do {
+				for (Post post : feed) {
+					completeList.add(post);
+				}
+				paging = feed.getPaging();
+			} while ((paging != null)
+					&& (feed = facebook.fetchNext(paging)) != null);
+			System.out.println("Number of Posts Retrieved: "
+					+ completeList.size());
+			return completeList;
 		} catch (FacebookException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
 	}
 
-	private ResponseList<Photo> getAllPhotosFromFB(String userFBAccessToken)
+	private List<Photo> getAllPhotosFromFB(String userFBAccessToken)
 			throws DataAccessException {
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
-		ResponseList<Photo> photos;
 		try {
-			photos = facebook.getUploadedPhotos();
-			photos.addAll(facebook.getPhotos());
-			for (Photo p : photos) {
-				System.out.println(p.getName());
-			}
-			return photos;
+			List<Photo> completeList = new ArrayList<>();
+			PagableList<Photo> photos = facebook.getPhotos();
+			Paging<Photo> paging = null;
+			do {
+				for (Photo photo : photos) {
+					completeList.add(photo);
+				}
+				paging = photos.getPaging();
+			} while ((paging != null)
+					&& (photos = facebook.fetchNext(paging)) != null);
+			return completeList;
 		} catch (FacebookException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving photos", e);
@@ -76,7 +90,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	@Override
 	public List<FBPost> getAllPosts(String userFBAccessToken)
 			throws DataAccessException {
-		ResponseList<Post> feed = getAllPostsFromFB(userFBAccessToken);
+		List<Post> feed = getAllPostsFromFB(userFBAccessToken);
 		List<FBPost> filteredPosts = new ArrayList<>();
 		try {
 			filteredPosts = filterPostsList(feed);
@@ -224,7 +238,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	@Override
 	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
 			String userFBAccessToken) throws DataAccessException {
-		ResponseList<Post> feed = getAllPostsFromFB(userFBAccessToken);
+		List<Post> feed = getAllPostsFromFB(userFBAccessToken);
 
 		List<Post> newFeed = new ArrayList<>();
 		for (Post p : feed) {
@@ -238,7 +252,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			}
 		}
 
-		ResponseList<Photo> photos = getAllPhotosFromFB(userFBAccessToken);
+		List<Photo> photos = getAllPhotosFromFB(userFBAccessToken);
 		List<Photo> newPhotos = new ArrayList<>();
 
 		for (Photo p : photos) {
