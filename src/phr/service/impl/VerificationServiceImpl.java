@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import phr.dao.VerificationDao;
 import phr.dao.sqlimpl.VerificationDaoImpl;
 import phr.exceptions.DataAccessException;
-import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.models.FBPost;
 import phr.models.UnverifiedActivityEntry;
@@ -65,17 +64,6 @@ public class VerificationServiceImpl implements VerificationService {
 	}
 
 	@Override
-	public void delete(FBPost fbPost) throws ServiceException {
-		try {
-			verificationDao.delete(fbPost);
-		} catch (EntryNotFoundException e) {
-			e.printStackTrace();
-			throw new ServiceException(
-					"Error has occurred while deleting a activity entry", e);
-		}
-	}
-
-	@Override
 	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
 			String userAccessToken) throws ServiceException {
 		try {
@@ -112,6 +100,26 @@ public class VerificationServiceImpl implements VerificationService {
 			String userAccessToken) {
 		return verificationDao
 				.getAllUnverifiedSportsEstablishmentPosts(userAccessToken);
+	}
+
+	@Override
+	public void delete(UnverifiedFoodEntry entry) {
+		verificationDao.delete(entry);
+	}
+
+	@Override
+	public void delete(UnverifiedActivityEntry entry) {
+		verificationDao.delete(entry);
+	}
+
+	@Override
+	public void delete(UnverifiedRestaurantEntry entry) {
+		verificationDao.delete(entry);
+	}
+
+	@Override
+	public void delete(UnverifiedSportsEstablishmentEntry entry) {
+		verificationDao.delete(entry);
 	}
 
 }

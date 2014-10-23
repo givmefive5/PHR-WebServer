@@ -43,7 +43,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 
 	// @Autowired
 	// FoodDao foodDao;
-	
+
 	UserDao userDao = new UserDaoSqlImpl();
 	FoodDao foodDao = new FoodDaoSqlImpl();
 	ActivityDao activityDao = new ActivityDaoSqlImpl();
@@ -93,7 +93,10 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					fbPost.getTimestamp(),
 					extractedWord,
 					ONE_HOUR,
-					(activityDao.getActivityMET(extractedWord) * WeightConverter.convertKgToLbs(weightTrackerDao.getLatestWeight(userAccessToken).getWeightInPounds()) * ONE_HOUR), 
+					(activityDao.getActivityMET(extractedWord)
+							* WeightConverter.convertKgToLbs(weightTrackerDao
+									.getLatestWeight(userAccessToken)
+									.getWeightInPounds()) * ONE_HOUR),
 					fbPost.getStatus(),
 					fbPost.getImage(),
 					new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
@@ -108,7 +111,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				pstmt = conn.prepareStatement(query);
 				pstmt.setString(1, unverifiedActivityEntry.getActivityName());
 				pstmt.setInt(2, unverifiedActivityEntry.getDurationInSeconds());
-				pstmt.setDouble(3,unverifiedActivityEntry.getCalorieBurnedPerHour());
+				pstmt.setDouble(3,
+						unverifiedActivityEntry.getCalorieBurnedPerHour());
 				pstmt.setTimestamp(4, unverifiedActivityEntry.getTimestamp());
 				pstmt.setString(5, unverifiedActivityEntry.getStatus());
 				pstmt.setInt(6, unverifiedActivityEntry.getUser().getId());
@@ -154,17 +158,21 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
-				pstmt.setString(1,unverifiedRestaurantEntry.getRestaurantName());
+				pstmt.setString(1,
+						unverifiedRestaurantEntry.getRestaurantName());
 				pstmt.setTimestamp(2, unverifiedRestaurantEntry.getTimestamp());
 				pstmt.setString(3, unverifiedRestaurantEntry.getStatus());
 				pstmt.setInt(4, unverifiedRestaurantEntry.getUser().getId());
 				pstmt.setString(5, unverifiedRestaurantEntry.getFbPostID());
 
 				if (unverifiedRestaurantEntry.getImage() != null) {
-					String encodedImage = unverifiedRestaurantEntry.getImage().getEncodedImage();
-					String fileName = ImageHandler.saveImage_ReturnFilePath(encodedImage);
+					String encodedImage = unverifiedRestaurantEntry.getImage()
+							.getEncodedImage();
+					String fileName = ImageHandler
+							.saveImage_ReturnFilePath(encodedImage);
 					unverifiedRestaurantEntry.getImage().setFileName(fileName);
-					pstmt.setString(6, unverifiedRestaurantEntry.getImage().getFileName());
+					pstmt.setString(6, unverifiedRestaurantEntry.getImage()
+							.getFileName());
 				} else
 					pstmt.setNull(6, Types.NULL);
 
@@ -240,48 +248,6 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public void delete(FBPost fbPost) throws EntryNotFoundException {
-
-		switch (fbPost.getPostType()) {
-
-		case FOOD:
-			deleteEntry("tempfoodtracker", fbPost);
-			break;
-		case RESTAURANT:
-			deleteEntry("temprestaurant", fbPost);
-			break;
-		case ACTIVITY:
-			deleteEntry("tempactivitytracker", fbPost);
-			break;
-		case SPORTS_ESTABLISHMENTS:
-			deleteEntry("tempsportestablishment", fbPost);
-			break;
-		default:
-			break;
-		}
-	}
-
-	public void deleteEntry(String tableName, FBPost fbPost)
-			throws EntryNotFoundException {
-
-		try {
-			Connection conn = getConnection();
-			String query = "DELETE FROM ? WHERE id = ?";
-
-			PreparedStatement pstmt;
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, tableName);
-			pstmt.setInt(2, fbPost.getId());
-
-			pstmt.executeUpdate();
-
-		} catch (Exception e) {
-			throw new EntryNotFoundException(
-					"Object ID not found in the database", e);
-		}
-	}
-
-	@Override
 	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
 			String userAccessToken) throws DataAccessException {
 
@@ -300,24 +266,24 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				if (rs.getString("photo") == null)
 					image = null;
 				else {
-					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
+					String encodedImage = ImageHandler
+							.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 
-				foodEntries.add(new UnverifiedFoodEntry(
-						rs.getInt("id"), 
-						rs.getTimestamp("dateAdded"), 
-						rs.getString("foodName"),
-						rs.getDouble("calorie"),
-						rs.getDouble("protein"), 
-						rs.getDouble("fat"), 
-						rs.getDouble("carbohydrate"), 
-						rs.getString("servingUnit"),
-						rs.getDouble("servingSize"),
-						rs.getString("status"), 
-						image, 
-						new User(rs.getInt("userID")), 
-						rs.getString("facebookID")));
+				foodEntries
+						.add(new UnverifiedFoodEntry(rs.getInt("id"), rs
+								.getTimestamp("dateAdded"), rs
+								.getString("foodName"),
+								rs.getDouble("calorie"), rs
+										.getDouble("protein"), rs
+										.getDouble("fat"), rs
+										.getDouble("carbohydrate"), rs
+										.getString("servingUnit"), rs
+										.getDouble("servingSize"), rs
+										.getString("status"), image, new User(
+										rs.getInt("userID")), rs
+										.getString("facebookID")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -352,17 +318,15 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 
-				activityEntries.add(new UnverifiedActivityEntry(
-						rs.getInt("id"), 
-						rs.getTimestamp("dateAdded"), 
-						rs.getString("activityName"), 
-						rs.getInt("durationInSeconds"), 
-						rs.getDouble("calorieBurnedPerHour"), 
-						rs.getString("status"), 
-						image, 
-						new User(rs.getInt("userID")), 
-						rs.getString("facebookID")));
-	}
+				activityEntries
+						.add(new UnverifiedActivityEntry(rs.getInt("id"), rs
+								.getTimestamp("dateAdded"), rs
+								.getString("activityName"), rs
+								.getInt("durationInSeconds"), rs
+								.getDouble("calorieBurnedPerHour"), rs
+								.getString("status"), image, new User(rs
+								.getInt("userID")), rs.getString("facebookID")));
+			}
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -391,18 +355,16 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				if (rs.getString("photo") == null)
 					image = null;
 				else {
-					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
+					String encodedImage = ImageHandler
+							.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 
-				restaurantEntries.add(new UnverifiedRestaurantEntry(
-						rs.getInt("id"),
-						rs.getTimestamp("dateAdded"),
-						rs.getString("activityName"), 
-						rs.getString("status"),
-						image, 
-						new User(rs.getInt("userID")), 
-						rs.getString("facebookID")));
+				restaurantEntries.add(new UnverifiedRestaurantEntry(rs
+						.getInt("id"), rs.getTimestamp("dateAdded"), rs
+						.getString("activityName"), rs.getString("status"),
+						image, new User(rs.getInt("userID")), rs
+								.getString("facebookID")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -418,5 +380,35 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			String userAccessToken) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void delete(FBPost fbPost) throws EntryNotFoundException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(UnverifiedFoodEntry entry) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(UnverifiedActivityEntry entry) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(UnverifiedRestaurantEntry entry) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void delete(UnverifiedSportsEstablishmentEntry entry) {
+		// TODO Auto-generated method stub
+
 	}
 }

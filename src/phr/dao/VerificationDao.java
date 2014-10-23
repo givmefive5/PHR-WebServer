@@ -29,4 +29,12 @@ public interface VerificationDao {
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken);
 
+	public void delete(UnverifiedFoodEntry entry);
+
+	public void delete(UnverifiedActivityEntry entry);
+
+	public void delete(UnverifiedRestaurantEntry entry);
+
+	public void delete(UnverifiedSportsEstablishmentEntry entry);
+
 }

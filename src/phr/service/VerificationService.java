@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import phr.exceptions.ServiceException;
-import phr.models.FBPost;
 import phr.models.UnverifiedActivityEntry;
 import phr.models.UnverifiedFoodEntry;
 import phr.models.UnverifiedRestaurantEntry;
@@ -15,8 +14,6 @@ public interface VerificationService {
 	public void updateListOfUnverifiedPosts(String userAccessToken,
 			String userFBAccessToken, Timestamp startDate)
 			throws ServiceException;
-
-	public void delete(FBPost fbPost) throws ServiceException;
 
 	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
 			String userAccessToken) throws ServiceException;
@@ -29,4 +26,12 @@ public interface VerificationService {
 
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) throws ServiceException;
+
+	public void delete(UnverifiedFoodEntry entry);
+
+	public void delete(UnverifiedActivityEntry entry);
+
+	public void delete(UnverifiedRestaurantEntry entry);
+
+	public void delete(UnverifiedSportsEstablishmentEntry entry);
 }
