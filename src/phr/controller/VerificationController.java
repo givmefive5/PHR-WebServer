@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
@@ -252,25 +253,185 @@ public class VerificationController {
 
 	@RequestMapping("verification/deleteUnverifiedFood")
 	public void deleteUnverifiedFood(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws IOException, JSONException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				UnverifiedFoodEntry food = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("objectToDelete"),
+								UnverifiedFoodEntry.class);
+				verificationService.delete(food);
 
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", null, "Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		} catch (EntryNotFoundException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"The entry to be deleted was not found in the database + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
 	}
 
 	@RequestMapping("verification/deleteUnverifiedActivity")
 	public void deleteUnverifiedActivity(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				UnverifiedActivityEntry activity = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("objectToDelete"),
+								UnverifiedActivityEntry.class);
+				verificationService.delete(activity);
 
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", null, "Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		} catch (EntryNotFoundException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"The entry to be deleted was not found in the database + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
 	}
 
 	@RequestMapping("verification/deleteUnverifiedRestaurant")
 	public void deleteUnverifiedRestaurant(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				UnverifiedRestaurantEntry restaurant = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("objectToDelete"),
+								UnverifiedRestaurantEntry.class);
+				verificationService.delete(restaurant);
 
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", null, "Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		} catch (EntryNotFoundException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"The entry to be deleted was not found in the database + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
 	}
 
 	@RequestMapping("verification/deleteUnverifiedSportsEstablishment")
 	public void deleteUnverifiedSportsEstablishment(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				UnverifiedSportsEstablishmentEntry se = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("objectToDelete"),
+								UnverifiedSportsEstablishmentEntry.class);
+				verificationService.delete(se);
 
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", null, "Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		} catch (EntryNotFoundException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"The entry to be deleted was not found in the database + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
 	}
 }

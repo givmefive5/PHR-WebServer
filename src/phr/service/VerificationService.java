@@ -3,6 +3,7 @@ package phr.service;
 import java.sql.Timestamp;
 import java.util.List;
 
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.models.UnverifiedActivityEntry;
 import phr.models.UnverifiedFoodEntry;
@@ -27,11 +28,15 @@ public interface VerificationService {
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) throws ServiceException;
 
-	public void delete(UnverifiedFoodEntry entry);
+	public void delete(UnverifiedFoodEntry entry)
+			throws EntryNotFoundException, ServiceException;
 
-	public void delete(UnverifiedActivityEntry entry);
+	public void delete(UnverifiedActivityEntry entry)
+			throws EntryNotFoundException, ServiceException;
 
-	public void delete(UnverifiedRestaurantEntry entry);
+	public void delete(UnverifiedRestaurantEntry entry)
+			throws EntryNotFoundException, ServiceException;
 
-	public void delete(UnverifiedSportsEstablishmentEntry entry);
+	public void delete(UnverifiedSportsEstablishmentEntry entry)
+			throws EntryNotFoundException, ServiceException;
 }
