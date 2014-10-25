@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,41 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements FacebookPo
 		}
 		
 		return facebookIDList;
+	}
+
+	@Override
+	public Timestamp getLatestTimestamp(String AccessToken)
+			throws DataAccessException {
+		Timestamp latestTimestamp = null;
+		
+		try{
+			Connection conn = getConnection();
+			String query = "SELECT dateAdded FROM activitytracker UNION "
+					+ "SELECT dateAdded FROM bloodpressuretracker UNION "
+					+ "SELECT dateAdded FROM bloodsugartracker UNION "
+					+ "SELECT dateAdded FROM checkuptracker UNION "
+					+ "SELECT dateAdded FROM foodtracker UNION "
+					+ "SELECT dateAdded FROM notestracker UNION "
+					+ "SELECT dateAdded FROM tempactivitytracker UNION "
+					+ "SELECT dateAdded FROM tempfoodtracker UNION "
+					+ "SELECT dateAdded FROM temprestaurant UNION "
+					+ "SELECT dateAdded FROM weighttracker"
+					+ "ORDER BY dateAdded DESC LIMIT 1";
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()){
+				latestTimestamp =  rs.getTimestamp("dateAdded");
+			}
+			
+		}catch(Exception e){
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return latestTimestamp;
 	}
 
 

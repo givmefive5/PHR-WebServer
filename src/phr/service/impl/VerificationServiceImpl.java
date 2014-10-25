@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.VerificationDao;
 import phr.dao.sqlimpl.VerificationDaoImpl;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.models.FBPost;
 import phr.models.UnverifiedActivityEntry;
@@ -38,8 +39,7 @@ public class VerificationServiceImpl implements VerificationService {
 					startDate, userFBAccessToken);
 
 			for (FBPost p : fbPosts) {
-				System.out
-						.println(p.getStatus() + " Class: " + p.getPostType());
+				System.out.println(p.getStatus() + " Class: " + p.getPostType());
 				System.out.println("Extracted Words: ");
 				if (p.getExtractedWords() != null)
 					for (String s : p.getExtractedWords()) {
@@ -77,8 +77,7 @@ public class VerificationServiceImpl implements VerificationService {
 	public List<UnverifiedActivityEntry> getAllUnverifiedActivityPosts(
 			String userAccessToken) throws ServiceException {
 		try {
-			return verificationDao
-					.getAllUnverifiedActivityPosts(userAccessToken);
+			return verificationDao.getAllUnverifiedActivityPosts(userAccessToken);
 		} catch (DataAccessException e) {
 			throw new ServiceException("Unable to perform action", e);
 		}
@@ -88,8 +87,7 @@ public class VerificationServiceImpl implements VerificationService {
 	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
 			String userAccessToken) throws ServiceException {
 		try {
-			return verificationDao
-					.getAllUnverifiedRestaurantPosts(userAccessToken);
+			return verificationDao.getAllUnverifiedRestaurantPosts(userAccessToken);
 		} catch (DataAccessException e) {
 			throw new ServiceException("Unable to perform action", e);
 		}
@@ -98,28 +96,51 @@ public class VerificationServiceImpl implements VerificationService {
 	@Override
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) {
-		return verificationDao
-				.getAllUnverifiedSportsEstablishmentPosts(userAccessToken);
+		return verificationDao.getAllUnverifiedSportsEstablishmentPosts(userAccessToken);
 	}
 
 	@Override
-	public void delete(UnverifiedFoodEntry entry) {
-		verificationDao.delete(entry);
+	public void delete(UnverifiedFoodEntry entry) throws ServiceException {
+	    try {
+			verificationDao.delete(entry);
+		} catch (EntryNotFoundException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting an unverified food entry", e);
+		}
 	}
 
 	@Override
-	public void delete(UnverifiedActivityEntry entry) {
-		verificationDao.delete(entry);
+	public void delete(UnverifiedActivityEntry entry) throws ServiceException {
+		try {
+			verificationDao.delete(entry);
+		} catch (EntryNotFoundException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting an unverified activity entry", e);
+		}
 	}
 
 	@Override
-	public void delete(UnverifiedRestaurantEntry entry) {
-		verificationDao.delete(entry);
+	public void delete(UnverifiedRestaurantEntry entry) throws ServiceException {
+		try {
+			verificationDao.delete(entry);
+		} catch (EntryNotFoundException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting an unverified restaurant entry", e);
+		}
 	}
 
 	@Override
-	public void delete(UnverifiedSportsEstablishmentEntry entry) {
-		verificationDao.delete(entry);
+	public void delete(UnverifiedSportsEstablishmentEntry entry) throws ServiceException {
+		try {
+			verificationDao.delete(entry);
+		} catch (EntryNotFoundException e) {
+			e.printStackTrace();
+			throw new ServiceException(
+					"Error has occurred while deleting an unverified entry", e);
+		}
 	}
 
 }

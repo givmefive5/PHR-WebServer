@@ -15,8 +15,6 @@ public interface VerificationDao {
 	public void addNewUnverifiedPosts(String userAccessToken,
 			List<FBPost> newFbPosts) throws DataAccessException;
 
-	public void delete(FBPost fbPost) throws EntryNotFoundException;
-
 	public List<UnverifiedFoodEntry> getAllUnverifiedFoodPosts(
 			String userAccessToken) throws DataAccessException;
 
@@ -29,12 +27,12 @@ public interface VerificationDao {
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken);
 
-	public void delete(UnverifiedFoodEntry entry);
+	public void delete(UnverifiedFoodEntry entry) throws EntryNotFoundException;
 
-	public void delete(UnverifiedActivityEntry entry);
+	public void delete(UnverifiedActivityEntry entry) throws EntryNotFoundException;
 
-	public void delete(UnverifiedRestaurantEntry entry);
+	public void delete(UnverifiedRestaurantEntry entry) throws EntryNotFoundException;
 
-	public void delete(UnverifiedSportsEstablishmentEntry entry);
+	public void delete(UnverifiedSportsEstablishmentEntry entry) throws EntryNotFoundException;
 
 }

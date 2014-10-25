@@ -93,10 +93,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					fbPost.getTimestamp(),
 					extractedWord,
 					ONE_HOUR,
-					(activityDao.getActivityMET(extractedWord)
-							* WeightConverter.convertKgToLbs(weightTrackerDao
-									.getLatestWeight(userAccessToken)
-									.getWeightInPounds()) * ONE_HOUR),
+					(activityDao.getActivityMET(extractedWord) 
+							* WeightConverter.convertKgToLbs(weightTrackerDao.getLatestWeight(userAccessToken).getWeightInPounds()) * ONE_HOUR),
 					fbPost.getStatus(),
 					fbPost.getImage(),
 					new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
@@ -111,8 +109,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				pstmt = conn.prepareStatement(query);
 				pstmt.setString(1, unverifiedActivityEntry.getActivityName());
 				pstmt.setInt(2, unverifiedActivityEntry.getDurationInSeconds());
-				pstmt.setDouble(3,
-						unverifiedActivityEntry.getCalorieBurnedPerHour());
+				pstmt.setDouble(3, unverifiedActivityEntry.getCalorieBurnedPerHour());
 				pstmt.setTimestamp(4, unverifiedActivityEntry.getTimestamp());
 				pstmt.setString(5, unverifiedActivityEntry.getStatus());
 				pstmt.setInt(6, unverifiedActivityEntry.getUser().getId());
@@ -158,8 +155,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
-				pstmt.setString(1,
-						unverifiedRestaurantEntry.getRestaurantName());
+				pstmt.setString(1, unverifiedRestaurantEntry.getRestaurantName());
 				pstmt.setTimestamp(2, unverifiedRestaurantEntry.getTimestamp());
 				pstmt.setString(3, unverifiedRestaurantEntry.getStatus());
 				pstmt.setInt(4, unverifiedRestaurantEntry.getUser().getId());
@@ -378,37 +374,79 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 	@Override
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
-	public void delete(FBPost fbPost) throws EntryNotFoundException {
-		// TODO Auto-generated method stub
+	public void delete(UnverifiedFoodEntry entry) throws EntryNotFoundException {
+		try {
+			Connection conn = getConnection();
+			String query = "DELETE FROM tempfoodtrcker WHERE id = ?";
 
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, entry.getEntryID());
+
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
+		}
 	}
 
 	@Override
-	public void delete(UnverifiedFoodEntry entry) {
-		// TODO Auto-generated method stub
+	public void delete(UnverifiedActivityEntry entry) throws EntryNotFoundException {
+		try {
+			Connection conn = getConnection();
+			String query = "DELETE FROM tempactivitytracker WHERE id = ?";
 
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, entry.getEntryID());
+
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
+		}
 	}
 
 	@Override
-	public void delete(UnverifiedActivityEntry entry) {
-		// TODO Auto-generated method stub
+	public void delete(UnverifiedRestaurantEntry entry) throws EntryNotFoundException {
+		try {
+			Connection conn = getConnection();
+			String query = "DELETE FROM temprestaurant WHERE id = ?";
 
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, entry.getEntryID());
+
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
+		}
 	}
 
 	@Override
-	public void delete(UnverifiedRestaurantEntry entry) {
-		// TODO Auto-generated method stub
+	public void delete(UnverifiedSportsEstablishmentEntry entry) throws EntryNotFoundException {
+		try {
+			Connection conn = getConnection();
+			String query = "DELETE FROM tempactivitytracker WHERE id = ?";
 
-	}
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			//pstmt.setInt(1, entry.getEntryID());
 
-	@Override
-	public void delete(UnverifiedSportsEstablishmentEntry entry) {
-		// TODO Auto-generated method stub
+			pstmt.executeUpdate();
 
+		} catch (Exception e) {
+			throw new EntryNotFoundException(
+					"Object ID not found in the database", e);
+		}
 	}
 }
