@@ -217,4 +217,10 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void edit(User user) {
+		// TODO Auto-generated method stub
+
+	}
 }

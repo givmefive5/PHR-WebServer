@@ -22,9 +22,7 @@ public class KeywordsExtractor {
 
 		List<String> extractedWords;
 		try {
-			System.out.println(message + " OLD");
 			message = cleanMessage(message, foodCorpus);
-			System.out.println(message + " NEW");
 			extractedWords = filter.findMatches(message, foodCorpus);
 		} catch (InterruptedException e) {
 			throw new DataAccessException(
@@ -41,9 +39,7 @@ public class KeywordsExtractor {
 
 		List<String> extractedWords;
 		try {
-			System.out.println(message + " OLD");
 			message = cleanMessage(message, restaurantCorpus);
-			System.out.println(message + " NEW");
 			extractedWords = filter.findMatches(message, restaurantCorpus);
 		} catch (InterruptedException e) {
 			throw new DataAccessException(

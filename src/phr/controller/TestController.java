@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -36,12 +40,14 @@ public class TestController {
 	public void test(@RequestParam String userFBAccessToken)
 			throws SNSException, UnsupportedEncodingException,
 			ClientProtocolException, GeneralSecurityException, IOException,
-			JSONException {
+			JSONException, ParseException {
 
 		VerificationService verification = new VerificationServiceImpl();
 		try {
-			Timestamp startDate = new Timestamp(0);
-			System.out.println("Hey hey");
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			Date date = dateFormat.parse("25/10/2013");
+			long time = date.getTime();
+			Timestamp startDate = new Timestamp(time);
 			verification.updateListOfUnverifiedPosts(
 					"4e443873-82b1-428a-b8e6-3cf4c3e1378e", userFBAccessToken,
 					startDate);

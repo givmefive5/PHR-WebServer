@@ -79,4 +79,9 @@ public class UserServiceImpl implements UserService {
 		return userDao.getUserGivenAccessToken(accessToken);
 	}
 
+	@Override
+	public void edit(User user) {
+		userDao.edit(user);
+	}
+
 }
