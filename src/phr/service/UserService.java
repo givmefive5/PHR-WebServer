@@ -19,6 +19,9 @@ public interface UserService {
 	public boolean isValidAccessToken(String accessToken, String username)
 			throws UserServiceException;
 
-	public int getUserIDGivenAccessToken();
+	public boolean usernameAlreadyExists(String username)
+			throws UserServiceException;
 
+	public User getUserGivenAccessToken(String accessToken)
+			throws UserServiceException;
 }

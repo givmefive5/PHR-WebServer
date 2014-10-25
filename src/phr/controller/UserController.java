@@ -115,4 +115,72 @@ public class UserController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
+
+	@RequestMapping(value = "user/checkIfUsernameExists")
+	public void checkIfUsernameExists(HttpServletRequest request,
+			HttpServletResponse response) throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			JSONObject data = JSONParser.getData(json);
+			String username = data.getString("username");
+			boolean exists = userService.usernameAlreadyExists(username);
+
+			JSONObject dataJSON = new JSONObject();
+			dataJSON.put("exists", exists);
+			jsonResponse = JSONResponseCreator.createJSONResponse("success",
+					dataJSON, null);
+
+		} catch (JSONException | JSONConverterException | UserServiceException e) {
+			e.printStackTrace();
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
+
+	@RequestMapping(value = "user/get")
+	public void get(HttpServletRequest request, HttpServletResponse response)
+			throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				User user = userService.getUserGivenAccessToken(accessToken);
+
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("user",
+						GSONConverter.convertObjectToJSON(user));
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", dataForResponse,
+						"Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | JSONConverterException | UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
 }

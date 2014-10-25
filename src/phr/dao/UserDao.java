@@ -23,4 +23,8 @@ public interface UserDao {
 	public Integer getUserIDGivenAccessToken(String userAccessToken)
 			throws DataAccessException;
 
+	public boolean usernameAlreadyExists(String username)
+			throws DataAccessException;
+
+	public User getUserGivenAccessToken(String accessToken);
 }

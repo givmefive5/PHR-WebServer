@@ -97,7 +97,8 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 
 	}
 
-	private boolean usernameAlreadyExists(String username)
+	@Override
+	public boolean usernameAlreadyExists(String username)
 			throws DataAccessException {
 
 		int count = 0;
@@ -209,5 +210,11 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			throw new DataAccessException(
 					"Error in db fetching user access token", e);
 		}
+	}
+
+	@Override
+	public User getUserGivenAccessToken(String accessToken) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

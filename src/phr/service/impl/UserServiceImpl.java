@@ -64,9 +64,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int getUserIDGivenAccessToken() {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean usernameAlreadyExists(String username)
+			throws UserServiceException {
+		try {
+			return userDao.usernameAlreadyExists(username);
+		} catch (DataAccessException e) {
+			throw new UserServiceException("Error", e);
+		}
+	}
+
+	@Override
+	public User getUserGivenAccessToken(String accessToken)
+			throws UserServiceException {
+		return userDao.getUserGivenAccessToken(accessToken);
 	}
 
 }
