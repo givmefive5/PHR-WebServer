@@ -95,8 +95,13 @@ public class VerificationServiceImpl implements VerificationService {
 
 	@Override
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
-			String userAccessToken) {
-		return verificationDao.getAllUnverifiedSportsEstablishmentPosts(userAccessToken);
+			String userAccessToken) throws ServiceException {
+		try {
+			return verificationDao.getAllUnverifiedSportsEstablishmentPosts(userAccessToken);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new ServiceException("Unable to perform action", e);
+		}
 	}
 
 	@Override
