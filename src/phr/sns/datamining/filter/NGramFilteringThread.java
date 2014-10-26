@@ -1,20 +1,29 @@
 package phr.sns.datamining.filter;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 public class NGramFilteringThread extends Thread {
 
-	private List<String> corpus;
+	private final HashMap<String, String> corpus;
 	private String message;
-	private HashSet<String> foundWords;
-	private int nStart;
-	private int nEnd;
+	private final HashSet<String> foundWords;
+	private final int nStart;
+	private final int nEnd;
 
-	public NGramFilteringThread(List<String> corpus2, String message,
+	private HashMap<String, String> makeHashMapForCorpus(List<String> corpus) {
+		HashMap<String, String> corpusHashMap = new HashMap<>();
+		for (String c : corpus) {
+			corpusHashMap.put(Assist.onlyLettersDigitsAndSpaces(c), c);
+		}
+		return corpusHashMap;
+	}
+
+	public NGramFilteringThread(List<String> corpus, String message,
 			int nStart, int nEnd) {
 		foundWords = new HashSet<>();
-		this.corpus = corpus2;
+		this.corpus = makeHashMapForCorpus(corpus);
 		this.message = message;
 		this.nStart = nStart;
 		this.nEnd = nEnd;
@@ -22,18 +31,17 @@ public class NGramFilteringThread extends Thread {
 
 	@Override
 	public void run() {
-		String[] words = message.split(" ");
 		List<String> ngramList;
 		for (int n = nEnd; n >= nStart; n--) {
 			ngramList = Assist.createNGrams(n, message);
-			for (String corpusWord : corpus)
-				for (String ngram : ngramList)
-					if (Assist.onlyLettersDigitsAndSpaces(corpusWord).equals(
-							Assist.onlyLettersDigitsAndSpaces(ngram))) {
-						foundWords.add(corpusWord);
-						message = message.replace(ngram, "*");
-						message = message.replaceAll("[*][ *][ *]*", "* ");
-					}
+			for (String ngram : ngramList) {
+				String cleaned = Assist.onlyLettersDigitsAndSpaces(ngram);
+				if (corpus.get(cleaned) != null) {
+					foundWords.add(corpus.get(cleaned));
+					message = message.replace(ngram, "*");
+					message = message.replaceAll("[*][ *][ *]*", "* ");
+				}
+			}
 		}
 	}
 
