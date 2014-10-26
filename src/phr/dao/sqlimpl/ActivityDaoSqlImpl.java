@@ -19,34 +19,46 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	@Override
 	public int addReturnEntryID(Activity activity)
 			throws DataAccessException {
-
-		try {
-			Connection conn = getConnection();
-			String query = "INSERT INTO activitylist(name, MET, countUsed) VALUES (?, ?, ?)";
-			PreparedStatement pstmt;
-
-			pstmt = conn.prepareStatement(query,
-					Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, activity.getName());
-			pstmt.setDouble(2, activity.getMET());
-			pstmt.setInt(3, 0);
-
-			pstmt.executeUpdate();
-
-			ResultSet rs = pstmt.getGeneratedKeys();
-
-			int entryID = -1;
-			if (rs.next())
-				entryID = rs.getInt(1);
-
-			return entryID;
-
-		} catch (Exception e) {
-			throw new DataAccessException(
-					"An error has occured while trying to access data from the database",
-					e);
+		
+		
+		if(activity.getEntryID()!= null){
+			incrementCountUsed(activity);
+			return activity.getEntryID();
 		}
+		int entryID = ActivityEntryExistsReturnEntryID(activity);
+		if (entryID != -1) {
+			
+			incrementCountUsed(activity);
+			
+			return entryID;
+		} else {
 
+			try {
+				Connection conn = getConnection();
+				String query = "INSERT INTO activitylist(name, MET, countUsed) VALUES (?, ?, ?)";
+				PreparedStatement pstmt;
+	
+				pstmt = conn.prepareStatement(query,
+						Statement.RETURN_GENERATED_KEYS);
+				pstmt.setString(1, activity.getName());
+				pstmt.setDouble(2, activity.getMET());
+				pstmt.setInt(3, 0);
+	
+				pstmt.executeUpdate();
+	
+				ResultSet rs = pstmt.getGeneratedKeys();
+	
+				if (rs.next())
+					entryID = rs.getInt(1);
+	
+				return entryID;
+	
+			} catch (Exception e) {
+				throw new DataAccessException(
+						"An error has occured while trying to access data from the database",
+						e);
+			}
+		}
 	}
 
 	@Override
@@ -157,8 +169,30 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	@Override
 	public int ActivityEntryExistsReturnEntryID(Activity activity)
 			throws DataAccessException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM activitylist WHERE "
+					+ "name = ?, MET = ?, countUsed = ? ";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt.setString(1, activity.getName());
+			pstmt.setDouble(2, activity.getMET());
+			pstmt.setInt(3, activity.getCountUsed());
+			
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+			int entryID = -1;
+			if (rs.next())
+				entryID = rs.getInt(1);
+
+			return entryID;
+
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 	}
 
 	@Override

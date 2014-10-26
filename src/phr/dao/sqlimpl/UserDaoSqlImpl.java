@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import org.springframework.stereotype.Repository;
 
 import phr.dao.UserDao;
+import phr.dao.WeightTrackerDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.models.User;
@@ -15,6 +16,8 @@ import phr.tools.Hasher;
 
 @Repository("userDao")
 public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
+	
+	WeightTrackerDao weightDao = new WeightTrackerDaoSqlImpl();
 
 	@Override
 	public boolean isValidUser(User user) throws DataAccessException {
@@ -71,7 +74,6 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	@Override
 	public void addUser(User user) throws UsernameAlreadyExistsException,
 			DataAccessException {
-		// TODO Auto-generated method stub
 		if (usernameAlreadyExists(user.getUsername()))
 			throw new UsernameAlreadyExistsException(
 					"Username already exists, cannot perform registration successfully");
@@ -213,9 +215,43 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	}
 
 	@Override
-	public User getUserGivenAccessToken(String accessToken) {
-		// TODO Auto-generated method stub
-		return null;
+	public User getUserGivenAccessToken(String accessToken) throws DataAccessException {
+		
+		User user = null;
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM useraccountandinfo WHERE userAccessToken = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, accessToken);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				user = new User(
+						rs.getInt("userID"),
+						rs.getString("username"),
+						rs.getString("password"),
+						(rs.getString("firstName") + " " + rs.getString("middleName") + " " + rs.getString("lastName")),
+						rs.getString("birthdate"),
+						rs.getString("gender"),
+						rs.getDouble("heightInInches"),
+						weightDao.getLatestWeight(accessToken).getWeightInPounds(),
+						rs.getString("contactNumber"),
+						rs.getString("emailAddress"),
+						rs.getString(""),
+						rs.getString(""),
+						rs.getString(""),
+						rs.getString(""));
+			}
+			
+			return user;
+
+		} catch (SQLException e) {
+			throw new DataAccessException(
+					"Error in db fetching user access token", e);
+		}
 	}
 
 	@Override

@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(User newUser) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -76,7 +75,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserGivenAccessToken(String accessToken)
 			throws UserServiceException {
-		return userDao.getUserGivenAccessToken(accessToken);
+		try {
+			return userDao.getUserGivenAccessToken(accessToken);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new UserServiceException("Error", e);
+		}
 	}
 
 	@Override
