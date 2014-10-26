@@ -63,8 +63,11 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				activities.add(new Activity(rs.getInt("id"), rs
-						.getString("name"), rs.getDouble("MET")));
+				activities.add(new Activity(
+						rs.getInt("id"),
+						rs.getString("name"), 
+						rs.getDouble("MET"),
+						rs.getInt("countUsed")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -118,8 +121,11 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				activities.add(new Activity(rs.getInt("id"), rs
-						.getString("name"), rs.getDouble("MET")));
+				activities.add(new Activity(
+						rs.getInt("id"),
+						rs.getString("name"), 
+						rs.getDouble("MET"),
+						rs.getInt("countUsed")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(

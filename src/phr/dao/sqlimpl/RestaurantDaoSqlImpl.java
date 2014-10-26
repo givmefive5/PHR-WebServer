@@ -31,12 +31,18 @@ public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				foods.add(new Food(rs.getInt("id"), rs.getString("name"), rs
-						.getDouble("calorie"), rs.getDouble("protein"), rs
-						.getDouble("fat"), rs.getDouble("carbohydrate"), rs
-						.getString("servingUnit"), rs.getDouble("servingSize"),
-						rs.getInt("restaurantID"), rs
-								.getBoolean("fromFatsecret")));
+				foods.add(new Food(
+						rs.getInt("id"), 
+						rs.getString("name"), 
+						rs.getDouble("calorie"), 
+						rs.getDouble("protein"), 
+						rs.getDouble("fat"), 
+						rs.getDouble("carbohydrate"), 
+						rs.getString("servingUnit"), 
+						rs.getDouble("servingSize"),
+						rs.getInt("restaurantID"), 
+						rs.getBoolean("fromFatsecret"),
+						rs.getInt("countUsed")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(

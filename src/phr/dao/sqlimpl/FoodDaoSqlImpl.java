@@ -114,22 +114,25 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, name, calorie, servingUnit, servingSize, restaurantID, fromFatsecret FROM foodList";
+			String query = "SELECT id, name, calorie, servingUnit, servingSize, restaurantID, fromFatsecret, countUsed FROM foodList";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				foods.add(new Food(rs.getInt("id"), rs.getString("name"), rs
-						.getDouble("calorie"), rs.getDouble("protein"), rs
-						.getDouble("fat"), rs.getDouble("carbohydrate"), rs
-						.getString("servingUnit"), rs.getDouble("servingSize"),
-						rs.getInt("restaurantID"), rs
-								.getBoolean("fromFatsecret")));
-			}
-			for(Food food : foods){
-				
+				foods.add(new Food(
+						rs.getInt("id"), 
+						rs.getString("name"), 
+						rs.getDouble("calorie"), 
+						rs.getDouble("protein"), 
+						rs.getDouble("fat"), 
+						rs.getDouble("carbohydrate"), 
+						rs.getString("servingUnit"), 
+						rs.getDouble("servingSize"),
+						rs.getInt("restaurantID"), 
+						rs.getBoolean("fromFatsecret"),
+						rs.getInt("countUsed")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -187,12 +190,18 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 
-				foods.add(new Food(rs.getInt("id"), rs.getString("name"), rs
-						.getDouble("calorie"), rs.getDouble("protein"), rs
-						.getDouble("fat"), rs.getDouble("carbohydrate"), rs
-						.getString("servingUnit"), rs.getDouble("servingSize"),
-						rs.getInt("restaurantID"), rs
-								.getBoolean("fromFatsecret")));
+				foods.add(new Food(
+						rs.getInt("id"), 
+						rs.getString("name"),
+						rs.getDouble("calorie"), 
+						rs.getDouble("protein"),
+						rs.getDouble("fat"), 
+						rs.getDouble("carbohydrate"), 
+						rs.getString("servingUnit"), 
+						rs.getDouble("servingSize"),
+						rs.getInt("restaurantID"), 
+						rs.getBoolean("fromFatsecret"),
+						rs.getInt("countUsed")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
