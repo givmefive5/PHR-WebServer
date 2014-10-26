@@ -71,7 +71,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				addNewActivityEntry(fbPost, userAccessToken);
 				break;
 			case SPORTS_ESTABLISHMENTS:
-				addNewSportsEstablishmentEntry(fbPost);
+				addNewSportsEstablishmentEntry(fbPost, userAccessToken);
 				break;
 			default:
 				break;
@@ -79,9 +79,50 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 		}
 	}
 
-	private void addNewSportsEstablishmentEntry(FBPost fbPost) {
-		// TODO Auto-generated method stub
+	private void addNewSportsEstablishmentEntry(FBPost fbPost, String userAccessToken) throws DataAccessException {
 
+		for (String extractedWord : fbPost.getExtractedWords()) {
+			UnverifiedSportsEstablishmentEntry unverifiedSportsEstablishmentEntry = new UnverifiedSportsEstablishmentEntry(
+					new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
+					fbPost.getFacebookId(),
+					fbPost.getTimestamp(), 
+					fbPost.getStatus(), 
+					fbPost.getImage(), 
+					extractedWord);
+
+			try {
+				Connection conn = getConnection();
+				String query = "INSERT INTO tempsportestablishment (gymName, dateAdded, status, userID, facebookID, photo) "
+						+ "VALUES (?, ?, ?, ?, ?, ?)";
+				PreparedStatement pstmt;
+
+				pstmt = conn.prepareStatement(query);
+				pstmt.setString(1,
+						unverifiedSportsEstablishmentEntry.getGymName());
+				pstmt.setTimestamp(2, unverifiedSportsEstablishmentEntry.getTimestamp());
+				pstmt.setString(3, unverifiedSportsEstablishmentEntry.getStatus());
+				pstmt.setInt(4, unverifiedSportsEstablishmentEntry.getUser().getId());
+				pstmt.setString(5, unverifiedSportsEstablishmentEntry.getFacebookID());
+
+				if (unverifiedSportsEstablishmentEntry.getImage() != null) {
+					String encodedImage = unverifiedSportsEstablishmentEntry.getImage()
+							.getEncodedImage();
+					String fileName = ImageHandler
+							.saveImage_ReturnFilePath(encodedImage);
+					unverifiedSportsEstablishmentEntry.getImage().setFileName(fileName);
+					pstmt.setString(6, unverifiedSportsEstablishmentEntry.getImage()
+							.getFileName());
+				} else
+					pstmt.setNull(6, Types.NULL);
+
+				pstmt.executeUpdate();
+
+			} catch (Exception e) {
+				throw new DataAccessException(
+						"An error has occured while trying to access data from the database",
+						e);
+			}
+		}
 	}
 
 	private void addNewActivityEntry(FBPost fbPost, String userAccessToken)
@@ -181,9 +222,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						"An error has occured while trying to access data from the database",
 						e);
 			}
-
 		}
-
 	}
 
 	private void addNewFoodVerificationEntry(FBPost fbPost, String userAccessToken) throws DataAccessException {
@@ -358,7 +397,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getTimestamp("dateAdded"),
 						rs.getString("status"), 
 						image, 
-						rs.getString("name")));
+						rs.getString("restaurantName")));
 
 			}
 		} catch (Exception e) {
@@ -372,9 +411,44 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 
 	@Override
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
-			String userAccessToken) {
+			String userAccessToken) throws DataAccessException {
 
-		return null;
+		List<UnverifiedSportsEstablishmentEntry> sportsEstablishmentsEntries = new ArrayList<UnverifiedSportsEstablishmentEntry>();
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM tempsportestablishment WHERE userID = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(userAccessToken));
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				PHRImage image = null;
+				if (rs.getString("photo") == null)
+					image = null;
+				else {
+					String encodedImage = ImageHandler
+							.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
+				}
+
+				sportsEstablishmentsEntries.add(new UnverifiedSportsEstablishmentEntry(
+						rs.getInt("id"), 
+						new User(rs.getInt("userID")), 
+						rs.getString("facebookID"), 
+						rs.getTimestamp("dateAdded"),
+						rs.getString("status"), 
+						image, 
+						rs.getString("gymName")));
+
+			}
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return sportsEstablishmentsEntries;
 	}
 
 	@Override
@@ -442,7 +516,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			// pstmt.setInt(1, entry.getEntryID());
+			pstmt.setInt(1, entry.getEntryID());
 
 			pstmt.executeUpdate();
 
