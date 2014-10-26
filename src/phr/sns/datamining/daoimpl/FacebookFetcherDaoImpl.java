@@ -109,6 +109,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 		for (Post p : feed) {
 			if (p != null) {
+				String message = p.getMessage();
+
 				Date date = p.getCreatedTime();
 				Timestamp timestamp = new Timestamp(date.getTime());
 				FBPost post;
@@ -125,7 +127,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				}
 				if (p.getMessage() != null) {
 					String[] foodWordsFound = keywordsExtractor
-							.extractFoodNames(p.getMessage());
+							.extractFoodNames(message);
 					if (foodWordsFound.length > 0) {
 						post = new FBPost(p.getId(), p.getMessage(), timestamp,
 								FBPostType.FOOD, phrImage, foodWordsFound);
@@ -133,7 +135,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						continue;
 					}
 					String[] restaurantsWordsFound = keywordsExtractor
-							.extractRestaurantNames(p.getMessage());
+							.extractRestaurantNames(message);
 					if (restaurantsWordsFound.length > 0) {
 						post = new FBPost(p.getId(), p.getMessage(), timestamp,
 								FBPostType.RESTAURANT, phrImage,
@@ -141,8 +143,12 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						posts.add(post);
 						continue;
 					}
+
+					if (p.getPlace() != null)
+						message = message + " " + p.getPlace().getName();
+
 					String[] activityWordsFound = keywordsExtractor
-							.extractActivityNames(p.getMessage());
+							.extractActivityNames(message);
 					if (activityWordsFound.length > 0) {
 						post = new FBPost(p.getId(), p.getMessage(), timestamp,
 								FBPostType.ACTIVITY, phrImage,
@@ -151,7 +157,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						continue;
 					}
 					String[] sportsEstablishmentsWordsFound = keywordsExtractor
-							.extractSportsEstablishmentsNames(p.getMessage());
+							.extractSportsEstablishmentsNames(message);
 					if (sportsEstablishmentsWordsFound.length > 0) {
 						post = new FBPost(p.getId(), p.getMessage(), timestamp,
 								FBPostType.SPORTS_ESTABLISHMENTS, phrImage,
@@ -160,7 +166,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						continue;
 					}
 
-					post = new FBPost(p.getId(), p.getMessage(), timestamp,
+					post = new FBPost(p.getId(), message, timestamp,
 							FBPostType.UNRELATED, phrImage, null);
 					posts.add(post);
 				}
