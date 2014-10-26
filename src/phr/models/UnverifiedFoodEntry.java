@@ -3,96 +3,40 @@ package phr.models;
 import java.sql.Timestamp;
 
 public class UnverifiedFoodEntry extends TrackerEntry {
-
-	String foodName;
-	Double calorie;
-	Double protein;
-	Double fat;
-	Double carbohydrate;
-	String servingUnit;
-	Double servingSize;
-
+	
+	Food food;
+	double servingCount;
+	
 	public UnverifiedFoodEntry(Integer entryID, User user, String facebookID,
-			Timestamp timestamp, String status, PHRImage image,
-			String foodName, Double calorie, Double protein, Double fat,
-			Double carbohydrate, String servingUnit, Double servingSize) {
+			Timestamp timestamp, String status, PHRImage image, Food food,
+			double servingCount) {
 		super(entryID, user, facebookID, timestamp, status, image);
-		this.foodName = foodName;
-		this.calorie = calorie;
-		this.protein = protein;
-		this.fat = fat;
-		this.carbohydrate = carbohydrate;
-		this.servingUnit = servingUnit;
-		this.servingSize = servingSize;
+		this.food = food;
+		this.servingCount = servingCount;
 	}
 
 	public UnverifiedFoodEntry(User user, String facebookID,
-			Timestamp timestamp, String status, PHRImage image,
-			String foodName, Double calorie, Double protein, Double fat,
-			Double carbohydrate, String servingUnit, Double servingSize) {
+			Timestamp timestamp, String status, PHRImage image, Food food,
+			double servingCount) {
 		super(user, facebookID, timestamp, status, image);
-		this.foodName = foodName;
-		this.calorie = calorie;
-		this.protein = protein;
-		this.fat = fat;
-		this.carbohydrate = carbohydrate;
-		this.servingUnit = servingUnit;
-		this.servingSize = servingSize;
+		this.food = food;
+		this.servingCount = servingCount;
 	}
 
-	public String getFoodName() {
-		return foodName;
+	public Food getFood() {
+		return food;
 	}
 
-	public void setFoodName(String foodName) {
-		this.foodName = foodName;
+	public void setFood(Food food) {
+		this.food = food;
 	}
 
-	public Double getCalorie() {
-		return calorie;
+	public double getServingCount() {
+		return servingCount;
 	}
 
-	public void setCalorie(Double calorie) {
-		this.calorie = calorie;
+	public void setServingCount(double servingCount) {
+		this.servingCount = servingCount;
 	}
-
-	public Double getProtein() {
-		return protein;
-	}
-
-	public void setProtein(Double protein) {
-		this.protein = protein;
-	}
-
-	public Double getFat() {
-		return fat;
-	}
-
-	public void setFat(Double fat) {
-		this.fat = fat;
-	}
-
-	public Double getCarbohydrate() {
-		return carbohydrate;
-	}
-
-	public void setCarbohydrate(Double carbohydrate) {
-		this.carbohydrate = carbohydrate;
-	}
-
-	public String getServingUnit() {
-		return servingUnit;
-	}
-
-	public void setServingUnit(String servingUnit) {
-		this.servingUnit = servingUnit;
-	}
-
-	public Double getServingSize() {
-		return servingSize;
-	}
-
-	public void setServingSize(Double servingSize) {
-		this.servingSize = servingSize;
-	}
+	
 }

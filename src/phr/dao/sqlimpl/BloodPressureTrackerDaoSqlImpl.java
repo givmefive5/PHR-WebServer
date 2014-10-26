@@ -16,7 +16,6 @@ import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
 import phr.models.BloodPressure;
-import phr.models.FBPost;
 import phr.models.PHRImage;
 import phr.models.PHRImageType;
 import phr.tools.ImageHandler;

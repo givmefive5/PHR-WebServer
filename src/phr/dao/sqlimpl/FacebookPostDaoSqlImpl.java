@@ -3,15 +3,17 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import phr.dao.FacebookPostDao;
+import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 
 public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements FacebookPostDao {
+	
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public List<String> getAllFacebookID(String accessToken) throws DataAccessException {
@@ -29,9 +31,11 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements FacebookPo
 					+ "SELECT facebookID FROM tempactivitytracker UNION "
 					+ "SELECT facebookID FROM tempfoodtracker UNION "
 					+ "SELECT facebookID FROM temprestaurant UNION "
-					+ "SELECT facebookID FROM weighttracker";
+					+ "SELECT facebookID FROM weighttracker "
+					+ "WHERE userID = ?";
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(accessToken));
 			
 			ResultSet rs = pstmt.executeQuery();
 			
@@ -49,8 +53,7 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements FacebookPo
 	}
 
 	@Override
-	public Timestamp getLatestTimestamp(String AccessToken)
-			throws DataAccessException {
+	public Timestamp getLatestTimestamp(String accessToken) throws DataAccessException {
 		Timestamp latestTimestamp = null;
 		
 		try{
@@ -64,10 +67,12 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements FacebookPo
 					+ "SELECT dateAdded FROM tempactivitytracker UNION "
 					+ "SELECT dateAdded FROM tempfoodtracker UNION "
 					+ "SELECT dateAdded FROM temprestaurant UNION "
-					+ "SELECT dateAdded FROM weighttracker"
+					+ "SELECT dateAdded FROM weighttracker "
+					+ "WHERE userID = ? "
 					+ "ORDER BY dateAdded DESC LIMIT 1";
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(accessToken));
 			
 			ResultSet rs = pstmt.executeQuery();
 			

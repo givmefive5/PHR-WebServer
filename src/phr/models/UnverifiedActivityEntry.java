@@ -3,37 +3,37 @@ package phr.models;
 import java.sql.Timestamp;
 
 public class UnverifiedActivityEntry extends TrackerEntry {
-
-	String activityName;
+	
+	Activity activity;
 	int durationInSeconds;
 	Double calorieBurnedPerHour;
-
+	
 	public UnverifiedActivityEntry(Integer entryID, User user,
 			String facebookID, Timestamp timestamp, String status,
-			PHRImage image, String activityName, int durationInSeconds,
+			PHRImage image, Activity activity, int durationInSeconds,
 			Double calorieBurnedPerHour) {
 		super(entryID, user, facebookID, timestamp, status, image);
-		this.activityName = activityName;
+		this.activity = activity;
 		this.durationInSeconds = durationInSeconds;
 		this.calorieBurnedPerHour = calorieBurnedPerHour;
 	}
 
 	public UnverifiedActivityEntry(User user, String facebookID,
 			Timestamp timestamp, String status, PHRImage image,
-			String activityName, int durationInSeconds,
+			Activity activity, int durationInSeconds,
 			Double calorieBurnedPerHour) {
 		super(user, facebookID, timestamp, status, image);
-		this.activityName = activityName;
+		this.activity = activity;
 		this.durationInSeconds = durationInSeconds;
 		this.calorieBurnedPerHour = calorieBurnedPerHour;
 	}
 
-	public String getActivityName() {
-		return activityName;
+	public Activity getActivity() {
+		return activity;
 	}
 
-	public void setActivityName(String activityName) {
-		this.activityName = activityName;
+	public void setActivity(Activity activity) {
+		this.activity = activity;
 	}
 
 	public int getDurationInSeconds() {
@@ -51,5 +51,5 @@ public class UnverifiedActivityEntry extends TrackerEntry {
 	public void setCalorieBurnedPerHour(Double calorieBurnedPerHour) {
 		this.calorieBurnedPerHour = calorieBurnedPerHour;
 	}
-
+	
 }
