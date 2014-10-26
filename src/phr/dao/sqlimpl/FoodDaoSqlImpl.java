@@ -23,8 +23,12 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 	public int addReturnEntryID(Food food) throws DataAccessException {
 		
-		int entryID = foodEntryExists(food);
 		
+		if(food.getEntryID()!= null){
+			incrementCountUsed(food);
+			return food.getEntryID();
+		}
+		int entryID = foodEntryExists(food);
 		if (entryID != -1) {
 			
 			incrementCountUsed(food);
