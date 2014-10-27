@@ -11,6 +11,11 @@ public class Restaurant {
 		this.name = name;
 	}
 
+	public Restaurant(int entryID) {
+		super();
+		this.entryID = entryID;
+	}
+
 	public Integer getEntryID() {
 		return entryID;
 	}

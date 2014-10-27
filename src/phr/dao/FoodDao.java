@@ -16,6 +16,9 @@ public interface FoodDao {
 	public Food getFood(int entryID) throws DataAccessException;
 
 	public List<Food> search(String searchQuery) throws DataAccessException;
-
+	
+	public List<Food> getFoodGivenRestaurantName(String restaurantName) throws DataAccessException;
+    
+	public Integer getRestaurantID(String restaurantName) throws DataAccessException;
 
 }

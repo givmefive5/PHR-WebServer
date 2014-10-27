@@ -18,5 +18,8 @@ public interface ActivityDao {
 	public int ActivityEntryExistsReturnEntryID(Activity activity) throws DataAccessException;
 	
 	public List<Activity> search(String serachQuery) throws DataAccessException;
+	
+	public List<Activity> getActivityGivenGymName(String gymName) throws DataAccessException;
 
+	public Integer getActivityID(String activityName) throws DataAccessException;
 }

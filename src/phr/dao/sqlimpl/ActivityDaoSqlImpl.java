@@ -17,9 +17,7 @@ import phr.models.Activity;
 public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 	@Override
-	public int addReturnEntryID(Activity activity)
-			throws DataAccessException {
-		
+	public int addReturnEntryID(Activity activity) throws DataAccessException {
 		
 		if(activity.getEntryID()!= null){
 			incrementCountUsed(activity);
@@ -220,6 +218,55 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		}
 
 		return MET;
+	}
+
+	@Override
+	public List<Activity> getActivityGivenGymName(String gymName) throws DataAccessException {
+		
+		List<Activity> activities = new ArrayList<Activity>();
+
+		try {
+			Connection conn = getConnection();
+			String query = "";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, gymName);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				
+			}
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return activities;
+	}
+
+	@Override
+	public Integer getActivityID(String activityName) throws DataAccessException {
+
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id FROM activityList WHERE name = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, activityName);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next())
+				return rs.getInt(1);
+			else
+				return null;
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 	}
 
 }

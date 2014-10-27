@@ -12,6 +12,12 @@ public class SportEstablishment {
 	}
 
 
+	public SportEstablishment(int entryID) {
+		super();
+		this.entryID = entryID;
+	}
+
+
 	public Integer getEntryID() {
 		return entryID;
 	}

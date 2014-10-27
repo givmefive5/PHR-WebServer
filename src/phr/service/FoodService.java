@@ -12,6 +12,8 @@ public interface FoodService {
 	public int addReturnEntryID(Food food) throws ServiceException;
 
 	public List<Food> getAll() throws ServiceException;
+	
+	public List<Food> getFoodGivenRestaurantName(String restaurantName) throws ServiceException;
 
 
 }

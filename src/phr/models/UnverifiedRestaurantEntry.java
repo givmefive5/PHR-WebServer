@@ -1,31 +1,54 @@
 package phr.models;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class UnverifiedRestaurantEntry extends TrackerEntry {
 
-	String restaurantName;
+	String extractedWord;
+	Restaurant restaurant;
+	List<Food> foods;
 
 	public UnverifiedRestaurantEntry(Integer entryID, User user,
 			String facebookID, Timestamp timestamp, String status,
-			PHRImage image, String restaurantName) {
+			PHRImage image, String extractedWord, Restaurant restaurant, List<Food> foods) {
 		super(entryID, user, facebookID, timestamp, status, image);
-		this.restaurantName = restaurantName;
+		this.extractedWord = extractedWord;
+		this.restaurant = restaurant;
+		this.foods = foods;
 	}
 
 	public UnverifiedRestaurantEntry(User user, String facebookID,
 			Timestamp timestamp, String status, PHRImage image,
-			String restaurantName) {
+			String extractedWord, Restaurant restaurant,  List<Food> foods) {
 		super(user, facebookID, timestamp, status, image);
-		this.restaurantName = restaurantName;
+		this.extractedWord = extractedWord;
+		this.restaurant = restaurant;
+		this.foods = foods;
 	}
 
-	public String getRestaurantName() {
-		return restaurantName;
+	public String getExtractedWord() {
+		return extractedWord;
 	}
 
-	public void setRestaurantName(String restaurantName) {
-		this.restaurantName = restaurantName;
+	public void setExtractedWord(String extractedWord) {
+		this.extractedWord = extractedWord;
+	}
+
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
+
+	public List<Food> getFoods() {
+		return foods;
+	}
+
+	public void setFoods(List<Food> foods) {
+		this.foods = foods;
 	}
 
 }

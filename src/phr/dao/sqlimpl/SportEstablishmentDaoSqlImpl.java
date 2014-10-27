@@ -3,24 +3,43 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 import phr.dao.SportEstablishmentDao;
 import phr.exceptions.DataAccessException;
-import phr.models.Activity;
-import phr.models.Food;
+import phr.models.SportEstablishment;
 
 public class SportEstablishmentDaoSqlImpl extends BaseDaoSqlImpl implements SportEstablishmentDao {
 
 	@Override
-	public List<Activity> getActivity(int gymID) throws DataAccessException {
+	public SportEstablishment getSportEstablishmentGivenGymName(String gymName) throws DataAccessException {
 		
-		List<Activity> activities = new ArrayList<Activity>();
-
-		try {
+		SportEstablishment sportEstablishment = null;
+		
+		try{
 			Connection conn = getConnection();
-			String query = "";
+			String query = "SELECT * FROM gymlist WHERE name = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, gymName);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				sportEstablishment = new SportEstablishment(rs.getInt("id"), rs.getString("name"));
+			}
+		}catch(Exception e){
+			throw new DataAccessException("An error has occured while trying to access data from the database", e);
+		}
+		return sportEstablishment;
+	}
+
+	@Override
+	public SportEstablishment getSportEstablishmentGivenGymID(int gymID) throws DataAccessException {
+		SportEstablishment sportEstablishemt = new SportEstablishment(gymID);
+		
+		try{
+			Connection conn = getConnection();
+			String query = "SELECT * FROM gymlist WHERE id = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -28,20 +47,14 @@ public class SportEstablishmentDaoSqlImpl extends BaseDaoSqlImpl implements Spor
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				
+				sportEstablishemt.setName(rs.getString("name"));
 			}
-		} catch (Exception e) {
-			throw new DataAccessException(
-					"An error has occured while trying to access data from the database",
-					e);
+		}catch(Exception e){
+			throw new DataAccessException("An error has occured while trying to access data from the database", e);
 		}
-		return activities;
+		
+		return sportEstablishemt;	
 	}
 
-	@Override
-	public Integer getGymID(String gymName) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

@@ -56,4 +56,14 @@ public class FoodServiceImpl implements FoodService {
 		}
 	}
 
+	@Override
+	public List<Food> getFoodGivenRestaurantName(String restaurantName)
+			throws ServiceException {
+		try {
+			return foodDao.getFoodGivenRestaurantName(restaurantName);
+		} catch (DataAccessException e) {
+			throw new ServiceException("An error has occurred", e);
+		}
+	}
+
 }

@@ -22,30 +22,5 @@ public class RestaurantServiceImpl implements RestaurantService {
 	
 	RestaurantDao restaurantDao = new RestaurantDaoSqlImpl();
 	
-	@Override
-	public List<Food> getFood(int restaurantID) throws ServiceException {
-		List<Food> foods = new ArrayList<Food>();
-		try {
-			foods = restaurantDao.getFood(restaurantID);
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-			throw new ServiceException(
-					"Error has occurred while getting food entries", e);
-		}
-		return foods;
-	}
-
-	@Override
-	public Integer getRestaurantID(String restaurantName)
-			throws ServiceException {
-		
-		try {
-			return restaurantDao.getRestaurantID(restaurantName);
-		} catch (DataAccessException e) {
-			e.printStackTrace();
-			throw new ServiceException(
-					"Error has occurred while getting restaurantID", e);
-		}
-	}
 
 }

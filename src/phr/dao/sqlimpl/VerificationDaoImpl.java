@@ -3,16 +3,16 @@ package phr.dao.sqlimpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import phr.dao.ActivityDao;
 import phr.dao.FoodDao;
+import phr.dao.RestaurantDao;
+import phr.dao.SportEstablishmentDao;
 import phr.dao.UserDao;
 import phr.dao.VerificationDao;
 import phr.dao.WeightTrackerDao;
@@ -34,10 +34,9 @@ import phr.tools.WeightConverter;
 @Repository("verificationDao")
 public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 		VerificationDao {
-	
+	/*
 	 @Autowired
 	 UserDao userDao;
-	/*
 	 @Autowired
 	 ActivityDao activityDao;
 	 @Autowired
@@ -46,10 +45,12 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 	 FoodDao foodDao;
 	*/
 	
-	//UserDao userDao = new UserDaoSqlImpl();
+	UserDao userDao = new UserDaoSqlImpl();
 	FoodDao foodDao = new FoodDaoSqlImpl();
 	ActivityDao activityDao = new ActivityDaoSqlImpl();
 	WeightTrackerDao weightTrackerDao = new WeightTrackerDaoSqlImpl();
+	SportEstablishmentDao sportEstablishmentDao = new SportEstablishmentDaoSqlImpl();
+	RestaurantDao restaurantDao = new RestaurantDaoSqlImpl();
 
 	final int ONE_HOUR = 3600;
 	final double ONE_SERVING = 1.0;
@@ -90,17 +91,18 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					fbPost.getTimestamp(), 
 					fbPost.getStatus(), 
 					fbPost.getImage(), 
-					extractedWord);
+					extractedWord,
+					sportEstablishmentDao.getSportEstablishmentGivenGymName(extractedWord), 
+					activityDao.getActivityGivenGymName(extractedWord));
 
 			try {
 				Connection conn = getConnection();
-				String query = "INSERT INTO tempsportestablishment (gymName, dateAdded, status, userID, facebookID, photo) "
-						+ "VALUES (?, ?, ?, ?, ?, ?)";
+				String query = "INSERT INTO tempsportestablishment (gymID, dateAdded, status, userID, facebookID, photo, extractedWord) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
-				pstmt.setString(1,
-						unverifiedSportsEstablishmentEntry.getGymName());
+				pstmt.setInt(1, unverifiedSportsEstablishmentEntry.getSportEstablishment().getEntryID());
 				pstmt.setTimestamp(2, unverifiedSportsEstablishmentEntry.getTimestamp());
 				pstmt.setString(3, unverifiedSportsEstablishmentEntry.getStatus());
 				pstmt.setInt(4, unverifiedSportsEstablishmentEntry.getUser().getId());
@@ -116,6 +118,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 							.getFileName());
 				} else
 					pstmt.setNull(6, Types.NULL);
+				
+				pstmt.setString(7, unverifiedSportsEstablishmentEntry.getExtractedWord());
 
 				pstmt.executeUpdate();
 
@@ -144,16 +148,17 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					fbPost.getImage(), 
 					activity,
 					ONE_HOUR, 
-					calories);
+					calories,
+					extractedWord);
 			
 			try {
 				Connection conn = getConnection();
-				String query = "INSERT INTO tempactivitytracker(activityName, durationInSeconds, calorieBurnedPerHour, dateAdded, status, userID, facebookID, photo) "
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+				String query = "INSERT INTO tempactivitytracker(activityID, durationInSeconds, calorieBurnedPerHour, dateAdded, status, userID, facebookID, photo, extractedWord) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
-				pstmt.setString(1, unverifiedActivityEntry.getActivity().getName());
+				pstmt.setInt(1, unverifiedActivityEntry.getActivity().getEntryID());
 				pstmt.setInt(2, unverifiedActivityEntry.getDurationInSeconds());
 				pstmt.setDouble(3,
 						unverifiedActivityEntry.getCalorieBurnedPerHour());
@@ -172,6 +177,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 							.getFileName());
 				} else
 					pstmt.setNull(8, Types.NULL);
+				
+				pstmt.setString(9, unverifiedActivityEntry.getExtractedWord());
 
 				pstmt.executeUpdate();
 
@@ -188,19 +195,24 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 
 		for (String extractedWord : fbPost.getExtractedWords()) {
 			UnverifiedRestaurantEntry unverifiedRestaurantEntry = new UnverifiedRestaurantEntry(
-					new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
-					fbPost.getFacebookId(), fbPost.getTimestamp(), fbPost
-							.getStatus(), fbPost.getImage(), extractedWord);
+					ONE_HOUR, new User(
+					userDao.getUserIDGivenAccessToken(userAccessToken)),
+					fbPost.getFacebookId(), 
+					fbPost.getTimestamp(), 
+					fbPost.getStatus(), 
+					fbPost.getImage(), 
+					extractedWord,
+					restaurantDao.getRestaurantGivenRestaurantName(extractedWord),
+					foodDao.getFoodGivenRestaurantName(extractedWord));
 
 			try {
 				Connection conn = getConnection();
-				String query = "INSERT INTO temprestaurant(restaurantName, dateAdded, status, userID, facebookID, photo) "
-						+ "VALUES (?, ?, ?, ?, ?, ?)";
+				String query = "INSERT INTO temprestaurant(restaurantID, dateAdded, status, userID, facebookID, photo, extractedWord) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
-				pstmt.setString(1,
-						unverifiedRestaurantEntry.getRestaurantName());
+				pstmt.setInt(1, unverifiedRestaurantEntry.getRestaurant().getEntryID());
 				pstmt.setTimestamp(2, unverifiedRestaurantEntry.getTimestamp());
 				pstmt.setString(3, unverifiedRestaurantEntry.getStatus());
 				pstmt.setInt(4, unverifiedRestaurantEntry.getUser().getId());
@@ -216,6 +228,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 							.getFileName());
 				} else
 					pstmt.setNull(6, Types.NULL);
+				
+				pstmt.setString(7, unverifiedRestaurantEntry.getExtractedWord());
 
 				pstmt.executeUpdate();
 
@@ -240,36 +254,32 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					fbPost.getStatus(), 
 					fbPost.getImage(), 
 					food, 
-				    ONE_SERVING);
+				    ONE_SERVING,
+				    extractedWord);
 			
 			try {
 				Connection conn = getConnection();
-				String query = "INSERT INTO tempfoodtracker(foodName, calorie, protein, fat, carbohydrate, servingUnit, servingSize, dateAdded, status, userID, facebookID, photo) "
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				String query = "INSERT INTO tempfoodtracker(foodID, servingSize, dateAdded, status, userID, facebookID, photo, extractedWord) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
-				pstmt.setString(1, unverifiedFoodEntry.getFood().getName());
-				pstmt.setDouble(2, unverifiedFoodEntry.getFood().getCalorie());
-				pstmt.setDouble(3, unverifiedFoodEntry.getFood().getProtein());
-				pstmt.setDouble(4, unverifiedFoodEntry.getFood().getFat());
-				pstmt.setDouble(5, unverifiedFoodEntry.getFood().getCarbohydrate());
-				pstmt.setString(6, unverifiedFoodEntry.getFood().getServingUnit());
-				pstmt.setDouble(7, unverifiedFoodEntry.getServingCount());
-				pstmt.setTimestamp(8, unverifiedFoodEntry.getTimestamp());
-				pstmt.setString(9, unverifiedFoodEntry.getStatus());
-				pstmt.setInt(10, unverifiedFoodEntry.getUser().getId());
-				pstmt.setString(11, unverifiedFoodEntry.getFacebookID());
+				pstmt.setInt(1, unverifiedFoodEntry.getFood().getEntryID());
+				
+				pstmt.setDouble(2, unverifiedFoodEntry.getServingCount());
+				pstmt.setTimestamp(3, unverifiedFoodEntry.getTimestamp());
+				pstmt.setString(4, unverifiedFoodEntry.getStatus());
+				pstmt.setInt(5, unverifiedFoodEntry.getUser().getId());
+				pstmt.setString(6, unverifiedFoodEntry.getFacebookID());
 				if (unverifiedFoodEntry.getImage() != null) {
-					String encodedImage = unverifiedFoodEntry.getImage()
-							.getEncodedImage();
-					String fileName = ImageHandler
-							.saveImage_ReturnFilePath(encodedImage);
+					String encodedImage = unverifiedFoodEntry.getImage().getEncodedImage();
+					String fileName = ImageHandler.saveImage_ReturnFilePath(encodedImage);
 					unverifiedFoodEntry.getImage().setFileName(fileName);
-					pstmt.setString(12, unverifiedFoodEntry.getImage()
-							.getFileName());
+					pstmt.setString(7, unverifiedFoodEntry.getImage().getFileName());
 				} else
-					pstmt.setNull(12, Types.NULL);
+					pstmt.setNull(7, Types.NULL);
+				
+				pstmt.setString(8, unverifiedFoodEntry.getExtractedWord());
 
 				pstmt.executeUpdate();
 
@@ -312,7 +322,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getString("status"), 
 						image, 
 						foodDao.getFood(rs.getInt("foodID")),
-						rs.getDouble("servingSize")));
+						rs.getDouble("servingSize"),
+						rs.getString("extractedWord")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -356,7 +367,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						image,
 						activityDao.getActivity(rs.getInt("activityID")),
 						rs.getInt("durationInSeconds"),
-						rs.getDouble("calorieBurnedPerHour")));
+						rs.getDouble("calorieBurnedPerHour"),
+						rs.getString("extractedWord")));
 
 			}
 		} catch (Exception e) {
@@ -399,7 +411,9 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getTimestamp("dateAdded"),
 						rs.getString("status"), 
 						image, 
-						rs.getString("restaurantName")));
+						rs.getString("extractedWord"), 
+						restaurantDao.getRestaurantGivenRestaurantID(rs.getInt("restaurantID")), 
+						foodDao.getFoodGivenRestaurantName("extractedWord")));
 
 			}
 		} catch (Exception e) {
@@ -442,7 +456,9 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getTimestamp("dateAdded"),
 						rs.getString("status"), 
 						image, 
-						rs.getString("gymName")));
+						rs.getString("extractedWord"),
+						sportEstablishmentDao.getSportEstablishmentGivenGymID(rs.getInt("gymID")),
+						activityDao.getActivityGivenGymName("extractedWord")));
 
 			}
 		} catch (Exception e) {
