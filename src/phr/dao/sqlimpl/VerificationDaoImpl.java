@@ -34,6 +34,7 @@ import phr.tools.WeightConverter;
 @Repository("verificationDao")
 public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 		VerificationDao {
+
 	/*
 	 @Autowired
 	 UserDao userDao;
@@ -45,6 +46,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 	 FoodDao foodDao;
 	*/
 	
+
 	UserDao userDao = new UserDaoSqlImpl();
 	FoodDao foodDao = new FoodDaoSqlImpl();
 	ActivityDao activityDao = new ActivityDaoSqlImpl();
@@ -82,7 +84,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 		}
 	}
 
-	private void addNewSportsEstablishmentEntry(FBPost fbPost, String userAccessToken) throws DataAccessException {
+	private void addNewSportsEstablishmentEntry(FBPost fbPost,
+			String userAccessToken) throws DataAccessException {
 
 		for (String extractedWord : fbPost.getExtractedWords()) {
 			UnverifiedSportsEstablishmentEntry unverifiedSportsEstablishmentEntry = new UnverifiedSportsEstablishmentEntry(
@@ -94,6 +97,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					extractedWord,
 					sportEstablishmentDao.getSportEstablishmentGivenGymName(extractedWord), 
 					activityDao.getActivityGivenGymName(extractedWord));
+					fbPost.getFacebookId(), fbPost.getTimestamp(), fbPost
+							.getStatus(), fbPost.getImage(), extractedWord);
 
 			try {
 				Connection conn = getConnection();
@@ -107,15 +112,21 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				pstmt.setString(3, unverifiedSportsEstablishmentEntry.getStatus());
 				pstmt.setInt(4, unverifiedSportsEstablishmentEntry.getUser().getId());
 				pstmt.setString(5, unverifiedSportsEstablishmentEntry.getFacebookID());
+				pstmt.setString(1,unverifiedSportsEstablishmentEntry.getGymName());
+				pstmt.setTimestamp(2,unverifiedSportsEstablishmentEntry.getTimestamp());
+				pstmt.setString(3,unverifiedSportsEstablishmentEntry.getStatus());
+				pstmt.setInt(4, unverifiedSportsEstablishmentEntry.getUser().getId());
+				pstmt.setString(5,unverifiedSportsEstablishmentEntry.getFacebookID());
 
 				if (unverifiedSportsEstablishmentEntry.getImage() != null) {
-					String encodedImage = unverifiedSportsEstablishmentEntry.getImage()
-							.getEncodedImage();
+					String encodedImage = unverifiedSportsEstablishmentEntry
+							.getImage().getEncodedImage();
 					String fileName = ImageHandler
 							.saveImage_ReturnFilePath(encodedImage);
-					unverifiedSportsEstablishmentEntry.getImage().setFileName(fileName);
-					pstmt.setString(6, unverifiedSportsEstablishmentEntry.getImage()
-							.getFileName());
+					unverifiedSportsEstablishmentEntry.getImage().setFileName(
+							fileName);
+					pstmt.setString(6, unverifiedSportsEstablishmentEntry
+							.getImage().getFileName());
 				} else
 					pstmt.setNull(6, Types.NULL);
 				
@@ -135,13 +146,15 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			throws DataAccessException {
 
 		for (String extractedWord : fbPost.extractedWords) {
-	
-			Activity activity = activityDao.search(extractedWord).get(0);		
+
+			Activity activity = activityDao.search(extractedWord).get(0);
 			Double calories = (activityDao.getActivityMET(extractedWord)
-					* WeightConverter.convertKgToLbs(
-				    weightTrackerDao.getLatestWeight(userAccessToken).getWeightInPounds()) * ONE_HOUR);
+					* WeightConverter.convertKgToLbs(weightTrackerDao
+							.getLatestWeight(userAccessToken)
+							.getWeightInPounds()) * ONE_HOUR);
 			UnverifiedActivityEntry unverifiedActivityEntry = new UnverifiedActivityEntry(
 					new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
+<<<<<<< HEAD
 					fbPost.getFacebookId(),
 					fbPost.getTimestamp(), 
 					fbPost.getStatus(), 
@@ -151,6 +164,12 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					calories,
 					extractedWord);
 			
+=======
+					fbPost.getFacebookId(), fbPost.getTimestamp(), fbPost
+							.getStatus(), fbPost.getImage(), activity,
+					ONE_HOUR, calories);
+
+>>>>>>> origin/master
 			try {
 				Connection conn = getConnection();
 				String query = "INSERT INTO tempactivitytracker(activityID, durationInSeconds, calorieBurnedPerHour, dateAdded, status, userID, facebookID, photo, extractedWord) "
@@ -158,7 +177,12 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
+<<<<<<< HEAD
 				pstmt.setInt(1, unverifiedActivityEntry.getActivity().getEntryID());
+=======
+				pstmt.setString(1, unverifiedActivityEntry.getActivity()
+						.getName());
+>>>>>>> origin/master
 				pstmt.setInt(2, unverifiedActivityEntry.getDurationInSeconds());
 				pstmt.setDouble(3,
 						unverifiedActivityEntry.getCalorieBurnedPerHour());
@@ -241,7 +265,8 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 		}
 	}
 
-	private void addNewFoodVerificationEntry(FBPost fbPost, String userAccessToken) throws DataAccessException {
+	private void addNewFoodVerificationEntry(FBPost fbPost,
+			String userAccessToken) throws DataAccessException {
 
 		for (String extractedWord : fbPost.getExtractedWords()) {
 
@@ -249,6 +274,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 
 			UnverifiedFoodEntry unverifiedFoodEntry = new UnverifiedFoodEntry(
 					new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
+<<<<<<< HEAD
 					fbPost.getFacebookId(), 
 					fbPost.getTimestamp(), 
 					fbPost.getStatus(), 
@@ -257,6 +283,11 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				    ONE_SERVING,
 				    extractedWord);
 			
+=======
+					fbPost.getFacebookId(), fbPost.getTimestamp(), fbPost
+							.getStatus(), fbPost.getImage(), food, ONE_SERVING);
+
+>>>>>>> origin/master
 			try {
 				Connection conn = getConnection();
 				String query = "INSERT INTO tempfoodtracker(foodID, servingSize, dateAdded, status, userID, facebookID, photo, extractedWord) "
@@ -264,6 +295,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				PreparedStatement pstmt;
 
 				pstmt = conn.prepareStatement(query);
+<<<<<<< HEAD
 				pstmt.setInt(1, unverifiedFoodEntry.getFood().getEntryID());
 				
 				pstmt.setDouble(2, unverifiedFoodEntry.getServingCount());
@@ -271,6 +303,21 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				pstmt.setString(4, unverifiedFoodEntry.getStatus());
 				pstmt.setInt(5, unverifiedFoodEntry.getUser().getId());
 				pstmt.setString(6, unverifiedFoodEntry.getFacebookID());
+=======
+				pstmt.setString(1, unverifiedFoodEntry.getFood().getName());
+				pstmt.setDouble(2, unverifiedFoodEntry.getFood().getCalorie());
+				pstmt.setDouble(3, unverifiedFoodEntry.getFood().getProtein());
+				pstmt.setDouble(4, unverifiedFoodEntry.getFood().getFat());
+				pstmt.setDouble(5, unverifiedFoodEntry.getFood()
+						.getCarbohydrate());
+				pstmt.setString(6, unverifiedFoodEntry.getFood()
+						.getServingUnit());
+				pstmt.setDouble(7, unverifiedFoodEntry.getServingCount());
+				pstmt.setTimestamp(8, unverifiedFoodEntry.getTimestamp());
+				pstmt.setString(9, unverifiedFoodEntry.getStatus());
+				pstmt.setInt(10, unverifiedFoodEntry.getUser().getId());
+				pstmt.setString(11, unverifiedFoodEntry.getFacebookID());
+>>>>>>> origin/master
 				if (unverifiedFoodEntry.getImage() != null) {
 					String encodedImage = unverifiedFoodEntry.getImage().getEncodedImage();
 					String fileName = ImageHandler.saveImage_ReturnFilePath(encodedImage);
@@ -314,6 +361,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 							.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
+<<<<<<< HEAD
 				foodEntries.add(new UnverifiedFoodEntry(
 						rs.getInt("id"),
 						new User(rs.getInt("userID")), 
@@ -324,6 +372,15 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						foodDao.getFood(rs.getInt("foodID")),
 						rs.getDouble("servingSize"),
 						rs.getString("extractedWord")));
+=======
+				foodEntries
+						.add(new UnverifiedFoodEntry(rs.getInt("id"), new User(
+								rs.getInt("userID")), rs
+								.getString("facebookID"), rs
+								.getTimestamp("dateAdded"), rs
+								.getString("status"), image, foodDao.getFood(rs
+								.getInt("foodID")), rs.getDouble("servingSize")));
+>>>>>>> origin/master
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -359,6 +416,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				}
 
 				activityEntries.add(new UnverifiedActivityEntry(
+<<<<<<< HEAD
 						rs.getInt("id"),
 						new User(rs.getInt("userID")), 
 						rs.getString("facebookID"), 
@@ -369,6 +427,15 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getInt("durationInSeconds"),
 						rs.getDouble("calorieBurnedPerHour"),
 						rs.getString("extractedWord")));
+=======
+						rs.getInt("id"), new User(rs.getInt("userID")), rs
+								.getString("facebookID"), rs
+								.getTimestamp("dateAdded"), rs
+								.getString("status"), image, activityDao
+								.getActivity(rs.getInt("activityID")), rs
+								.getInt("durationInSeconds"), rs
+								.getDouble("calorieBurnedPerHour")));
+>>>>>>> origin/master
 
 			}
 		} catch (Exception e) {
@@ -404,6 +471,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 
+<<<<<<< HEAD
 				restaurantEntries.add(new UnverifiedRestaurantEntry(
 						rs.getInt("id"), 
 						new User(rs.getInt("userID")), 
@@ -414,6 +482,13 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getString("extractedWord"), 
 						restaurantDao.getRestaurantGivenRestaurantID(rs.getInt("restaurantID")), 
 						foodDao.getFoodGivenRestaurantName("extractedWord")));
+=======
+				restaurantEntries.add(new UnverifiedRestaurantEntry(rs
+						.getInt("id"), new User(rs.getInt("userID")), rs
+						.getString("facebookID"), rs.getTimestamp("dateAdded"),
+						rs.getString("status"), image, rs
+								.getString("restaurantName")));
+>>>>>>> origin/master
 
 			}
 		} catch (Exception e) {
@@ -449,6 +524,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 
+<<<<<<< HEAD
 				sportsEstablishmentsEntries.add(new UnverifiedSportsEstablishmentEntry(
 						rs.getInt("id"), 
 						new User(rs.getInt("userID")), 
@@ -459,6 +535,15 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getString("extractedWord"),
 						sportEstablishmentDao.getSportEstablishmentGivenGymID(rs.getInt("gymID")),
 						activityDao.getActivityGivenGymName("extractedWord")));
+=======
+				sportsEstablishmentsEntries
+						.add(new UnverifiedSportsEstablishmentEntry(rs
+								.getInt("id"), new User(rs.getInt("userID")),
+								rs.getString("facebookID"), rs
+										.getTimestamp("dateAdded"), rs
+										.getString("status"), image, rs
+										.getString("gymName")));
+>>>>>>> origin/master
 
 			}
 		} catch (Exception e) {
