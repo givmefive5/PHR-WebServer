@@ -28,5 +28,5 @@ public interface UserDao {
 
 	public User getUserGivenAccessToken(String accessToken) throws DataAccessException;
 
-	public void edit(User user);
+	public void edit(User user) throws DataAccessException;
 }

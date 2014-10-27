@@ -1,12 +1,14 @@
 package phr.models;
 
+import java.sql.Timestamp;
+
 public class User {
 
 	private int id;
 	private String username;
 	private String password;
 	private String name;
-	private String dateOfBirth;
+	private Timestamp dateOfBirth;
 	private String gender;
 	private double height;
 	private double weight;
@@ -17,6 +19,7 @@ public class User {
 	private String allergies;
 	private String knownHealthProblems;
 	private String fbAccessToken;
+	private PHRImage photo;
 
 	public User() {
 		super();
@@ -33,7 +36,7 @@ public class User {
 	}
 
 	public User(String username, String password, String name,
-			String dateOfBirth) {
+			Timestamp dateOfBirth) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -42,7 +45,7 @@ public class User {
 	}
 
 	public User(int id, String username, String password, String name,
-			String dateOfBirth) {
+			Timestamp dateOfBirth) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -52,7 +55,7 @@ public class User {
 	}
 
 	public User(int id, String username, String password, String name,
-			String dateOfBirth, String gender, double height, double weight,
+			Timestamp dateOfBirth, String gender, double height, double weight,
 			String contactNumber, String email, String emergencyPerson,
 			String emergencyContactNumber, String allergies,
 			String knownHealthProblems) {
@@ -71,6 +74,31 @@ public class User {
 		this.emergencyContactNumber = emergencyContactNumber;
 		this.allergies = allergies;
 		this.knownHealthProblems = knownHealthProblems;
+	}
+
+	
+	public User(int id, String username, String password, String name,
+			Timestamp dateOfBirth, String gender, double height, double weight,
+			String contactNumber, String email, String emergencyPerson,
+			String emergencyContactNumber, String allergies,
+			String knownHealthProblems, String fbAccessToken, PHRImage photo) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
+		this.height = height;
+		this.weight = weight;
+		this.contactNumber = contactNumber;
+		this.email = email;
+		this.emergencyPerson = emergencyPerson;
+		this.emergencyContactNumber = emergencyContactNumber;
+		this.allergies = allergies;
+		this.knownHealthProblems = knownHealthProblems;
+		this.fbAccessToken = fbAccessToken;
+		this.photo = photo;
 	}
 
 	public String getFbAccessToken() {
@@ -185,12 +213,20 @@ public class User {
 		this.name = name;
 	}
 
-	public String getDateOfBirth() {
+	public Timestamp getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
+	public void setDateOfBirth(Timestamp dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
+	public PHRImage getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(PHRImage photo) {
+		this.photo = photo;
+	}
+	
 }

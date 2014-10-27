@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,7 @@ import phr.exceptions.DataAccessException;
 import phr.exceptions.UsernameAlreadyExistsException;
 import phr.models.User;
 import phr.tools.Hasher;
+import phr.tools.ImageHandler;
 
 @Repository("userDao")
 public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
@@ -80,17 +82,52 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 		else {
 			try {
 				Connection conn = getConnection();
-				String query = "INSERT INTO useraccountandinfo(username, password) VALUES (?, ?)";
+				String query = "INSERT INTO useraccountandinfo(username, password, fullname, birthdate, gender, heightInInches, weight, "
+						+ "contactNumber, emailAddress, emergencyPerson, emergencyContactNumber, allergies, knownHealthProblems, fbAccessToken, photo) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
 				String hashedPassword = Hasher.hashString(user.getPassword());
 				pstmt = conn.prepareStatement(query);
 				pstmt.setString(1, user.getUsername());
 				pstmt.setString(2, hashedPassword);
+				pstmt.setString(3, user.getName());
+				pstmt.setTimestamp(4, user.getDateOfBirth());
+				pstmt.setString(5, user.getGender());
+				pstmt.setDouble(6, user.getHeight());
+				pstmt.setDouble(7, user.getWeight());
+				pstmt.setString(8, user.getContactNumber());
+				pstmt.setString(9, user.getEmail());
+				pstmt.setString(10, user.getEmergencyPerson());
+				pstmt.setString(11, user.getEmergencyContactNumber());
+				
+				if(user.getAllergies() != null)
+					pstmt.setString(12, user.getAllergies());
+				else
+					pstmt.setNull(12, Types.NULL);
+				
+				if(user.getKnownHealthProblems() != null)
+					pstmt.setString(13, user.getKnownHealthProblems());
+				else
+					pstmt.setNull(13, Types.NULL);
+				
+				if(user.getFbAccessToken() != null)
+					pstmt.setString(14, user.getFbAccessToken());
+				else
+					pstmt.setNull(14, Types.NULL);
+				
+				if (user.getPhoto() != null) {
+					String encodedImage = user.getPhoto().getEncodedImage();
+					String fileName = ImageHandler.saveImage_ReturnFilePath(encodedImage);
+					user.getPhoto().setFileName(fileName);
+					pstmt.setString(15, user.getPhoto().getFileName());
+				}
+				else
+					pstmt.setNull(15, Types.NULL);
 
 				pstmt.executeUpdate();
 
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				throw new DataAccessException(
 						"An error has occured while trying to access data from the database",
 						e);
@@ -230,20 +267,8 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 
 			while (rs.next()) {
 				user = new User(
-						rs.getInt("userID"),
 						rs.getString("username"),
-						rs.getString("password"),
-						(rs.getString("firstName") + " " + rs.getString("middleName") + " " + rs.getString("lastName")),
-						rs.getString("birthdate"),
-						rs.getString("gender"),
-						rs.getDouble("heightInInches"),
-						weightDao.getLatestWeight(accessToken).getWeightInPounds(),
-						rs.getString("contactNumber"),
-						rs.getString("emailAddress"),
-						rs.getString(""),
-						rs.getString(""),
-						rs.getString(""),
-						rs.getString(""));
+						rs.getString("password"));
 			}
 			
 			return user;
@@ -255,8 +280,61 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	}
 
 	@Override
-	public void edit(User user) {
-		// TODO Auto-generated method stub
+	public void edit(User user) throws DataAccessException {
+	
+		try {
+			Connection conn = getConnection();
+			String query = "UPDATE useraccountandinfo SET username = ?, password = ?, fullname = ?, birthdate = ?, gender = ?, heightInInches = ?, weight =?, "
+					+ "contactNumber = ?, emailAddress = ?, emergencyPerson = ?, emergencyContactNumber = ?, allergies = ?, knownHealthProblems = ?, fbAccessToken = ?, photo = ?) "
+					+ "WHERE userID = ?";
+			
+			PreparedStatement pstmt;
+
+			String hashedPassword = Hasher.hashString(user.getPassword());
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, user.getUsername());
+			pstmt.setString(2, hashedPassword);
+			pstmt.setString(3, user.getName());
+			pstmt.setTimestamp(4, user.getDateOfBirth());
+			pstmt.setString(5, user.getGender());
+			pstmt.setDouble(6, user.getHeight());
+			pstmt.setDouble(7, user.getWeight());
+			pstmt.setString(8, user.getContactNumber());
+			pstmt.setString(9, user.getEmail());
+			pstmt.setString(10, user.getEmergencyPerson());
+			pstmt.setString(11, user.getEmergencyContactNumber());
+			
+			if(user.getAllergies() != null)
+				pstmt.setString(12, user.getAllergies());
+			else
+				pstmt.setNull(12, Types.NULL);
+			
+			if(user.getKnownHealthProblems() != null)
+				pstmt.setString(13, user.getKnownHealthProblems());
+			else
+				pstmt.setNull(13, Types.NULL);
+			
+			if(user.getFbAccessToken() != null)
+				pstmt.setString(14, user.getFbAccessToken());
+			else
+				pstmt.setNull(14, Types.NULL);
+			
+			if (user.getPhoto() != null) {
+				String encodedImage = user.getPhoto().getEncodedImage();
+				String fileName = ImageHandler.saveImage_ReturnFilePath(encodedImage);
+				user.getPhoto().setFileName(fileName);
+				pstmt.setString(15, user.getPhoto().getFileName());
+			}
+			else
+				pstmt.setNull(15, Types.NULL);
+
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 
 	}
 }
