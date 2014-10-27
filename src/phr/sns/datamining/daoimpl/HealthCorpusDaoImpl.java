@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import phr.dao.sqlimpl.BaseDaoSqlImpl;
 import phr.exceptions.DataAccessException;
+import phr.models.Activity;
 import phr.sns.datamining.dao.HealthCorpusDao;
 
 @Repository("healthCorpusDao")
@@ -28,7 +29,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				foodList.add(rs.getString(1));
+				foodList.add(rs.getString("name"));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -40,9 +41,27 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public List<String> getActivityWords() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getActivityWords() throws DataAccessException {
+		
+		List<String> activityList = new ArrayList<String>();
+
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT name FROM activitylist";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				activityList.add(rs.getString("name"));
+			}
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return activityList;
 	}
 
 	@Override
@@ -57,7 +76,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				restaurantList.add(rs.getString(1));
+				restaurantList.add(rs.getString("name"));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -69,9 +88,27 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public List<String> getSportsEstablishmentNames() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getSportsEstablishmentNames() throws DataAccessException {
+		
+		List<String> sportEstablishmemtList = new ArrayList<>();
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT name FROM gymList";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				sportEstablishmemtList.add(rs.getString("name"));
+			}
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+
+		return sportEstablishmemtList;
 	}
 
 }

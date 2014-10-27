@@ -26,10 +26,10 @@ import phr.tools.ImageHandler;
 @Repository("weightTrackerDao")
 public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTrackerDao {
 
-	//@Autowired
-	//UserDao userDao;
+	@Autowired
+	UserDao userDao;
 	
-	UserDao userDao = new UserDaoSqlImpl();
+	//UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(Weight weight) throws DataAccessException {

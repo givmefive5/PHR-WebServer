@@ -8,9 +8,9 @@ public interface HealthCorpusDao {
 
 	List<String> getFoodWords() throws DataAccessException;
 
-	List<String> getActivityWords();
+	List<String> getActivityWords() throws DataAccessException;
 
 	List<String> getRestaurantNames() throws DataAccessException;
 
-	List<String> getSportsEstablishmentNames();
+	List<String> getSportsEstablishmentNames() throws DataAccessException;
 }
