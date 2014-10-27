@@ -25,5 +25,5 @@ public interface UserService {
 	public User getUserGivenAccessToken(String accessToken)
 			throws UserServiceException;
 
-	public void edit(User user);
+	public void edit(User user) throws UserServiceException;
 }

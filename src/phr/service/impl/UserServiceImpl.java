@@ -84,8 +84,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void edit(User user) {
-		userDao.edit(user);
+	public void edit(User user) throws UserServiceException {
+		try {
+			userDao.edit(user);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			throw new UserServiceException("Error", e);
+		}
 	}
 
 }
