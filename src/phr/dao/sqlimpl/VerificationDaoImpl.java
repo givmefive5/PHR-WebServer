@@ -8,6 +8,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import phr.dao.ActivityDao;
@@ -33,9 +34,10 @@ import phr.tools.WeightConverter;
 @Repository("verificationDao")
 public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 		VerificationDao {
-	/*
+	
 	 @Autowired
 	 UserDao userDao;
+	/*
 	 @Autowired
 	 ActivityDao activityDao;
 	 @Autowired
@@ -44,7 +46,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 	 FoodDao foodDao;
 	*/
 	
-	UserDao userDao = new UserDaoSqlImpl();
+	//UserDao userDao = new UserDaoSqlImpl();
 	FoodDao foodDao = new FoodDaoSqlImpl();
 	ActivityDao activityDao = new ActivityDaoSqlImpl();
 	WeightTrackerDao weightTrackerDao = new WeightTrackerDaoSqlImpl();

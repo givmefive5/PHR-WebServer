@@ -116,7 +116,7 @@ public class UserController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping(value = "user/checkIfUsernameExists")
+	@RequestMapping(value = "/user/checkIfUsernameExists")
 	public void checkIfUsernameExists(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();

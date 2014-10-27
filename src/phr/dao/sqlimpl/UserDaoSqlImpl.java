@@ -87,10 +87,10 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
-				String hashedPassword = Hasher.hashString(user.getPassword());
+				//String hashedPassword = Hasher.hashString(user.getPassword());
 				pstmt = conn.prepareStatement(query);
 				pstmt.setString(1, user.getUsername());
-				pstmt.setString(2, hashedPassword);
+				pstmt.setString(2, user.getPassword());
 				pstmt.setString(3, user.getName());
 				pstmt.setTimestamp(4, user.getDateOfBirth());
 				pstmt.setString(5, user.getGender());

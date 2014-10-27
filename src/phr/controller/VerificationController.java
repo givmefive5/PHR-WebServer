@@ -38,7 +38,7 @@ public class VerificationController {
 	@Autowired
 	UserService userService;
 
-	@RequestMapping("verification/addNewPosts")
+	@RequestMapping("/verification/addNewPosts")
 	public void addNewPosts(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 		PrintWriter writer = response.getWriter();
@@ -78,7 +78,7 @@ public class VerificationController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping("verification/getAllFoods")
+	@RequestMapping("/verification/getAllFoods")
 	public void getAllFoods(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 		PrintWriter writer = response.getWriter();
@@ -122,7 +122,7 @@ public class VerificationController {
 
 	}
 
-	@RequestMapping("verification/getAllActivities")
+	@RequestMapping("/verification/getAllActivities")
 	public void getAllActivities(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -165,7 +165,7 @@ public class VerificationController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping("verification/getAllRestaurants")
+	@RequestMapping("/verification/getAllRestaurants")
 	public void getAllRestaurants(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -208,7 +208,7 @@ public class VerificationController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping("verification/getAllSportsEstablishments")
+	@RequestMapping("/verification/getAllSportsEstablishments")
 	public void getAllSportsEstablishments(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -251,7 +251,7 @@ public class VerificationController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping("verification/deleteUnverifiedFood")
+	@RequestMapping("/verification/deleteUnverifiedFood")
 	public void deleteUnverifiedFood(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, JSONException {
 		PrintWriter writer = response.getWriter();
@@ -297,7 +297,7 @@ public class VerificationController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping("verification/deleteUnverifiedActivity")
+	@RequestMapping("/verification/deleteUnverifiedActivity")
 	public void deleteUnverifiedActivity(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -343,7 +343,7 @@ public class VerificationController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping("verification/deleteUnverifiedRestaurant")
+	@RequestMapping("/verification/deleteUnverifiedRestaurant")
 	public void deleteUnverifiedRestaurant(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
@@ -389,7 +389,7 @@ public class VerificationController {
 		writer.write(jsonResponse.toString());
 	}
 
-	@RequestMapping("verification/deleteUnverifiedSportsEstablishment")
+	@RequestMapping("/verification/deleteUnverifiedSportsEstablishment")
 	public void deleteUnverifiedSportsEstablishment(HttpServletRequest request,
 			HttpServletResponse response) throws JSONException, IOException {
 		PrintWriter writer = response.getWriter();
