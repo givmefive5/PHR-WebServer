@@ -13,6 +13,8 @@ public class KeywordsExtractor {
 	HealthCorpusDao healthCorpusDao = new HealthCorpusDaoImpl();
 	List<String> foodCorpus;
 	List<String> restaurantCorpus;
+	List<String> activityCorpus;
+	List<String> sportsEstablishmentCorpus;
 
 	DMFilter filter = new DMFilter();
 
@@ -49,17 +51,39 @@ public class KeywordsExtractor {
 		return extractedWords.toArray(new String[extractedWords.size()]);
 	}
 
-	public String[] extractActivityNames(String message) {
-		ArrayList<String> extractedWords = new ArrayList<>();
-		if (message.contains("Swimming"))
-			extractedWords.add("Swimming");
+	public String[] extractActivityNames(String message)
+			throws DataAccessException {
+		if (activityCorpus == null)
+			activityCorpus = healthCorpusDao.getActivityWords();
+
+		List<String> extractedWords;
+		try {
+			message = cleanMessage(message, activityCorpus);
+			extractedWords = filter.findMatches(message, activityCorpus);
+		} catch (InterruptedException e) {
+			throw new DataAccessException(
+					"An error occured in the while accessing and processing SNS posts",
+					e);
+		}
 		return extractedWords.toArray(new String[extractedWords.size()]);
 	}
 
-	public String[] extractSportsEstablishmentsNames(String message) {
-		ArrayList<String> extractedWords = new ArrayList<>();
-		if (message.contains("Fitness First"))
-			extractedWords.add("Fitness First");
+	public String[] extractSportsEstablishmentsNames(String message)
+			throws DataAccessException {
+		if (sportsEstablishmentCorpus == null)
+			sportsEstablishmentCorpus = healthCorpusDao
+					.getSportsEstablishmentNames();
+
+		List<String> extractedWords;
+		try {
+			message = cleanMessage(message, sportsEstablishmentCorpus);
+			extractedWords = filter.findMatches(message,
+					sportsEstablishmentCorpus);
+		} catch (InterruptedException e) {
+			throw new DataAccessException(
+					"An error occured in the while accessing and processing SNS posts",
+					e);
+		}
 		return extractedWords.toArray(new String[extractedWords.size()]);
 	}
 
