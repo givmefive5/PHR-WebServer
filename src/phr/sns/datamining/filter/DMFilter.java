@@ -2,6 +2,7 @@ package phr.sns.datamining.filter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,12 +45,13 @@ public class DMFilter {
 		int n = message.split(" ").length;
 
 		int quotient = n / 5;
+		HashMap<String, String> corpusHashMap = makeHashMapForCorpus(corpus);
 		List<NGramFilteringThread> threads = new ArrayList<>();
 		for (int i = 1; i <= n; i += (quotient + 1)) {
 			int end = i + quotient;
 			if (end > n)
 				end = n;
-			threads.add(new NGramFilteringThread(corpus, message, i, end));
+			threads.add(new NGramFilteringThread(corpusHashMap, message, i, end));
 		}
 		for (NGramFilteringThread t : threads) {
 			t.start();
@@ -62,6 +64,14 @@ public class DMFilter {
 		}
 
 		return foundWords;
+	}
+
+	private HashMap<String, String> makeHashMapForCorpus(List<String> corpus) {
+		HashMap<String, String> corpusHashMap = new HashMap<>();
+		for (String c : corpus) {
+			corpusHashMap.put(Assist.onlyLettersDigitsAndSpaces(c), c);
+		}
+		return corpusHashMap;
 	}
 
 	private List<String> removeSubwordsFromWordsFound(List<String> allWordsFound) {

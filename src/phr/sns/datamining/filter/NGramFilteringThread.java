@@ -12,18 +12,10 @@ public class NGramFilteringThread extends Thread {
 	private final int nStart;
 	private final int nEnd;
 
-	private HashMap<String, String> makeHashMapForCorpus(List<String> corpus) {
-		HashMap<String, String> corpusHashMap = new HashMap<>();
-		for (String c : corpus) {
-			corpusHashMap.put(Assist.onlyLettersDigitsAndSpaces(c), c);
-		}
-		return corpusHashMap;
-	}
-
-	public NGramFilteringThread(List<String> corpus, String message,
+	public NGramFilteringThread(HashMap<String, String> corpus, String message,
 			int nStart, int nEnd) {
 		foundWords = new HashSet<>();
-		this.corpus = makeHashMapForCorpus(corpus);
+		this.corpus = corpus;
 		this.message = message;
 		this.nStart = nStart;
 		this.nEnd = nEnd;
