@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,11 +26,12 @@ import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
 
+@Controller
 public class ActivityTrackerController {
-	
+
 	@Autowired
 	ActivityTrackerService activityTrackerService;
-	
+
 	@Autowired
 	UserService userService;
 
@@ -51,8 +53,8 @@ public class ActivityTrackerController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToAdd"),
 								ActivityTrackerEntry.class);
-				int entryID = activityTrackerService.addReturnEntryID(accessToken,
-						activity);
+				int entryID = activityTrackerService.addReturnEntryID(
+						accessToken, activity);
 
 				JSONObject dataForResponse = new JSONObject();
 				dataForResponse.put("entryID", entryID);

@@ -8,7 +8,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import phr.dao.FoodDao;
@@ -16,36 +15,36 @@ import phr.dao.FoodTrackerDao;
 import phr.dao.UserDao;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.EntryNotFoundException;
-import phr.models.FBPost;
-import phr.models.Food;
 import phr.models.FoodTrackerEntry;
 import phr.models.PHRImage;
 import phr.models.PHRImageType;
 import phr.tools.ImageHandler;
 
 @Repository("foodTrackerDao")
+public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
+		FoodTrackerDao {
 
-public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTrackerDao {
-	
-	//@Autowired
-	//UserDao userDao;
-	
-	//@Autowired
-	//FoodDao foodDao;
-	
+	// @Autowired
+	// UserDao userDao;
+
+	// @Autowired
+	// FoodDao foodDao;
+
 	UserDao userDao = new UserDaoSqlImpl();
 	FoodDao foodDao = new FoodDaoSqlImpl();
 
 	@Override
-	public int addReturnsEntryID(FoodTrackerEntry foodTrackerEntry) throws DataAccessException {
-		
+	public int addReturnsEntryID(FoodTrackerEntry foodTrackerEntry)
+			throws DataAccessException {
+
 		try {
 			Connection conn = getConnection();
 			String query = "INSERT INTO foodtracker(FoodID, servingCount, dateAdded, status, userID, facebookID, photo) "
 					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, foodTrackerEntry.getFood().getEntryID());
 			pstmt.setDouble(2, foodTrackerEntry.getServingCount());
 			pstmt.setTimestamp(3, foodTrackerEntry.getTimestamp());
@@ -62,18 +61,17 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 						.saveImage_ReturnFilePath(encodedImage);
 				foodTrackerEntry.getImage().setFileName(fileName);
 				pstmt.setString(7, foodTrackerEntry.getImage().getFileName());
-			}
-			else
+			} else
 				pstmt.setNull(7, Types.NULL);
 
 			pstmt.executeUpdate();
-			
+
 			ResultSet rs = pstmt.getGeneratedKeys();
 
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-			
+
 			return entryID;
 
 		} catch (Exception e) {
@@ -81,16 +79,16 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 	}
 
 	@Override
-	public void edit(FoodTrackerEntry foodTrackerEntry) throws DataAccessException,
-			EntryNotFoundException {
-		
-		try{	
+	public void edit(FoodTrackerEntry foodTrackerEntry)
+			throws DataAccessException, EntryNotFoundException {
+
+		try {
 			Connection conn = getConnection();
-			String query = "UPDATE foodtracker SET foodID = ?, servingCount = ?, dateAdded =? , status = ?, photo = ?) "
+			String query = "UPDATE foodtracker SET foodID = ?, servingCount = ?, dateAdded =? , status = ?, photo = ? "
 					+ "WHERE id = ?";
 			PreparedStatement pstmt;
 
@@ -106,15 +104,14 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 						.saveImage_ReturnFilePath(encodedImage);
 				foodTrackerEntry.getImage().setFileName(fileName);
 				pstmt.setString(5, foodTrackerEntry.getImage().getFileName());
-			}
-			else
+			} else
 				pstmt.setNull(5, Types.NULL);
-			
+
 			pstmt.setInt(6, foodTrackerEntry.getEntryID());
-			
+
 			pstmt.executeUpdate();
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
 					e);
@@ -124,7 +121,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 	@Override
 	public void delete(FoodTrackerEntry object) throws DataAccessException,
 			EntryNotFoundException {
-		
+
 		try {
 			Connection conn = getConnection();
 			String query = "DELETE FROM foodtracker WHERE id = ?";
@@ -139,16 +136,16 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
 		}
-		
+
 	}
 
 	@Override
 	public List<FoodTrackerEntry> getAll(String userAccessToken)
 			throws DataAccessException {
-		
+
 		List<FoodTrackerEntry> foods = new ArrayList<FoodTrackerEntry>();
-		
-		try{
+
+		try {
 			Connection conn = getConnection();
 			String query = "SELECT id, foodID, servingCount, facebookID status, photo, dateAdded "
 					+ " FROM foodtracker WHERE userID = ? ";
@@ -156,33 +153,30 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements FoodTracker
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(userAccessToken));
-			
+
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				PHRImage image = null;
-				if(rs.getString("photo") == null)
+				if (rs.getString("photo") == null)
 					image = null;
-				else{
-					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
+				else {
+					String encodedImage = ImageHandler
+							.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
 
-				foods.add(new FoodTrackerEntry(
-						rs.getInt("id"),
-						rs.getString("facebookID"),
-						rs.getTimestamp("dateAdded"),
-						rs.getString("status"),
-						image, 
-						foodDao.getFood(rs.getInt("foodID")),
-						rs.getDouble("servingCount")
-						));	
+				foods.add(new FoodTrackerEntry(rs.getInt("id"), rs
+						.getString("facebookID"), rs.getTimestamp("dateAdded"),
+						rs.getString("status"), image, foodDao.getFood(rs
+								.getInt("foodID")), rs
+								.getDouble("servingCount")));
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-		
+
 		return foods;
 	}
 
