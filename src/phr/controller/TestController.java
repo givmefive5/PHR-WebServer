@@ -24,7 +24,7 @@ import phr.exceptions.ImageHandlerException;
 import phr.exceptions.SNSException;
 import phr.exceptions.ServiceException;
 import phr.fatsecret.FatSecretFetcher;
-import phr.fatsecret.FatSecretFood;
+import phr.models.Food;
 import phr.service.VerificationService;
 import phr.service.impl.VerificationServiceImpl;
 import phr.sns.datamining.filter.KeywordsExtractor;
@@ -101,10 +101,13 @@ public class TestController {
 	@RequestMapping(value = "/test5")
 	public void test5(@RequestParam String searchQuery)
 			throws FatSecretFetcherException {
-		List<FatSecretFood> foods = FatSecretFetcher.searchFood(searchQuery);
-		for (FatSecretFood food : foods) {
-			System.out.println(food.getFood_name());
+		List<Food> foods = FatSecretFetcher.searchFood(searchQuery);
+		for (Food food : foods) {
+			System.out.println(food.getName());
+			System.out.println(food.getCalorie() + "kcal " + food.getProtein());
+			System.out.println(food.getServingUnit() + " " + food.getFat()
+					+ "g " + food.getCarbohydrate() + "g");
+
 		}
 	}
-
 }
