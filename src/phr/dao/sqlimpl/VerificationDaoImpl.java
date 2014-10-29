@@ -330,7 +330,6 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-
 		return foodEntries;
 	}
 
@@ -473,7 +472,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 	public void delete(UnverifiedFoodEntry entry) throws EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "DELETE FROM tempfoodtrcker WHERE id = ?";
+			String query = "DELETE FROM tempfoodtracker WHERE id = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);

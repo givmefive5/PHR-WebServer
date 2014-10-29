@@ -227,11 +227,12 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "";
+			String query = "SELECT name FROM activitylist WHERE "
+					+ "(SELECT activityID FROM gym_activity WHERE gymID = ?)";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, gymName);
+			pstmt.setInt(1, getActivityID(gymName));
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {

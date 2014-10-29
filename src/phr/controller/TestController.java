@@ -49,7 +49,7 @@ public class TestController {
 			long time = date.getTime();
 			Timestamp startDate = new Timestamp(time);
 			verification.updateListOfUnverifiedPosts(
-					"4e443873-82b1-428a-b8e6-3cf4c3e1378e", userFBAccessToken,
+					"cdfeac81-1cb2-43d6-ae51-131f294a98c1", userFBAccessToken,
 					startDate);
 		} catch (ServiceException e) {
 			e.printStackTrace();

@@ -144,7 +144,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT name, calorie, servingUnit, servingSize, restaurantID, fromFatsecret"
+			String query = "SELECT name, calorie, serving,  restaurantID, fromFatsecret"
 					+ " FROM foodList WHERE id = ?";
 
 			PreparedStatement pstmt;
