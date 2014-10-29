@@ -179,7 +179,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, searchQuery);
+			pstmt.setString(1, "%"+searchQuery+"%");
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -224,7 +224,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	@Override
-	public List<Food> getFoodGivenRestaurantName(String restaurantName) throws DataAccessException {
+	public List<Food> getFoodListGivenRestaurantName(String restaurantName) throws DataAccessException {
 		List<Food> foods = new ArrayList<Food>();
 
 		try {
@@ -292,12 +292,12 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			Connection conn = getConnection();
 			
 			String query = "SELECT * FROM foodlist WHERE calorie != null AND "
-					+ "protein != null AND fat != null AND carbohydrate != null "
+					+ "protein != null AND fat != null AND carbohydrate != null AND name LIKE ?"
 					+ "ORDER BY countUsed DESC";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, searchQuery);
+			pstmt.setString(1, "%"+searchQuery+"%");
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -320,6 +320,38 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		}
 		return foods;
 	}
-	
 
+
+	@Override
+	public Food getFoodGivenName(String searchQuery) throws DataAccessException {
+		
+		Food food = null;
+		try{
+			Connection conn = getConnection();
+			
+			String query = "SELECT * FROM foodlist WHERE name = searchQuery";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, searchQuery);
+
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				food = new Food(rs.getInt("id"));
+				food.setName(rs.getString("name"));
+				food.setCalorie(rs.getDouble("calorie"));
+				food.setServing(rs.getString("serving"));
+				food.setRestaurantID(rs.getInt("restaurantID"));
+				food.setFromFatsecret(rs.getBoolean("fromFatsecret"));
+				food.setProtein(rs.getDouble("protein"));
+				food.setFat(rs.getDouble("fat"));
+				food.setCarbohydrate(rs.getDouble("carbohydrate"));
+				food.setCountUsed(rs.getInt("countUsed"));
+			}
+		}catch(Exception e){
+			throw new DataAccessException("An error has occured while tyring to access data from the database", e);
+		}
+		return food;
+	}
 }

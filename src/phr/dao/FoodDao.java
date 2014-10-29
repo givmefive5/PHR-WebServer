@@ -17,10 +17,11 @@ public interface FoodDao {
 
 	public List<Food> search(String searchQuery) throws DataAccessException;
 	
-	public List<Food> getFoodGivenRestaurantName(String restaurantName) throws DataAccessException;
+	public List<Food> getFoodListGivenRestaurantName(String restaurantName) throws DataAccessException;
     
 	public Integer getRestaurantID(String restaurantName) throws DataAccessException;
 	
 	public List<Food> suggest (String searchQuery) throws DataAccessException;
-
+	
+	public Food getFoodGivenName (String searchQuery) throws DataAccessException;
 }

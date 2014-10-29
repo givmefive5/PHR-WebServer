@@ -93,7 +93,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					fbPost.getImage(), 
 					extractedWord,
 					sportEstablishmentDao.getSportEstablishmentGivenGymName(extractedWord), 
-					activityDao.getActivityGivenGymName(extractedWord));
+					activityDao.getActivityListGivenGymName(extractedWord));
 
 			try {
 				Connection conn = getConnection();
@@ -135,8 +135,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			throws DataAccessException {
 
 		for (String extractedWord : fbPost.extractedWords) {
-	
-			Activity activity = activityDao.search(extractedWord).get(0);		
+		
 			Double calories = (activityDao.getActivityMET(extractedWord)
 					* WeightConverter.convertKgToLbs(
 				    weightTrackerDao.getLatestWeight(userAccessToken).getWeightInPounds()) * ONE_HOUR);
@@ -146,7 +145,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					fbPost.getTimestamp(), 
 					fbPost.getStatus(), 
 					fbPost.getImage(), 
-					activity,
+					activityDao.getActivityGivenName(extractedWord),
 					ONE_HOUR, 
 					calories,
 					extractedWord);
@@ -203,7 +202,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					fbPost.getImage(), 
 					extractedWord,
 					restaurantDao.getRestaurantGivenRestaurantName(extractedWord),
-					foodDao.getFoodGivenRestaurantName(extractedWord));
+					foodDao.getFoodListGivenRestaurantName(extractedWord));
 
 			try {
 				Connection conn = getConnection();
@@ -244,16 +243,14 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 	private void addNewFoodVerificationEntry(FBPost fbPost, String userAccessToken) throws DataAccessException {
 
 		for (String extractedWord : fbPost.getExtractedWords()) {
-
-			Food food = foodDao.search(extractedWord).get(0);
-
+			
 			UnverifiedFoodEntry unverifiedFoodEntry = new UnverifiedFoodEntry(
 					new User(userDao.getUserIDGivenAccessToken(userAccessToken)),
 					fbPost.getFacebookId(), 
 					fbPost.getTimestamp(), 
 					fbPost.getStatus(), 
 					fbPost.getImage(), 
-					food, 
+					foodDao.getFoodGivenName(extractedWord), 
 				    ONE_SERVING,
 				    extractedWord);
 			
@@ -412,7 +409,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						image, 
 						rs.getString("extractedWord"), 
 						restaurantDao.getRestaurantGivenRestaurantID(rs.getInt("restaurantID")), 
-						foodDao.getFoodGivenRestaurantName("extractedWord")));
+						foodDao.getFoodListGivenRestaurantName("extractedWord")));
 
 			}
 		} catch (Exception e) {
@@ -457,7 +454,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						image, 
 						rs.getString("extractedWord"),
 						sportEstablishmentDao.getSportEstablishmentGivenGymID(rs.getInt("gymID")),
-						activityDao.getActivityGivenGymName("extractedWord")));
+						activityDao.getActivityListGivenGymName("extractedWord")));
 
 			}
 		} catch (Exception e) {

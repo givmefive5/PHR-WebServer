@@ -19,7 +19,9 @@ public interface ActivityDao {
 	
 	public List<Activity> search(String serachQuery) throws DataAccessException;
 	
-	public List<Activity> getActivityGivenGymName(String gymName) throws DataAccessException;
+	public List<Activity> getActivityListGivenGymName(String gymName) throws DataAccessException;
 
 	public Integer getActivityID(String activityName) throws DataAccessException;
+	
+	public Activity getActivityGivenName(String query) throws DataAccessException;
 }

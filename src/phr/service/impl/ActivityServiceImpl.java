@@ -61,7 +61,7 @@ public class ActivityServiceImpl implements ActivityService {
 	public List<Activity> getActivityGivenGymName(String gymName)
 			throws ServiceException {
 		try {
-			return activityDao.getActivityGivenGymName(gymName);
+			return activityDao.getActivityListGivenGymName(gymName);
 		} catch (DataAccessException e) {
 			throw new ServiceException("An error occurred", e);
 		}

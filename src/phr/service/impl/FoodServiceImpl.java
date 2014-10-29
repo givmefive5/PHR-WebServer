@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import phr.dao.FoodDao;
 import phr.dao.sqlimpl.FoodDaoSqlImpl;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.FatSecretFetcherException;
 import phr.exceptions.ServiceException;
+import phr.fatsecret.FatSecretFetcher;
 import phr.models.Food;
 import phr.service.FoodService;
 
@@ -27,8 +29,10 @@ public class FoodServiceImpl implements FoodService {
 		
 		List<Food> foods = new ArrayList<Food>();
 		try {
-			foods = foodDao.search(searchQuery);
-		} catch (DataAccessException e) {
+			foods.addAll(foodDao.suggest(searchQuery));
+			foods.addAll(FatSecretFetcher.searchFood(searchQuery));
+			foods.addAll(foodDao.search(searchQuery));
+		} catch (DataAccessException | FatSecretFetcherException e) {
 			throw new ServiceException(
 					"Error has occured while searching for food entries", e);
 		}
@@ -60,7 +64,7 @@ public class FoodServiceImpl implements FoodService {
 	public List<Food> getFoodGivenRestaurantName(String restaurantName)
 			throws ServiceException {
 		try {
-			return foodDao.getFoodGivenRestaurantName(restaurantName);
+			return foodDao.getFoodListGivenRestaurantName(restaurantName);
 		} catch (DataAccessException e) {
 			throw new ServiceException("An error has occurred", e);
 		}
