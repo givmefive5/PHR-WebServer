@@ -164,7 +164,7 @@ public class FatSecretFetcher {
 		double protein = Double.parseDouble(fs.getFood_description().substring(
 				s, l));
 
-		return new Food(name, calories, protein, fat, carbs, serving, -1, null,
+		return new Food(name, calories, protein, fat, carbs, serving, null,
 				true, 0);
 	}
 

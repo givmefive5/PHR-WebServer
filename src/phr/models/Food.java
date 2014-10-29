@@ -8,8 +8,7 @@ public class Food {
 	double protein;
 	double fat;
 	double carbohydrate;
-	String servingUnit;
-	double servingSize;
+	String serving;
 	Integer restaurantID;
 	Boolean fromFatsecret;
 	int countUsed;
@@ -20,8 +19,8 @@ public class Food {
 	}
 	
 	public Food(Integer entryID, String name, double calorie, double protein,
-			double fat, double carbohydrate, String servingUnit,
-			double servingSize, Integer restaurantID, Boolean fromFatsecret, int countUsed) {
+			double fat, double carbohydrate, String serving,
+            Integer restaurantID, Boolean fromFatsecret, int countUsed) {
 		super();
 		this.entryID = entryID;
 		this.name = name;
@@ -29,15 +28,14 @@ public class Food {
 		this.protein = protein;
 		this.fat = fat;
 		this.carbohydrate = carbohydrate;
-		this.servingUnit = servingUnit;
-		this.servingSize = servingSize;
+		this.serving = serving;
 		this.restaurantID = restaurantID;
 		this.fromFatsecret = fromFatsecret;
 		this.countUsed = countUsed;
 	}
 
 	public Food(String name, double calorie, double protein, double fat,
-			double carbohydrate, String servingUnit, double servingSize,
+			double carbohydrate, String serving,
 			Integer restaurantID, Boolean fromFatsecret, int countUsed) {
 		super();
 		this.name = name;
@@ -45,8 +43,7 @@ public class Food {
 		this.protein = protein;
 		this.fat = fat;
 		this.carbohydrate = carbohydrate;
-		this.servingUnit = servingUnit;
-		this.servingSize = servingSize;
+		this.serving = serving;
 		this.restaurantID = restaurantID;
 		this.fromFatsecret = fromFatsecret;
 		this.countUsed = countUsed;
@@ -100,20 +97,12 @@ public class Food {
 		this.carbohydrate = carbohydrate;
 	}
 
-	public String getServingUnit() {
-		return servingUnit;
+	public String getServing() {
+		return serving;
 	}
 
-	public void setServingUnit(String servingUnit) {
-		this.servingUnit = servingUnit;
-	}
-
-	public double getServingSize() {
-		return servingSize;
-	}
-
-	public void setServingSize(double servingSize) {
-		this.servingSize = servingSize;
+	public void setServing(String serving) {
+		this.serving = serving;
 	}
 
 	public Integer getRestaurantID() {

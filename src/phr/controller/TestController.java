@@ -49,7 +49,7 @@ public class TestController {
 			long time = date.getTime();
 			Timestamp startDate = new Timestamp(time);
 			verification.updateListOfUnverifiedPosts(
-					"2f1b48e7-c572-4073-bf68-19b8379e69ce", userFBAccessToken,
+					"4e443873-82b1-428a-b8e6-3cf4c3e1378e", userFBAccessToken,
 					startDate);
 		} catch (ServiceException e) {
 			e.printStackTrace();
@@ -105,7 +105,7 @@ public class TestController {
 		for (Food food : foods) {
 			System.out.println(food.getName());
 			System.out.println(food.getCalorie() + "kcal " + food.getProtein());
-			System.out.println(food.getServingUnit() + " " + food.getFat()
+			System.out.println(food.getServing() + " " + food.getFat()
 					+ "g " + food.getCarbohydrate() + "g");
 
 		}
