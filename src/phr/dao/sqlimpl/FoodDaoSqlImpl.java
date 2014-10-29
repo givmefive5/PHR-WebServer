@@ -292,7 +292,8 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			Connection conn = getConnection();
 			
 			String query = "SELECT * FROM foodlist WHERE calorie != null AND "
-					+ "protein != null AND fat != null AND carbohydrate != null";
+					+ "protein != null AND fat != null AND carbohydrate != null "
+					+ "ORDER BY countUsed DESC";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
