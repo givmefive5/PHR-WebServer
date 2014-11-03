@@ -111,6 +111,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			if (p != null) {
 				String message = p.getMessage();
 
+				boolean matchFound = false;
+
 				Date date = p.getCreatedTime();
 				Timestamp timestamp = new Timestamp(date.getTime());
 				FBPost post;
@@ -125,40 +127,43 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						phrImage = new PHRImage(encodedImage,
 								PHRImageType.IMAGE);
 				}
+
+				if (p.getPlace() != null)
+					message = message + " " + p.getPlace().getName();
+
 				if (p.getMessage() != null) {
 					String[] foodWordsFound = keywordsExtractor
 							.extractFoodNames(message);
+					String[] restaurantsWordsFound = keywordsExtractor
+							.extractRestaurantNames(message);
 					if (foodWordsFound.length > 0) {
-						post = new FBPost(p.getId(), p.getMessage(), timestamp,
+						matchFound = true;
+						post = new FBPost(p.getId(), message, timestamp,
 								FBPostType.FOOD, phrImage, foodWordsFound);
 						posts.add(post);
 						continue;
-					}
-					String[] restaurantsWordsFound = keywordsExtractor
-							.extractRestaurantNames(message);
-					if (restaurantsWordsFound.length > 0) {
-						post = new FBPost(p.getId(), p.getMessage(), timestamp,
+					} else if (restaurantsWordsFound.length > 0) {
+						matchFound = true;
+						post = new FBPost(p.getId(), message, timestamp,
 								FBPostType.RESTAURANT, phrImage,
 								restaurantsWordsFound);
 						posts.add(post);
 						continue;
 					}
 
-					if (p.getPlace() != null)
-						message = message + " " + p.getPlace().getName();
-
 					String[] activityWordsFound = keywordsExtractor
 							.extractActivityNames(message);
+					String[] sportsEstablishmentsWordsFound = keywordsExtractor
+							.extractSportsEstablishmentsNames(message);
 					if (activityWordsFound.length > 0) {
+						matchFound = true;
 						post = new FBPost(p.getId(), p.getMessage(), timestamp,
 								FBPostType.ACTIVITY, phrImage,
 								activityWordsFound);
 						posts.add(post);
 						continue;
-					}
-					String[] sportsEstablishmentsWordsFound = keywordsExtractor
-							.extractSportsEstablishmentsNames(message);
-					if (sportsEstablishmentsWordsFound.length > 0) {
+					} else if (sportsEstablishmentsWordsFound.length > 0) {
+						matchFound = true;
 						post = new FBPost(p.getId(), p.getMessage(), timestamp,
 								FBPostType.SPORTS_ESTABLISHMENTS, phrImage,
 								sportsEstablishmentsWordsFound);
@@ -166,9 +171,11 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						continue;
 					}
 
-					post = new FBPost(p.getId(), message, timestamp,
-							FBPostType.UNRELATED, phrImage, null);
-					posts.add(post);
+					if (matchFound == false) {
+						post = new FBPost(p.getId(), message, timestamp,
+								FBPostType.UNRELATED, phrImage, null);
+						posts.add(post);
+					}
 				}
 			}
 		}
@@ -180,6 +187,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		List<FBPost> posts = new ArrayList<>();
 		for (Photo p : newPhotos) {
 			if (p != null) {
+				String message = p.getName();
+
+				boolean matchFound = false;
+
 				Date date = p.getCreatedTime();
 				Timestamp timestamp = new Timestamp(date.getTime());
 				FBPost post;
@@ -194,36 +205,43 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						phrImage = new PHRImage(encodedImage,
 								PHRImageType.IMAGE);
 				}
+
+				if (p.getPlace() != null)
+					message = message + " " + p.getPlace().getName();
+
 				if (p.getName() != null) {
 					String[] foodWordsFound = keywordsExtractor
-							.extractFoodNames(p.getName());
+							.extractFoodNames(message);
+					String[] restaurantsWordsFound = keywordsExtractor
+							.extractRestaurantNames(message);
 					if (foodWordsFound.length > 0) {
-						post = new FBPost(p.getId(), p.getName(), timestamp,
+						matchFound = true;
+						post = new FBPost(p.getId(), message, timestamp,
 								FBPostType.FOOD, phrImage, foodWordsFound);
 						posts.add(post);
 						continue;
-					}
-					String[] restaurantsWordsFound = keywordsExtractor
-							.extractRestaurantNames(p.getName());
-					if (restaurantsWordsFound.length > 0) {
-						post = new FBPost(p.getId(), p.getName(), timestamp,
+					} else if (restaurantsWordsFound.length > 0) {
+						matchFound = true;
+						post = new FBPost(p.getId(), message, timestamp,
 								FBPostType.RESTAURANT, phrImage,
 								restaurantsWordsFound);
 						posts.add(post);
 						continue;
 					}
+
 					String[] activityWordsFound = keywordsExtractor
-							.extractActivityNames(p.getName());
+							.extractActivityNames(message);
+					String[] sportsEstablishmentsWordsFound = keywordsExtractor
+							.extractSportsEstablishmentsNames(message);
 					if (activityWordsFound.length > 0) {
+						matchFound = true;
 						post = new FBPost(p.getId(), p.getName(), timestamp,
 								FBPostType.ACTIVITY, phrImage,
 								activityWordsFound);
 						posts.add(post);
 						continue;
-					}
-					String[] sportsEstablishmentsWordsFound = keywordsExtractor
-							.extractSportsEstablishmentsNames(p.getName());
-					if (sportsEstablishmentsWordsFound.length > 0) {
+					} else if (sportsEstablishmentsWordsFound.length > 0) {
+						matchFound = true;
 						post = new FBPost(p.getId(), p.getName(), timestamp,
 								FBPostType.SPORTS_ESTABLISHMENTS, phrImage,
 								sportsEstablishmentsWordsFound);
@@ -231,9 +249,11 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						continue;
 					}
 
-					post = new FBPost(p.getId(), p.getName(), timestamp,
-							FBPostType.UNRELATED, phrImage, null);
-					posts.add(post);
+					if (matchFound == false) {
+						post = new FBPost(p.getId(), message, timestamp,
+								FBPostType.UNRELATED, phrImage, null);
+						posts.add(post);
+					}
 				}
 			}
 		}

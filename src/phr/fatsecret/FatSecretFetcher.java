@@ -115,10 +115,17 @@ public class FatSecretFetcher {
 			JSONObject foods = json.getJSONObject("foods");
 			if (foods.has("food")) {
 				String jsonArr = foods.get("food").toString();
-				Type type = new TypeToken<List<FatSecretFood>>() {
-				}.getType();
-				fsFoodList = GSONConverter.convertJSONToObjectList(jsonArr,
-						type);
+				System.out.println(jsonArr);
+				if (GSONConverter.isJSONObject(jsonArr)) {
+					fsFoodList.add(GSONConverter.getGSONObjectGivenJsonString(
+							jsonArr, FatSecretFood.class));
+				} else {
+					Type type = new TypeToken<List<FatSecretFood>>() {
+					}.getType();
+					fsFoodList = GSONConverter.convertJSONToObjectList(jsonArr,
+							type);
+				}
+
 			}
 			return convertFatSecretToFoodList(fsFoodList);
 		} catch (Exception e) {

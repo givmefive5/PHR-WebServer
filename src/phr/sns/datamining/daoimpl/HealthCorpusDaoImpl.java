@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import phr.dao.sqlimpl.BaseDaoSqlImpl;
 import phr.exceptions.DataAccessException;
-import phr.models.Activity;
 import phr.sns.datamining.dao.HealthCorpusDao;
 
 @Repository("healthCorpusDao")
@@ -42,19 +41,19 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 
 	@Override
 	public List<String> getActivityWords() throws DataAccessException {
-		
+
 		List<String> activityList = new ArrayList<String>();
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT name FROM activitylist";
+			String query = "SELECT wordTenses FROM activitycorpus";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			
+
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				activityList.add(rs.getString("name"));
+				activityList.add(rs.getString("wordTenses"));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -88,8 +87,9 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 	}
 
 	@Override
-	public List<String> getSportsEstablishmentNames() throws DataAccessException {
-		
+	public List<String> getSportsEstablishmentNames()
+			throws DataAccessException {
+
 		List<String> sportEstablishmemtList = new ArrayList<>();
 		try {
 			Connection conn = getConnection();
