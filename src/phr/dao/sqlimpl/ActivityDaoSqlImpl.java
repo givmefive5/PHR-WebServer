@@ -232,7 +232,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, getActivityID(gymName));
+			pstmt.setInt(1, getGymID(gymName));
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -256,6 +256,30 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, activityName);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next())
+				return rs.getInt(1);
+			else
+				return null;
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+	}
+	
+
+	public Integer getGymID(String gymName) throws DataAccessException {
+
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id FROM gymlist WHERE name = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, gymName);
 
 			ResultSet rs = pstmt.executeQuery();
 

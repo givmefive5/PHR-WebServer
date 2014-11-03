@@ -19,7 +19,7 @@ import phr.tools.ImageHandler;
 @Repository("userDao")
 public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	
-	WeightTrackerDao weightDao = new WeightTrackerDaoSqlImpl();
+	//WeightTrackerDao weightDao = new WeightTrackerDaoSqlImpl();
 
 	@Override
 	public boolean isValidUser(User user) throws DataAccessException {

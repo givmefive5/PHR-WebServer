@@ -329,7 +329,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		try{
 			Connection conn = getConnection();
 			
-			String query = "SELECT * FROM foodlist WHERE name = searchQuery";
+			String query = "SELECT * FROM foodlist WHERE name = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
