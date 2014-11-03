@@ -23,5 +23,7 @@ public interface ActivityDao {
 
 	public Integer getActivityID(String activityName) throws DataAccessException;
 	
+	public Integer getGymID(String gymName) throws DataAccessException;
+	
 	public Activity getActivityGivenName(String query) throws DataAccessException;
 }

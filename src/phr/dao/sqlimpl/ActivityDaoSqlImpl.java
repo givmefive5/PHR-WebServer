@@ -227,8 +227,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT name FROM activitylist WHERE "
-					+ "(SELECT activityID FROM gym_activity WHERE gymID = ?)";
+			String query = "SELECT act.* FROM activitylist act JOIN gym_activity gym ON act.id = gym.activityID WHERE gym.gymID = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -236,7 +235,11 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				
+				activities.add(new Activity(
+						rs.getInt("id"),
+						rs.getString("name"),
+						rs.getDouble("MET"),
+						rs.getInt("countUsed")));
 			}
 		} catch (Exception e) {
 			throw new DataAccessException(
@@ -270,36 +273,12 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		}
 	}
 	
-
-	public Integer getGymID(String gymName) throws DataAccessException {
-
-		try {
-			Connection conn = getConnection();
-			String query = "SELECT id FROM gymlist WHERE name = ?";
-			PreparedStatement pstmt;
-
-			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, gymName);
-
-			ResultSet rs = pstmt.executeQuery();
-
-			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
-		} catch (Exception e) {
-			throw new DataAccessException(
-					"An error has occured while trying to access data from the database",
-					e);
-		}
-	}
-
 	@Override
 	public Activity getActivityGivenName(String searchQuery) throws DataAccessException {
 		Activity activity = null;
 		try{
 			Connection conn = getConnection();
-			String query = "SELECT * FROM activityList WHERE name = ?";
+			String query = "SELECT act.* FROM activitylist act JOIN activitycorpus corpus ON act.id = corpus.activityID WHERE wordTenses = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
@@ -318,6 +297,30 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		}
 		
 		return activity;
+	}
+
+	@Override
+	public Integer getGymID(String gymName) throws DataAccessException {
+		
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT id FROM gymList WHERE name = ?";
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, gymName);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next())
+				return rs.getInt(1);
+			else
+				return null;
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
 	}
 
 }
