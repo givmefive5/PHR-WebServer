@@ -265,7 +265,6 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
 			String userFBAccessToken) throws DataAccessException {
 		List<Post> feed = getAllPostsFromFB(userFBAccessToken);
-		System.out.println("feed size "+ feed.size());
 		List<Post> newFeed = new ArrayList<>();
 		for (Post p : feed) {
 			if (p != null) {

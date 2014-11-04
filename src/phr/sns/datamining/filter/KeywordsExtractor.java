@@ -90,11 +90,14 @@ public class KeywordsExtractor {
 	private String cleanMessage(String message, List<String> corpus) {
 		List<String> singleWordsFromCorpus = new ArrayList<>();
 		for (String corpusWord : corpus) {
-			corpusWord = Assist.cleanWord(corpusWord);
 			String[] words = corpusWord.split(" ");
+			for (int i = 0; i < words.length; i++)
+				words[i] = Assist.cleanWord(words[i]);
 			singleWordsFromCorpus.addAll(Arrays.asList(words));
 		}
 
+		// for (String w : singleWordsFromCorpus)
+		// System.out.println(w);
 		String newMessage = "";
 		for (String s : message.split(" ")) {
 			if (s.length() > 0 && s.charAt(0) == '#') {

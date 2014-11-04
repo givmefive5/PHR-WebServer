@@ -70,6 +70,7 @@ public class DMFilter {
 		HashMap<String, String> corpusHashMap = new HashMap<>();
 		for (String c : corpus) {
 			corpusHashMap.put(Assist.onlyLettersDigitsAndSpaces(c), c);
+			System.out.println(c);
 		}
 		return corpusHashMap;
 	}
@@ -133,7 +134,7 @@ public class DMFilter {
 		String newMessage = "";
 		for (int i = 0; i < words.length; i++) {
 			String s = words[i];
-			if (s != "" && s.charAt(0) == '#')
+			if (s.length() > 0 && s.charAt(0) == '#')
 				s = "*";
 
 			if (i == words.length - 1)
@@ -150,7 +151,7 @@ public class DMFilter {
 		String[] tokens = message.split(" ");
 		List<String> hashtags = new ArrayList<>();
 		for (String s : tokens) {
-			if (s != "" && s.charAt(0) == '#')
+			if (s.length() > 0 && s.charAt(0) == '#')
 				hashtags.add(s);
 		}
 		return hashtags;
