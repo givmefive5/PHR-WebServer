@@ -29,10 +29,11 @@ public class FacebookFetcherServiceImpl implements FacebookFetcherService {
 
 	@Override
 	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
-			String userFBAccessToken) throws SNSException {
+			String userFBAccessToken, String userAccessToken)
+			throws SNSException {
 		try {
-			return facebookFetcherDao.getNewPostsAfterDate(timestamp,
-					userFBAccessToken);
+			return facebookFetcherDao.getNewPosts(timestamp, userFBAccessToken,
+					userAccessToken);
 		} catch (DataAccessException e) {
 			throw new SNSException("An error has occured", e);
 		}

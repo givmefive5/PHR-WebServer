@@ -10,10 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ImageHandlerException;
+import phr.exceptions.ServiceException;
 import phr.models.FBPost;
 import phr.models.FBPostType;
 import phr.models.PHRImage;
 import phr.models.PHRImageType;
+import phr.service.FacebookPostService;
+import phr.service.impl.FacebookPostServiceImpl;
 import phr.sns.datamining.dao.FacebookFetcherDao;
 import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.tools.ImageHandler;
@@ -262,43 +265,58 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	}
 
 	@Override
-	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
-			String userFBAccessToken) throws DataAccessException {
+	public List<FBPost> getNewPosts(Timestamp timestamp,
+			String userFBAccessToken, String userAccessToken)
+			throws DataAccessException {
 		List<Post> feed = getAllPostsFromFB(userFBAccessToken);
 		List<Post> newFeed = new ArrayList<>();
-		for (Post p : feed) {
-			if (p != null) {
-				Date dateLastUpdated = p.getUpdatedTime();
-				Timestamp timeLastUpdated = new Timestamp(
-						dateLastUpdated.getTime());
-				if (timeLastUpdated.after(timestamp)) {
-					newFeed.add(p);
-				}
-			}
-		}
-
-		List<Photo> photos = getAllPhotosFromFB(userFBAccessToken);
-		List<Photo> newPhotos = new ArrayList<>();
-
-		for (Photo p : photos) {
-			if (p != null) {
-				Date dateLastUpdated = p.getUpdatedTime();
-				Timestamp timeLastUpdated = new Timestamp(
-						dateLastUpdated.getTime());
-				if (timeLastUpdated.after(timestamp)) {
-					newPhotos.add(p);
-				}
-			}
-		}
 		try {
+			FacebookPostService fbPostService = new FacebookPostServiceImpl();
+			List<String> idsInDb = fbPostService
+					.getAllFacebookID(userAccessToken);
+
+			for (Post p : feed) {
+				if (p != null) {
+					Date dateLastUpdated = p.getUpdatedTime();
+					Timestamp timeLastUpdated = new Timestamp(
+							dateLastUpdated.getTime());
+					if (timeLastUpdated.after(timestamp)
+							&& noDuplicateInDB(p.getId(), idsInDb)) {
+						newFeed.add(p);
+					}
+				}
+			}
+
+			List<Photo> photos = getAllPhotosFromFB(userFBAccessToken);
+			List<Photo> newPhotos = new ArrayList<>();
+
+			for (Photo p : photos) {
+				if (p != null) {
+					Date dateLastUpdated = p.getUpdatedTime();
+					Timestamp timeLastUpdated = new Timestamp(
+							dateLastUpdated.getTime());
+					if (timeLastUpdated.after(timestamp)
+							&& noDuplicateInDB(p.getId(), idsInDb)) {
+						newPhotos.add(p);
+					}
+				}
+			}
+
 			List<FBPost> filteredPosts = filterPostsList(newFeed);
 			List<FBPost> filteredPhotos = filterPhotosList(newPhotos);
 			filteredPosts.addAll(filteredPhotos);
 			return filteredPosts;
-		} catch (ImageHandlerException e) {
+		} catch (ImageHandlerException | ServiceException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
 	}
 
+	private boolean noDuplicateInDB(String id, List<String> idsInDb) {
+		for (String s : idsInDb) {
+			if (s != null && s.equals(id))
+				return false;
+		}
+		return true;
+	}
 }

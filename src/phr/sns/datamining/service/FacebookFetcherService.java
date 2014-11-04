@@ -12,6 +12,7 @@ public interface FacebookFetcherService {
 			throws SNSException;
 
 	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
-			String userFBAccessToken) throws SNSException;
+			String userFBAccessToken, String userAccessToken)
+			throws SNSException;
 
 }

@@ -35,11 +35,12 @@ public class VerificationServiceImpl implements VerificationService {
 			throws ServiceException {
 
 		try {
-			List<FBPost> fbPosts = facebookFetcherDao.getNewPostsAfterDate(
-					startDate, userFBAccessToken);
+			List<FBPost> fbPosts = facebookFetcherDao.getNewPosts(startDate,
+					userFBAccessToken, userAccessToken);
 
 			for (FBPost p : fbPosts) {
-				System.out.println(p.getStatus() + " Class: " + p.getPostType());
+				System.out
+						.println(p.getStatus() + " Class: " + p.getPostType());
 				System.out.println("Extracted Words: ");
 				if (p.getExtractedWords() != null)
 					for (String s : p.getExtractedWords()) {
@@ -77,7 +78,8 @@ public class VerificationServiceImpl implements VerificationService {
 	public List<UnverifiedActivityEntry> getAllUnverifiedActivityPosts(
 			String userAccessToken) throws ServiceException {
 		try {
-			return verificationDao.getAllUnverifiedActivityPosts(userAccessToken);
+			return verificationDao
+					.getAllUnverifiedActivityPosts(userAccessToken);
 		} catch (DataAccessException e) {
 			throw new ServiceException("Unable to perform action", e);
 		}
@@ -87,7 +89,8 @@ public class VerificationServiceImpl implements VerificationService {
 	public List<UnverifiedRestaurantEntry> getAllUnverifiedRestaurantPosts(
 			String userAccessToken) throws ServiceException {
 		try {
-			return verificationDao.getAllUnverifiedRestaurantPosts(userAccessToken);
+			return verificationDao
+					.getAllUnverifiedRestaurantPosts(userAccessToken);
 		} catch (DataAccessException e) {
 			throw new ServiceException("Unable to perform action", e);
 		}
@@ -97,7 +100,8 @@ public class VerificationServiceImpl implements VerificationService {
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) throws ServiceException {
 		try {
-			return verificationDao.getAllUnverifiedSportsEstablishmentPosts(userAccessToken);
+			return verificationDao
+					.getAllUnverifiedSportsEstablishmentPosts(userAccessToken);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException("Unable to perform action", e);
@@ -106,12 +110,13 @@ public class VerificationServiceImpl implements VerificationService {
 
 	@Override
 	public void delete(UnverifiedFoodEntry entry) throws ServiceException {
-	    try {
+		try {
 			verificationDao.delete(entry);
 		} catch (EntryNotFoundException e) {
 			e.printStackTrace();
 			throw new ServiceException(
-					"Error has occurred while deleting an unverified food entry", e);
+					"Error has occurred while deleting an unverified food entry",
+					e);
 		}
 	}
 
@@ -122,7 +127,8 @@ public class VerificationServiceImpl implements VerificationService {
 		} catch (EntryNotFoundException e) {
 			e.printStackTrace();
 			throw new ServiceException(
-					"Error has occurred while deleting an unverified activity entry", e);
+					"Error has occurred while deleting an unverified activity entry",
+					e);
 		}
 	}
 
@@ -133,12 +139,14 @@ public class VerificationServiceImpl implements VerificationService {
 		} catch (EntryNotFoundException e) {
 			e.printStackTrace();
 			throw new ServiceException(
-					"Error has occurred while deleting an unverified restaurant entry", e);
+					"Error has occurred while deleting an unverified restaurant entry",
+					e);
 		}
 	}
 
 	@Override
-	public void delete(UnverifiedSportsEstablishmentEntry entry) throws ServiceException {
+	public void delete(UnverifiedSportsEstablishmentEntry entry)
+			throws ServiceException {
 		try {
 			verificationDao.delete(entry);
 		} catch (EntryNotFoundException e) {

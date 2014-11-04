@@ -70,7 +70,6 @@ public class DMFilter {
 		HashMap<String, String> corpusHashMap = new HashMap<>();
 		for (String c : corpus) {
 			corpusHashMap.put(Assist.onlyLettersDigitsAndSpaces(c), c);
-			System.out.println(c);
 		}
 		return corpusHashMap;
 	}
