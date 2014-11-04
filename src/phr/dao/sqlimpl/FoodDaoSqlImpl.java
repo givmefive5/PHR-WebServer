@@ -61,7 +61,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 				if (rs.next())
 					entryID = rs.getInt(1);
-
+				conn.close();
 				return entryID;
 
 			} catch (Exception e) {
@@ -93,7 +93,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-
+			conn.close();
 			return entryID;
 
 		} catch (Exception e) {
@@ -129,6 +129,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 						rs.getBoolean("fromFatsecret"),
 						rs.getInt("countUsed")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -159,6 +160,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				food.setRestaurantID(rs.getInt("restaurantID"));
 				food.setFromFatsecret(rs.getBoolean("fromFatsecret"));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -196,6 +198,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 						rs.getBoolean("fromFatsecret"),
 						rs.getInt("countUsed")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -216,7 +219,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			pstmt.setInt(1, food.getEntryID() );
 			
 			pstmt.executeUpdate();
-			
+			conn.close();
 		}catch (Exception e){
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database", e);
@@ -250,6 +253,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 						rs.getBoolean("fromFatsecret"),
 						rs.getInt("countUsed")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -272,10 +276,12 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -313,6 +319,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 						rs.getBoolean("fromFatsecret"),
 						rs.getInt("countUsed")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -349,6 +356,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				food.setCarbohydrate(rs.getDouble("carbohydrate"));
 				food.setCountUsed(rs.getInt("countUsed"));
 			}
+			conn.close();
 		}catch(Exception e){
 			throw new DataAccessException("An error has occured while tyring to access data from the database", e);
 		}

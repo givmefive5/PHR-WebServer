@@ -45,7 +45,7 @@ public class TestController {
 		VerificationService verification = new VerificationServiceImpl();
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-			Date date = dateFormat.parse("25/10/2013");
+			Date date = dateFormat.parse("03/11/2014");
 			long time = date.getTime();
 			Timestamp startDate = new Timestamp(time);
 			verification.updateListOfUnverifiedPosts(

@@ -100,6 +100,28 @@ public class User {
 		this.fbAccessToken = fbAccessToken;
 		this.photo = photo;
 	}
+	
+	public User(String username, String name, Timestamp dateOfBirth,
+			String gender, double height, double weight, String contactNumber,
+			String email, String emergencyPerson,
+			String emergencyContactNumber, String allergies,
+			String knownHealthProblems, String fbAccessToken, PHRImage photo) {
+		super();
+		this.username = username;
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
+		this.height = height;
+		this.weight = weight;
+		this.contactNumber = contactNumber;
+		this.email = email;
+		this.emergencyPerson = emergencyPerson;
+		this.emergencyContactNumber = emergencyContactNumber;
+		this.allergies = allergies;
+		this.knownHealthProblems = knownHealthProblems;
+		this.fbAccessToken = fbAccessToken;
+		this.photo = photo;
+	}
 
 	public String getFbAccessToken() {
 		return fbAccessToken;

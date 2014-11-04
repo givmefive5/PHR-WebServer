@@ -78,7 +78,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-
+			conn.close();
 			return entryID;
 
 		} catch (Exception e) {
@@ -118,6 +118,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 			pstmt.setInt(7, activityTrackerEntry.getEntryID());
 
 			pstmt.executeUpdate();
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -140,6 +141,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 
 			pstmt.executeUpdate();
 
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -182,6 +184,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 						rs.getDouble("calorieBurnedPerHour"),
 						rs.getInt("durationInSeconds")));	
 			}
+			conn.close();
 		}catch (Exception e){
 			throw new DataAccessException(
 				"An error has occured while trying to access data from the database",
@@ -208,10 +211,12 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Activit
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

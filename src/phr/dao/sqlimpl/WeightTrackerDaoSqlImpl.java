@@ -69,7 +69,7 @@ public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTra
 			int entryID = -1;
 			if (rs.next())
 				entryID = rs.getInt(1);
-
+			conn.close();
 			return entryID;
 
 		} catch (Exception e) {
@@ -106,7 +106,7 @@ public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTra
 			pstmt.setInt(5, weight.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -126,7 +126,7 @@ public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTra
 			pstmt.setInt(1, object.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -163,6 +163,7 @@ public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTra
 						image, 
 						rs.getDouble("weightInPounds")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -186,10 +187,12 @@ public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTra
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -233,6 +236,7 @@ public class WeightTrackerDaoSqlImpl extends BaseDaoSqlImpl implements WeightTra
 						image, 
 						rs.getDouble("weightInPounds"));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

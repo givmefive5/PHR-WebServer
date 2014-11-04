@@ -67,6 +67,7 @@ public class BloodSugarTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Blood
 			if (rs.next())
 				entryID = rs.getInt(1);
 
+			conn.close();
 			return entryID;
 
 		} catch (Exception e) {
@@ -105,6 +106,7 @@ public class BloodSugarTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Blood
 
 			pstmt.executeUpdate();
 
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -125,6 +127,7 @@ public class BloodSugarTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Blood
 
 			pstmt.executeUpdate();
 
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -157,6 +160,7 @@ public class BloodSugarTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Blood
 						.getString("status"), image,
 						rs.getDouble("bloodsugar"), rs.getString("type")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -180,10 +184,12 @@ public class BloodSugarTrackerDaoSqlImpl extends BaseDaoSqlImpl implements Blood
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

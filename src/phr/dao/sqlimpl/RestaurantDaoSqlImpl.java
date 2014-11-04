@@ -30,7 +30,7 @@ public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements
 			while (rs.next()) {
 				restaurant = new Restaurant(rs.getInt("id"), rs.getString("name"));
 			}
-			
+			conn.close();
 		}catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -55,8 +55,9 @@ public class RestaurantDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				restaurant.setName("name");
+				restaurant.setName(rs.getString("name"));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

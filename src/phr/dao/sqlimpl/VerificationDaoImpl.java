@@ -122,7 +122,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				pstmt.setString(7, unverifiedSportsEstablishmentEntry.getExtractedWord());
 
 				pstmt.executeUpdate();
-
+				conn.close();
 			} catch (Exception e) {
 				throw new DataAccessException(
 						"An error has occured while trying to access data from the database",
@@ -180,7 +180,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				pstmt.setString(9, unverifiedActivityEntry.getExtractedWord());
 
 				pstmt.executeUpdate();
-
+				conn.close();
 			} catch (Exception e) {
 				throw new DataAccessException(
 						"An error has occured while trying to access data from the database",
@@ -231,7 +231,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				pstmt.setString(7, unverifiedRestaurantEntry.getExtractedWord());
 
 				pstmt.executeUpdate();
-
+				conn.close();
 			} catch (Exception e) {
 				throw new DataAccessException(
 						"An error has occured while trying to access data from the database",
@@ -279,7 +279,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 				pstmt.setString(8, unverifiedFoodEntry.getExtractedWord());
 
 				pstmt.executeUpdate();
-
+				conn.close();
 			} catch (Exception e) {
 				throw new DataAccessException(
 						"An error has occured while trying to access data from the database",
@@ -322,6 +322,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getDouble("servingSize"),
 						rs.getString("extractedWord")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -367,6 +368,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						rs.getString("extractedWord")));
 
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -409,9 +411,10 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						image, 
 						rs.getString("extractedWord"), 
 						restaurantDao.getRestaurantGivenRestaurantID(rs.getInt("restaurantID")), 
-						foodDao.getFoodListGivenRestaurantName("extractedWord")));
+						foodDao.getFoodListGivenRestaurantName(rs.getString("extractedWord"))));
 
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -454,9 +457,10 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 						image, 
 						rs.getString("extractedWord"),
 						sportEstablishmentDao.getSportEstablishmentGivenGymID(rs.getInt("gymID")),
-						activityDao.getActivityListGivenGymName("extractedWord")));
+						activityDao.getActivityListGivenGymName(rs.getString("extractedWord"))));
 
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -476,7 +480,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(1, entry.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -495,7 +499,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(1, entry.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -514,7 +518,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(1, entry.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -533,7 +537,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(1, entry.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);

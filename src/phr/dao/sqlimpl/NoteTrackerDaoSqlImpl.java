@@ -66,6 +66,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 			if (rs.next())
 				entryID = rs.getInt(1);
 
+			conn.close();
 			return entryID;
 
 		} catch (Exception e) {
@@ -102,7 +103,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 			pstmt.setInt(5, note.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -121,7 +122,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 			pstmt.setInt(1, note.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -153,6 +154,7 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 				notes.add(new Note(rs.getInt("id"), rs.getString("facebookID"), rs.getTimestamp("dateAdded"), rs
 						.getString("status"), image, rs.getString("note")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -175,10 +177,12 @@ public class NoteTrackerDaoSqlImpl extends BaseDaoSqlImpl implements NoteTracker
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

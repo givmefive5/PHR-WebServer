@@ -1,9 +1,11 @@
 package phr.dao.sqlimpl;
 
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 
 import org.springframework.stereotype.Repository;
@@ -11,7 +13,10 @@ import org.springframework.stereotype.Repository;
 import phr.dao.UserDao;
 import phr.dao.WeightTrackerDao;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.ImageHandlerException;
 import phr.exceptions.UsernameAlreadyExistsException;
+import phr.models.PHRImage;
+import phr.models.PHRImageType;
 import phr.models.User;
 import phr.tools.Hasher;
 import phr.tools.ImageHandler;
@@ -46,7 +51,6 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 					"An error has occured while trying to access data from the database",
 					e);
 		}
-
 		return (count == 1) ? true : false;
 	}
 
@@ -64,7 +68,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			pstmt.setString(1, accessToken);
 			pstmt.setString(2, username);
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (SQLException e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -126,7 +130,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 					pstmt.setNull(15, Types.NULL);
 
 				pstmt.executeUpdate();
-
+				conn.close();
 			} catch (Exception e) {
 				throw new DataAccessException(
 						"An error has occured while trying to access data from the database",
@@ -240,10 +244,12 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 
 		} catch (SQLException e) {
 			throw new DataAccessException(
@@ -262,18 +268,40 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, accessToken);
-
+			
 			ResultSet rs = pstmt.executeQuery();
+			String encodedImage;
 
+			PHRImage image = null;
+			
+			
 			while (rs.next()) {
+				
+				if(rs.getString("photo") != null){
+					encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
+				}
 				user = new User(
 						rs.getString("username"),
-						rs.getString("password"));
+						rs.getString("fullName"),
+						rs.getTimestamp("birthdate"),
+						rs.getString("gender"),
+						rs.getDouble("heightInInches"),
+						rs.getDouble("weight"),
+						rs.getString("contactNumber"),
+						rs.getString("emailAddress"),
+						rs.getString("emergencyPerson"),
+						rs.getString("emergencyContactNumber"),
+						rs.getString("allergies"),
+						rs.getString("knownHealthProblems"),
+						rs.getString("fbAccessToken"),
+						image);
 			}
 			
+			conn.close();
 			return user;
 
-		} catch (SQLException e) {
+		} catch (SQLException | FileNotFoundException | ImageHandlerException e) {
 			throw new DataAccessException(
 					"Error in db fetching user access token", e);
 		}
@@ -329,7 +357,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 				pstmt.setNull(15, Types.NULL);
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

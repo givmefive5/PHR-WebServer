@@ -42,7 +42,7 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements FacebookPo
 			while(rs.next()){
 				facebookIDList.add(rs.getString("facebookID"));
 			}
-			
+			conn.close();
 		}catch(Exception e){
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -79,7 +79,7 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements FacebookPo
 			while(rs.next()){
 				latestTimestamp =  rs.getTimestamp("dateAdded");
 			}
-			
+			conn.close();
 		}catch(Exception e){
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

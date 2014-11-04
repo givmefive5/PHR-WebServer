@@ -67,6 +67,7 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			if (rs.next())
 				entryID = rs.getInt(1);
 
+			conn.close();
 			return entryID;
 
 		} catch (Exception e) {
@@ -104,6 +105,7 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			pstmt.executeUpdate();
 
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -123,6 +125,7 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			pstmt.executeUpdate();
 
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -161,6 +164,7 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 						rs.getInt("systolic"), 
 						rs.getInt("diastolic")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -186,10 +190,12 @@ public class BloodPressureTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

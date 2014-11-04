@@ -3,6 +3,10 @@ package phr.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +44,7 @@ public class VerificationController {
 
 	@RequestMapping("/verification/addNewPosts")
 	public void addNewPosts(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, JSONException {
+			HttpServletResponse response) throws IOException, JSONException, ParseException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -52,7 +56,11 @@ public class VerificationController {
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
 				String fbAccessToken = data.getString("fbAccessToken");
-				Timestamp startDate = new Timestamp(0); // need to be changed
+				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+				Date date = dateFormat.parse("03/11/2014");
+				long time = date.getTime();
+				Timestamp startDate = new Timestamp(time);
+				System.out.println("Fetching posts from " +startDate );
 				verificationService.updateListOfUnverifiedPosts(accessToken,
 						fbAccessToken, startDate);
 

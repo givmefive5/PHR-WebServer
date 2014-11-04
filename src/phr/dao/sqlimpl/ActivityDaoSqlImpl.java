@@ -48,7 +48,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 	
 				if (rs.next())
 					entryID = rs.getInt(1);
-	
+				conn.close();
 				return entryID;
 	
 			} catch (Exception e) {
@@ -79,6 +79,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 						rs.getDouble("MET"),
 						rs.getInt("countUsed")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -107,6 +108,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 				activity.setName(rs.getString("name"));
 				activity.setMET(rs.getDouble("MET"));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -137,6 +139,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 						rs.getDouble("MET"),
 						rs.getInt("countUsed")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -157,7 +160,8 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			pstmt.setInt(1, activity.getEntryID() );
 			
 			pstmt.executeUpdate();
-			
+
+			conn.close();
 		}catch (Exception e){
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database", e);
@@ -184,6 +188,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			if (rs.next())
 				entryID = rs.getInt(1);
 
+			conn.close();
 			return entryID;
 
 		} catch (Exception e) {
@@ -211,6 +216,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			while (rs.next()) {
 				MET = rs.getDouble("MET");
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -241,6 +247,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 						rs.getDouble("MET"),
 						rs.getInt("countUsed")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -261,11 +268,12 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 			pstmt.setString(1, activityName);
 
 			ResultSet rs = pstmt.executeQuery();
-
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -292,6 +300,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 				activity.setMET(rs.getDouble("MET"));
 				activity.setCountUsed(rs.getInt("countUsed"));
 			}
+			conn.close();
 		}catch(Exception e){
 			throw new DataAccessException("An error has occured while trying to access data from the database", e);
 		}
@@ -312,10 +321,12 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

@@ -72,6 +72,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			if (rs.next())
 				entryID = rs.getInt(1);
 
+			conn.close();
 			return entryID;
 
 		} catch (Exception e) {
@@ -110,7 +111,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(6, foodTrackerEntry.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -131,7 +132,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt.setInt(1, object.getEntryID());
 
 			pstmt.executeUpdate();
-
+			conn.close();
 		} catch (Exception e) {
 			throw new EntryNotFoundException(
 					"Object ID not found in the database", e);
@@ -171,6 +172,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 								.getInt("foodID")), rs
 								.getDouble("servingCount")));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -195,10 +197,12 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			ResultSet rs = pstmt.executeQuery();
 
+			Integer id = null;
 			if (rs.next())
-				return rs.getInt(1);
-			else
-				return null;
+				id = rs.getInt(1);
+
+			conn.close();
+			return id;
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",

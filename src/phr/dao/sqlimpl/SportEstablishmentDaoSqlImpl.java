@@ -27,6 +27,7 @@ public class SportEstablishmentDaoSqlImpl extends BaseDaoSqlImpl implements Spor
 			while (rs.next()) {
 				sportEstablishment = new SportEstablishment(rs.getInt("id"), rs.getString("name"));
 			}
+			conn.close();
 		}catch(Exception e){
 			throw new DataAccessException("An error has occured while trying to access data from the database", e);
 		}
@@ -49,6 +50,7 @@ public class SportEstablishmentDaoSqlImpl extends BaseDaoSqlImpl implements Spor
 			while (rs.next()) {
 				sportEstablishemt.setName(rs.getString("name"));
 			}
+			conn.close();
 		}catch(Exception e){
 			throw new DataAccessException("An error has occured while trying to access data from the database", e);
 		}
