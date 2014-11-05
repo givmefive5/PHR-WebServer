@@ -2,6 +2,9 @@ package phr.sns.datamining.daoimpl;
 
 import java.awt.Image;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +30,7 @@ import facebook4j.PagableList;
 import facebook4j.Paging;
 import facebook4j.Photo;
 import facebook4j.Post;
+import facebook4j.Reading;
 import facebook4j.auth.AccessToken;
 
 @Repository("facebookFetcherDao")
@@ -41,7 +45,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	public FacebookFetcherDaoImpl() {
 		facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId(appID, appSecret);
-		String permissions = "email,user_groups,user_status,read_stream,user_actions:instapp";
+		String permissions = "email,user_groups,user_status,read_stream, user_photos, user_actions:instapp";
 		facebook.setOAuthPermissions(permissions);
 	}
 
@@ -62,7 +66,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			System.out.println("Number of Posts Retrieved: "
 					+ completeList.size());
 			return completeList;
-		} catch (FacebookException e) {
+		} catch (FacebookException  e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
@@ -73,7 +77,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 		try {
 			List<Photo> completeList = new ArrayList<>();
-			PagableList<Photo> photos = facebook.getPhotos();
+			//PagableList<Photo> photos = facebook.getPhotos();
+			PagableList<Photo> photos = facebook.getUploadedPhotos();
 			Paging<Photo> paging = null;
 			do {
 				for (Photo photo : photos) {
@@ -82,6 +87,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				paging = photos.getPaging();
 			} while ((paging != null)
 					&& (photos = facebook.fetchNext(paging)) != null);
+			System.out.println("Number of Photos Retrieved: "
+					+ completeList.size());
 			return completeList;
 		} catch (FacebookException e) {
 			throw new DataAccessException(

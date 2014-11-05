@@ -530,7 +530,7 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 			throws EntryNotFoundException {
 		try {
 			Connection conn = getConnection();
-			String query = "DELETE FROM tempactivitytracker WHERE id = ?";
+			String query = "DELETE FROM tempsportestablishment WHERE id = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);

@@ -104,10 +104,14 @@ public class KeywordsExtractor {
 				s = Assist.cleanWord(s);
 				if (hasAMatchedWord(s, singleWordsFromCorpus))
 					newMessage += s + " ";
+				else
+					newMessage += "* ";
 			} else {
 				s = Assist.cleanWord(s);
 				if (singleWordsFromCorpus.contains(s))
 					newMessage += s + " ";
+				else
+					newMessage += "*";
 			}
 
 		}
