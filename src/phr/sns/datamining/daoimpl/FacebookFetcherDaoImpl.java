@@ -1,10 +1,8 @@
 package phr.sns.datamining.daoimpl;
 
 import java.awt.Image;
+import java.net.URL;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,8 +27,8 @@ import facebook4j.FacebookFactory;
 import facebook4j.PagableList;
 import facebook4j.Paging;
 import facebook4j.Photo;
+import facebook4j.PictureSize;
 import facebook4j.Post;
-import facebook4j.Reading;
 import facebook4j.auth.AccessToken;
 
 @Repository("facebookFetcherDao")
@@ -66,7 +64,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			System.out.println("Number of Posts Retrieved: "
 					+ completeList.size());
 			return completeList;
-		} catch (FacebookException  e) {
+		} catch (FacebookException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
@@ -77,7 +75,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 		try {
 			List<Photo> completeList = new ArrayList<>();
-			//PagableList<Photo> photos = facebook.getPhotos();
+			// PagableList<Photo> photos = facebook.getPhotos();
 			PagableList<Photo> photos = facebook.getUploadedPhotos();
 			Paging<Photo> paging = null;
 			do {
@@ -104,7 +102,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		List<FBPost> filteredPosts = new ArrayList<>();
 		try {
 			filteredPosts = filterPostsList(feed);
-		} catch (ImageHandlerException e) {
+		} catch (ImageHandlerException | FacebookException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
@@ -113,7 +111,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	}
 
 	private List<FBPost> filterPostsList(List<Post> feed)
-			throws ImageHandlerException, DataAccessException {
+			throws ImageHandlerException, DataAccessException,
+			FacebookException {
 
 		List<FBPost> posts = new ArrayList<>();
 
@@ -129,8 +128,11 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				String encodedImage = null;
 				PHRImage phrImage = null;
 				if (p.getPicture() != null) {
-					Image imageFromPost = ImageHandler.getImageFromURL(p
-							.getPicture());
+					String id = p.getId();
+					URL newURL = facebook.getPictureURL(id, PictureSize.large);
+					Image imageFromPost = ImageHandler.getImageFromURL(newURL);
+					// Image imageFromPost =
+					// ImageHandler.getImageFromURL(p.getPicture());
 					encodedImage = ImageHandler
 							.encodeImageToBase64(imageFromPost);
 					if (encodedImage != null)
@@ -193,7 +195,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	}
 
 	private List<FBPost> filterPhotosList(List<Photo> newPhotos)
-			throws ImageHandlerException, DataAccessException {
+			throws ImageHandlerException, DataAccessException,
+			FacebookException {
 		List<FBPost> posts = new ArrayList<>();
 		for (Photo p : newPhotos) {
 			if (p != null) {
@@ -207,8 +210,11 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				String encodedImage = null;
 				PHRImage phrImage = null;
 				if (p.getPicture() != null) {
-					Image imageFromPost = ImageHandler.getImageFromURL(p
-							.getPicture());
+					String id = p.getId();
+					URL newURL = facebook.getPictureURL(id, PictureSize.large);
+					Image imageFromPost = ImageHandler.getImageFromURL(newURL);
+					// Image imageFromPost =
+					// ImageHandler.getImageFromURL(p.getPicture());
 					encodedImage = ImageHandler
 							.encodeImageToBase64(imageFromPost);
 					if (encodedImage != null)
@@ -313,7 +319,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			List<FBPost> filteredPhotos = filterPhotosList(newPhotos);
 			filteredPosts.addAll(filteredPhotos);
 			return filteredPosts;
-		} catch (ImageHandlerException | ServiceException e) {
+		} catch (ImageHandlerException | ServiceException | FacebookException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}
