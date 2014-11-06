@@ -129,7 +129,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				PHRImage phrImage = null;
 				if (p.getPicture() != null) {
 					String id = p.getId();
-					URL newURL = facebook.getPictureURL(id, PictureSize.large);
+					URL newURL = facebook.getPictureURL(id, PictureSize.normal);
 					Image imageFromPost = ImageHandler.getImageFromURL(newURL);
 					// Image imageFromPost =
 					// ImageHandler.getImageFromURL(p.getPicture());
@@ -211,7 +211,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				PHRImage phrImage = null;
 				if (p.getPicture() != null) {
 					String id = p.getId();
-					URL newURL = facebook.getPictureURL(id, PictureSize.large);
+					URL newURL = facebook.getPictureURL(id, PictureSize.normal);
 					Image imageFromPost = ImageHandler.getImageFromURL(newURL);
 					// Image imageFromPost =
 					// ImageHandler.getImageFromURL(p.getPicture());
