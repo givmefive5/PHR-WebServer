@@ -1,5 +1,6 @@
 package phr.tools;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -24,14 +25,25 @@ public class ImageHandler {
 	public static Image getImageFromURL(URL pictureURL)
 			throws ImageHandlerException {
 		try {
+			System.out.println(pictureURL);
 			Image image = ImageIO.read(pictureURL);
-			return toBufferedImage(image);
+			return resizeImage(toBufferedImage(image));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
+	 private static BufferedImage resizeImage(BufferedImage originalImage){
+		 int type = originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+		 	final int IMG_WIDTH = 1000;
+		 	final int IMG_HEIGHT = 700;
+			BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+			Graphics2D g = resizedImage.createGraphics();
+			g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+			g.dispose();
+		 
+			return resizedImage;
+		    }
 	private static BufferedImage toBufferedImage(Image img) {
 		if (img.getClass().equals(BufferedImage.class))
 			return (BufferedImage) img;

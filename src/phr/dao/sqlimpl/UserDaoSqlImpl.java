@@ -312,50 +312,50 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 	
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE useraccountandinfo SET username = ?, password = ?, fullname = ?, birthdate = ?, gender = ?, heightInInches = ?, weight =?, "
-					+ "contactNumber = ?, emailAddress = ?, emergencyPerson = ?, emergencyContactNumber = ?, allergies = ?, knownHealthProblems = ?, fbAccessToken = ?, photo = ?) "
+			String query = "UPDATE useraccountandinfo SET username = ?,fullname = ?, birthdate = ?, gender = ?, heightInInches = ?, weight = ?, "
+					+ "contactNumber = ?, emailAddress = ?, emergencyPerson = ?, emergencyContactNumber = ?, allergies = ?, knownHealthProblems = ?, fbAccessToken = ?, photo = ? "
 					+ "WHERE userID = ?";
 			
 			PreparedStatement pstmt;
 
-			String hashedPassword = Hasher.hashString(user.getPassword());
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, user.getUsername());
-			pstmt.setString(2, hashedPassword);
-			pstmt.setString(3, user.getName());
-			pstmt.setTimestamp(4, user.getDateOfBirth());
-			pstmt.setString(5, user.getGender());
-			pstmt.setDouble(6, user.getHeight());
-			pstmt.setDouble(7, user.getWeight());
-			pstmt.setString(8, user.getContactNumber());
-			pstmt.setString(9, user.getEmail());
-			pstmt.setString(10, user.getEmergencyPerson());
-			pstmt.setString(11, user.getEmergencyContactNumber());
+			pstmt.setString(2, user.getName());
+			pstmt.setTimestamp(3, user.getDateOfBirth());
+			pstmt.setString(4, user.getGender());
+			pstmt.setDouble(5, user.getHeight());
+			pstmt.setDouble(6, user.getWeight());
+			pstmt.setString(7, user.getContactNumber());
+			pstmt.setString(8, user.getEmail());
+			pstmt.setString(9, user.getEmergencyPerson());
+			pstmt.setString(10, user.getEmergencyContactNumber());
 			
 			if(user.getAllergies() != null)
-				pstmt.setString(12, user.getAllergies());
+				pstmt.setString(11, user.getAllergies());
+			else
+				pstmt.setNull(11, Types.NULL);
+			
+			if(user.getKnownHealthProblems() != null)
+				pstmt.setString(12, user.getKnownHealthProblems());
 			else
 				pstmt.setNull(12, Types.NULL);
 			
-			if(user.getKnownHealthProblems() != null)
-				pstmt.setString(13, user.getKnownHealthProblems());
+			if(user.getFbAccessToken() != null)
+				pstmt.setString(13, user.getFbAccessToken());
 			else
 				pstmt.setNull(13, Types.NULL);
-			
-			if(user.getFbAccessToken() != null)
-				pstmt.setString(14, user.getFbAccessToken());
-			else
-				pstmt.setNull(14, Types.NULL);
 			
 			if (user.getPhoto() != null) {
 				String encodedImage = user.getPhoto().getEncodedImage();
 				String fileName = ImageHandler.saveImage_ReturnFilePath(encodedImage);
 				user.getPhoto().setFileName(fileName);
-				pstmt.setString(15, user.getPhoto().getFileName());
+				pstmt.setString(14, user.getPhoto().getFileName());
 			}
 			else
-				pstmt.setNull(15, Types.NULL);
+				pstmt.setNull(14, Types.NULL);
 
+			pstmt.setInt(15, user.getId());
+			
 			pstmt.executeUpdate();
 			conn.close();
 		} catch (Exception e) {
