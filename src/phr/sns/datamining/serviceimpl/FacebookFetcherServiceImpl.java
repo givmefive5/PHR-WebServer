@@ -18,16 +18,6 @@ public class FacebookFetcherServiceImpl implements FacebookFetcherService {
 	FacebookFetcherDao facebookFetcherDao = new FacebookFetcherDaoImpl();
 
 	@Override
-	public List<FBPost> getAllPosts(String userFBAccessToken)
-			throws SNSException {
-		try {
-			return facebookFetcherDao.getAllPosts(userFBAccessToken);
-		} catch (DataAccessException e) {
-			throw new SNSException("An error has occured", e);
-		}
-	}
-
-	@Override
 	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
 			String userFBAccessToken, String userAccessToken)
 			throws SNSException {

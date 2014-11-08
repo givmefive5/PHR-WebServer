@@ -8,9 +8,6 @@ import phr.models.FBPost;
 
 public interface FacebookFetcherService {
 
-	public List<FBPost> getAllPosts(String userFBAccessToken)
-			throws SNSException;
-
 	public List<FBPost> getNewPostsAfterDate(Timestamp timestamp,
 			String userFBAccessToken, String userAccessToken)
 			throws SNSException;
