@@ -8,9 +8,6 @@ import phr.models.FBPost;
 
 public interface FacebookFetcherDao {
 
-	public List<FBPost> getAllPosts(String userFBAccessToken)
-			throws DataAccessException;
-
 	public List<FBPost> getNewPosts(Timestamp timestamp,
 			String userFBAccessToken, String userAccessToken)
 			throws DataAccessException;

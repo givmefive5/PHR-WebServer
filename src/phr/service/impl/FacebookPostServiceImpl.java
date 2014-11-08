@@ -1,5 +1,6 @@
 package phr.service.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,17 @@ public class FacebookPostServiceImpl implements FacebookPostService {
 					"Error has occured while searching for facebookID", e);
 		}
 		return facebookIDList;
+	}
+
+	@Override
+	public Timestamp getLatestPostTimestamp(String accessToken)
+			throws ServiceException {
+		try {
+			return facebookPostDao.getLatestTimestamp(accessToken);
+		} catch (DataAccessException e) {
+			throw new ServiceException(
+					"Error has occured while searching for facebookID", e);
+		}
 	}
 
 }

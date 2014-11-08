@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -25,7 +22,9 @@ import phr.exceptions.SNSException;
 import phr.exceptions.ServiceException;
 import phr.fatsecret.FatSecretFetcher;
 import phr.models.Food;
+import phr.service.FacebookPostService;
 import phr.service.VerificationService;
+import phr.service.impl.FacebookPostServiceImpl;
 import phr.service.impl.VerificationServiceImpl;
 import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.sns.datamining.service.FacebookFetcherService;
@@ -35,6 +34,7 @@ import phr.tools.ImageHandler;
 @Controller
 public class TestController {
 	FacebookFetcherService fetcher = new FacebookFetcherServiceImpl();
+	FacebookPostService fbPostService = new FacebookPostServiceImpl();
 
 	@RequestMapping(value = "/test")
 	public void test(@RequestParam String userFBAccessToken)
@@ -44,13 +44,11 @@ public class TestController {
 
 		VerificationService verification = new VerificationServiceImpl();
 		try {
-			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-			Date date = dateFormat.parse("03/01/2013");
-			long time = date.getTime();
-			Timestamp startDate = new Timestamp(time);
-			verification.updateListOfUnverifiedPosts(
-					"d68f1df9-7418-490b-87d1-9eda23d973fd", userFBAccessToken,
-					startDate);
+			String accessToken = "d68f1df9-7418-490b-87d1-9eda23d973fd";
+			Timestamp startDate = fbPostService
+					.getLatestPostTimestamp(accessToken);
+			verification.updateListOfUnverifiedPosts(accessToken,
+					userFBAccessToken, startDate);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
@@ -105,8 +103,8 @@ public class TestController {
 		for (Food food : foods) {
 			System.out.println(food.getName());
 			System.out.println(food.getCalorie() + "kcal " + food.getProtein());
-			System.out.println(food.getServing() + " " + food.getFat()
-					+ "g " + food.getCarbohydrate() + "g");
+			System.out.println(food.getServing() + " " + food.getFat() + "g "
+					+ food.getCarbohydrate() + "g");
 
 		}
 	}

@@ -29,6 +29,7 @@ import facebook4j.Paging;
 import facebook4j.Photo;
 import facebook4j.PictureSize;
 import facebook4j.Post;
+import facebook4j.Reading;
 import facebook4j.auth.AccessToken;
 
 @Repository("facebookFetcherDao")
@@ -47,12 +48,14 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		facebook.setOAuthPermissions(permissions);
 	}
 
-	private List<Post> getAllPostsFromFB(String userFBAccessToken)
-			throws DataAccessException {
+	private List<Post> getAllPostsFromFB(String userFBAccessToken,
+			Timestamp timestamp) throws DataAccessException {
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 		try {
 			List<Post> completeList = new ArrayList<>();
-			PagableList<Post> feed = facebook.getPosts();
+			Reading reading = new Reading();
+			reading.since(new Date(timestamp.getTime()));
+			PagableList<Post> feed = facebook.getPosts(reading);
 			Paging<Post> paging = null;
 			do {
 				for (Post post : feed) {
@@ -70,13 +73,15 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		}
 	}
 
-	private List<Photo> getAllPhotosFromFB(String userFBAccessToken)
-			throws DataAccessException {
+	private List<Photo> getAllPhotosFromFB(String userFBAccessToken,
+			Timestamp timestamp) throws DataAccessException {
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 		try {
 			List<Photo> completeList = new ArrayList<>();
 			// PagableList<Photo> photos = facebook.getPhotos();
-			PagableList<Photo> photos = facebook.getUploadedPhotos();
+			Reading reading = new Reading();
+			reading.since(new Date(timestamp.getTime()));
+			PagableList<Photo> photos = facebook.getUploadedPhotos(reading);
 			Paging<Photo> paging = null;
 			do {
 				for (Photo photo : photos) {
@@ -95,10 +100,9 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 	}
 
-	@Override
-	public List<FBPost> getAllPosts(String userFBAccessToken)
-			throws DataAccessException {
-		List<Post> feed = getAllPostsFromFB(userFBAccessToken);
+	private List<FBPost> getAllPosts(String userFBAccessToken,
+			Timestamp timestamp) throws DataAccessException {
+		List<Post> feed = getAllPostsFromFB(userFBAccessToken, timestamp);
 		List<FBPost> filteredPosts = new ArrayList<>();
 		try {
 			filteredPosts = filterPostsList(feed);
@@ -281,7 +285,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	public List<FBPost> getNewPosts(Timestamp timestamp,
 			String userFBAccessToken, String userAccessToken)
 			throws DataAccessException {
-		List<Post> feed = getAllPostsFromFB(userFBAccessToken);
+		List<Post> feed = getAllPostsFromFB(userFBAccessToken, timestamp);
 		List<Post> newFeed = new ArrayList<>();
 		try {
 			FacebookPostService fbPostService = new FacebookPostServiceImpl();
@@ -300,7 +304,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				}
 			}
 
-			List<Photo> photos = getAllPhotosFromFB(userFBAccessToken);
+			List<Photo> photos = getAllPhotosFromFB(userFBAccessToken,
+					timestamp);
 			List<Photo> newPhotos = new ArrayList<>();
 
 			for (Photo p : photos) {
