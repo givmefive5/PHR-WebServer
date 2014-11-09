@@ -123,7 +123,6 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		for (Post p : feed) {
 			if (p != null) {
 				String message = p.getMessage();
-
 				boolean matchFound = false;
 
 				Date date = p.getCreatedTime();
@@ -147,6 +146,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				if (p.getPlace() != null)
 					message = message + " " + p.getPlace().getName();
 
+				System.out.println(message);
 				if (p.getMessage() != null) {
 					String[] foodWordsFound = keywordsExtractor
 							.extractFoodNames(message);
@@ -157,6 +157,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						post = new FBPost(p.getId(), message, timestamp,
 								FBPostType.FOOD, phrImage, foodWordsFound);
 						posts.add(post);
+						System.out.println("Class: FOOD");
+						for (String s : foodWordsFound) {
+							System.out.println(s);
+						}
 						continue;
 					} else if (restaurantsWordsFound.length > 0) {
 						matchFound = true;
@@ -164,6 +168,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 								FBPostType.RESTAURANT, phrImage,
 								restaurantsWordsFound);
 						posts.add(post);
+						System.out.println("Class: RESTAURANT");
+						for (String s : restaurantsWordsFound) {
+							System.out.println(s);
+						}
 						continue;
 					}
 
@@ -177,6 +185,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 								FBPostType.ACTIVITY, phrImage,
 								activityWordsFound);
 						posts.add(post);
+						System.out.println("Class: ACTIVITY");
+						for (String s : activityWordsFound) {
+							System.out.println(s);
+						}
 						continue;
 					} else if (sportsEstablishmentsWordsFound.length > 0) {
 						matchFound = true;
@@ -184,6 +196,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 								FBPostType.SPORTS_ESTABLISHMENTS, phrImage,
 								sportsEstablishmentsWordsFound);
 						posts.add(post);
+						System.out.println("Class: SPORTS ESTABLISHMENT");
+						for (String s : sportsEstablishmentsWordsFound) {
+							System.out.println(s);
+						}
 						continue;
 					}
 
@@ -228,7 +244,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 				if (p.getPlace() != null)
 					message = message + " " + p.getPlace().getName();
-
+				System.out.println(message);
 				if (p.getName() != null) {
 					String[] foodWordsFound = keywordsExtractor
 							.extractFoodNames(message);
@@ -239,6 +255,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						post = new FBPost(p.getId(), message, timestamp,
 								FBPostType.FOOD, phrImage, foodWordsFound);
 						posts.add(post);
+						System.out.println("Class: FOOD");
+						for (String s : foodWordsFound) {
+							System.out.println(s);
+						}
 						continue;
 					} else if (restaurantsWordsFound.length > 0) {
 						matchFound = true;
@@ -246,6 +266,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 								FBPostType.RESTAURANT, phrImage,
 								restaurantsWordsFound);
 						posts.add(post);
+						System.out.println("Class: RESTAURANT");
+						for (String s : restaurantsWordsFound) {
+							System.out.println(s);
+						}
 						continue;
 					}
 
@@ -259,6 +283,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 								FBPostType.ACTIVITY, phrImage,
 								activityWordsFound);
 						posts.add(post);
+						System.out.println("Class: ACTIVITY");
+						for (String s : activityWordsFound) {
+							System.out.println(s);
+						}
 						continue;
 					} else if (sportsEstablishmentsWordsFound.length > 0) {
 						matchFound = true;
@@ -266,6 +294,10 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 								FBPostType.SPORTS_ESTABLISHMENTS, phrImage,
 								sportsEstablishmentsWordsFound);
 						posts.add(post);
+						System.out.println("Class: SPORTS ESTABLISHMENTS");
+						for (String s : sportsEstablishmentsWordsFound) {
+							System.out.println(s);
+						}
 						continue;
 					}
 
