@@ -3,7 +3,6 @@ package phr.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.FoodDao;
@@ -17,42 +16,48 @@ import phr.service.FoodService;
 
 @Service("foodService")
 public class FoodServiceImpl implements FoodService {
-	
-	//@Autowired
-	//FoodDao foodDao;
-	
+
+	// @Autowired
+	// FoodDao foodDao;
+
 	FoodDao foodDao = new FoodDaoSqlImpl();
-	
+
 	@Override
-	public List<Food> search(String searchQuery)
-			throws ServiceException {
-		
+	public List<Food> search(String searchQuery) throws ServiceException {
+
 		List<Food> foods = new ArrayList<Food>();
 		try {
 			foods.addAll(foodDao.suggest(searchQuery));
 			foods.addAll(FatSecretFetcher.searchFood(searchQuery));
 			foods.addAll(foodDao.search(searchQuery));
+			if ((searchQuery == "" || searchQuery == null) && foods.size() > 30)
+				return foods.subList(0, 30);
+			else if (searchQuery == "" || searchQuery == null)
+				return foods.subList(0, foods.size());
+			else
+				return foods;
 		} catch (DataAccessException | FatSecretFetcherException e) {
 			throw new ServiceException(
 					"Error has occured while searching for food entries", e);
 		}
-		return foods;
+
 	}
 
 	@Override
 	public int addReturnEntryID(Food food) throws ServiceException {
-		
+
 		try {
 			return foodDao.addReturnEntryID(food);
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ServiceException(
-					"Error has occurred while adding a food entry in the list", e);
+					"Error has occurred while adding a food entry in the list",
+					e);
 		}
 	}
 
 	@Override
-	public List<Food> getAll() throws ServiceException{
+	public List<Food> getAll() throws ServiceException {
 		try {
 			return foodDao.getAllFood();
 		} catch (DataAccessException e) {
