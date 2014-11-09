@@ -25,7 +25,6 @@ public class ImageHandler {
 	public static Image getImageFromURL(URL pictureURL)
 			throws ImageHandlerException {
 		try {
-			System.out.println(pictureURL);
 			Image image = ImageIO.read(pictureURL);
 			return resizeImage(toBufferedImage(image));
 		} catch (IOException e) {

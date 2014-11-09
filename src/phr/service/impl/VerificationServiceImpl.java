@@ -38,15 +38,15 @@ public class VerificationServiceImpl implements VerificationService {
 			List<FBPost> fbPosts = facebookFetcherDao.getNewPosts(startDate,
 					userFBAccessToken, userAccessToken);
 
-			for (FBPost p : fbPosts) {
-				System.out
-						.println(p.getStatus() + " Class: " + p.getPostType());
-				System.out.println("Extracted Words: ");
-				if (p.getExtractedWords() != null)
-					for (String s : p.getExtractedWords()) {
-						System.out.println(s);
-					}
-			}
+			// for (FBPost p : fbPosts) {
+			// System.out
+			// .println(p.getStatus() + " Class: " + p.getPostType());
+			// System.out.println("Extracted Words: ");
+			// if (p.getExtractedWords() != null)
+			// for (String s : p.getExtractedWords()) {
+			// System.out.println(s);
+			// }
+			// }
 
 			addNewUnverifiedPosts(userAccessToken, fbPosts);
 		} catch (DataAccessException e) {
