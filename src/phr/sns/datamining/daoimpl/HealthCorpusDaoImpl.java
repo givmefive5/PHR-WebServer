@@ -21,7 +21,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 		List<String> foodList = new ArrayList<>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT name FROM foodlist";
+			String query = "SELECT DISTINCT name FROM foodlist";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -46,7 +46,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT wordTenses FROM activitycorpus";
+			String query = "SELECT DISTINCT wordTenses FROM activitycorpus";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -68,7 +68,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 		List<String> restaurantList = new ArrayList<>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT name FROM restaurantlist";
+			String query = "SELECT DISTINCT name FROM restaurantlist";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -93,7 +93,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 		List<String> sportEstablishmemtList = new ArrayList<>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT name FROM gymList";
+			String query = "SELECT DISTINCT name FROM gymList";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
