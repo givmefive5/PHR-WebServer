@@ -38,7 +38,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	private final KeywordsExtractor keywordsExtractor = new KeywordsExtractor();
 	private static final String appID = "458502710946706";
 	private static final String appSecret = "c41ccfbd5ff58c87342f4df5911d2d88";
-
+	int foodCount = 0, actCount = 0, restoCount = 0, seCount = 0, unrCount = 0;
 	Facebook facebook;
 
 	public FacebookFetcherDaoImpl() {
@@ -161,6 +161,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						for (String s : foodWordsFound) {
 							System.out.println(s);
 						}
+						foodCount++;
 						continue;
 					} else if (restaurantsWordsFound.length > 0) {
 						matchFound = true;
@@ -173,6 +174,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						for (String s : restaurantsWordsFound) {
 							System.out.println(s);
 						}
+						restoCount++;
 						continue;
 					}
 
@@ -191,6 +193,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						for (String s : activityWordsFound) {
 							System.out.println(s);
 						}
+						actCount++;
 						continue;
 					} else if (sportsEstablishmentsWordsFound.length > 0) {
 						matchFound = true;
@@ -203,6 +206,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						for (String s : sportsEstablishmentsWordsFound) {
 							System.out.println(s);
 						}
+						seCount++;
 						continue;
 					}
 
@@ -210,6 +214,9 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						post = new FBPost(p.getId(), message, timestamp,
 								FBPostType.UNRELATED, phrImage, null);
 						posts.add(post);
+						System.out.println(message);
+						System.out.println("Class: UNRELATED");
+						unrCount++;
 					}
 				}
 			}
@@ -263,6 +270,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						for (String s : foodWordsFound) {
 							System.out.println(s);
 						}
+						foodCount++;
 						continue;
 					} else if (restaurantsWordsFound.length > 0) {
 						matchFound = true;
@@ -275,6 +283,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						for (String s : restaurantsWordsFound) {
 							System.out.println(s);
 						}
+						restoCount++;
 						continue;
 					}
 
@@ -293,6 +302,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						for (String s : activityWordsFound) {
 							System.out.println(s);
 						}
+						actCount++;
 						continue;
 					} else if (sportsEstablishmentsWordsFound.length > 0) {
 						matchFound = true;
@@ -305,6 +315,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						for (String s : sportsEstablishmentsWordsFound) {
 							System.out.println(s);
 						}
+						seCount++;
 						continue;
 					}
 
@@ -312,6 +323,9 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 						post = new FBPost(p.getId(), message, timestamp,
 								FBPostType.UNRELATED, phrImage, null);
 						posts.add(post);
+						System.out.println(message);
+						System.out.println("Class: UNRELATED");
+						unrCount++;
 					}
 				}
 			}
@@ -361,6 +375,9 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 			List<FBPost> filteredPosts = filterPostsList(newFeed);
 			List<FBPost> filteredPhotos = filterPhotosList(newPhotos);
+			System.out.println("F: " + foodCount + " A: " + actCount + " R: "
+					+ restoCount);
+			System.out.println("S: " + seCount + " U: " + unrCount);
 			filteredPosts.addAll(filteredPhotos);
 			return filteredPosts;
 		} catch (ImageHandlerException | ServiceException | FacebookException e) {
