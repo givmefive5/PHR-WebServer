@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
@@ -153,6 +155,50 @@ public class ActivityController {
 				| UserServiceException e) {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
+
+	@RequestMapping(value = "/activitylist/delete", method = RequestMethod.POST)
+	public void deleteFood(HttpServletRequest request,
+			HttpServletResponse response) throws JSONException, IOException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				Activity activity = GSONConverter.getGSONObjectGivenJsonObject(
+						data.getJSONObject("objectToDelete"), Activity.class);
+				activityService.delete(activity);
+
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", null, "Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		} catch (EntryNotFoundException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"The entry to be deleted was not found in the database + "
 							+ e.getMessage());
 			e.printStackTrace();
 		}

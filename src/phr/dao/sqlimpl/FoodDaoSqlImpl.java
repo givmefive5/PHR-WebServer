@@ -18,29 +18,29 @@ import phr.models.Food;
 public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 	@Override
-
 	public int addReturnEntryID(Food food) throws DataAccessException {
-		
-		if(food.getEntryID()!= null){
+
+		if (food.getEntryID() != null) {
 			incrementCountUsed(food);
 			return food.getEntryID();
 		}
 		int entryID = foodEntryExists(food);
 		if (entryID != -1) {
-			
+
 			incrementCountUsed(food);
-			
+
 			return entryID;
 		} else {
 
 			try {
-						
+
 				Connection conn = getConnection();
 				String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, serving, restaurantID, fromFatsecret, countUsed) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement pstmt;
 
-				pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				pstmt = conn.prepareStatement(query,
+						Statement.RETURN_GENERATED_KEYS);
 				pstmt.setString(1, food.getName());
 				pstmt.setDouble(2, food.getCalorie());
 				pstmt.setDouble(3, food.getProtein());
@@ -48,7 +48,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				pstmt.setDouble(5, food.getCarbohydrate());
 				pstmt.setString(6, food.getServing());
 
-				if(food.getRestaurantID() == null)
+				if (food.getRestaurantID() == null)
 					pstmt.setNull(7, Types.NULL);
 				else
 					pstmt.setInt(7, food.getRestaurantID());
@@ -81,7 +81,8 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 					+ "name = ?, calorie = ?, protein = ?, fat = ?, carbohydrate = ?, serving = ?";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query,
+					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, food.getName());
 			pstmt.setDouble(2, food.getCalorie());
 			pstmt.setDouble(3, food.getFat());
@@ -117,17 +118,11 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				foods.add(new Food(
-						rs.getInt("id"), 
-						rs.getString("name"), 
-						rs.getDouble("calorie"), 
-						rs.getDouble("protein"), 
-						rs.getDouble("fat"), 
-						rs.getDouble("carbohydrate"), 
-						rs.getString("serving"), 
-						rs.getInt("restaurantID"), 
-						rs.getBoolean("fromFatsecret"),
-						rs.getInt("countUsed")));
+				foods.add(new Food(rs.getInt("id"), rs.getString("name"), rs
+						.getDouble("calorie"), rs.getDouble("protein"), rs
+						.getDouble("fat"), rs.getDouble("carbohydrate"), rs
+						.getString("serving"), rs.getInt("restaurantID"), rs
+						.getBoolean("fromFatsecret"), rs.getInt("countUsed")));
 			}
 			conn.close();
 		} catch (Exception e) {
@@ -181,22 +176,16 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, "%"+searchQuery+"%");
+			pstmt.setString(1, "%" + searchQuery + "%");
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 
-				foods.add(new Food(
-						rs.getInt("id"), 
-						rs.getString("name"),
-						rs.getDouble("calorie"), 
-						rs.getDouble("protein"),
-						rs.getDouble("fat"), 
-						rs.getDouble("carbohydrate"), 
-						rs.getString("serving"), 
-						rs.getInt("restaurantID"), 
-						rs.getBoolean("fromFatsecret"),
-						rs.getInt("countUsed")));
+				foods.add(new Food(rs.getInt("id"), rs.getString("name"), rs
+						.getDouble("calorie"), rs.getDouble("protein"), rs
+						.getDouble("fat"), rs.getDouble("carbohydrate"), rs
+						.getString("serving"), rs.getInt("restaurantID"), rs
+						.getBoolean("fromFatsecret"), rs.getInt("countUsed")));
 			}
 			conn.close();
 		} catch (Exception e) {
@@ -209,25 +198,27 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	public void incrementCountUsed(Food food) throws DataAccessException {
-		
-		try{
+
+		try {
 			Connection conn = getConnection();
 			String query = "UPDATE foodlist SET countUsed = countUsed + 1 WHERE id = ? ";
-			
+
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, food.getEntryID() );
-			
+			pstmt.setInt(1, food.getEntryID());
+
 			pstmt.executeUpdate();
 			conn.close();
-		}catch (Exception e){
+		} catch (Exception e) {
 			throw new DataAccessException(
-					"An error has occured while trying to access data from the database", e);
+					"An error has occured while trying to access data from the database",
+					e);
 		}
 	}
 
 	@Override
-	public List<Food> getFoodListGivenRestaurantName(String restaurantName) throws DataAccessException {
+	public List<Food> getFoodListGivenRestaurantName(String restaurantName)
+			throws DataAccessException {
 		List<Food> foods = new ArrayList<Food>();
 
 		try {
@@ -241,17 +232,11 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				foods.add(new Food(
-						rs.getInt("id"), 
-						rs.getString("name"), 
-						rs.getDouble("calorie"), 
-						rs.getDouble("protein"), 
-						rs.getDouble("fat"), 
-						rs.getDouble("carbohydrate"), 
-						rs.getString("serving"), 
-						rs.getInt("restaurantID"), 
-						rs.getBoolean("fromFatsecret"),
-						rs.getInt("countUsed")));
+				foods.add(new Food(rs.getInt("id"), rs.getString("name"), rs
+						.getDouble("calorie"), rs.getDouble("protein"), rs
+						.getDouble("fat"), rs.getDouble("carbohydrate"), rs
+						.getString("serving"), rs.getInt("restaurantID"), rs
+						.getBoolean("fromFatsecret"), rs.getInt("countUsed")));
 			}
 			conn.close();
 		} catch (Exception e) {
@@ -261,7 +246,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		}
 		return foods;
 	}
-	
+
 	@Override
 	public Integer getRestaurantID(String restaurantName)
 			throws DataAccessException {
@@ -291,33 +276,27 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 	@Override
 	public List<Food> suggest(String searchQuery) throws DataAccessException {
-		
+
 		List<Food> foods = new ArrayList<Food>();
 
 		try {
 			Connection conn = getConnection();
-			
+
 			String query = "SELECT * FROM foodlist WHERE calorie != null AND "
 					+ "protein != null AND fat != null AND carbohydrate != null AND name LIKE ?"
 					+ "ORDER BY countUsed DESC";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, "%"+searchQuery+"%");
+			pstmt.setString(1, "%" + searchQuery + "%");
 
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				foods.add(new Food(
-						rs.getInt("id"), 
-						rs.getString("name"), 
-						rs.getDouble("calorie"), 
-						rs.getDouble("protein"), 
-						rs.getDouble("fat"), 
-						rs.getDouble("carbohydrate"), 
-						rs.getString("serving"), 
-						rs.getInt("restaurantID"), 
-						rs.getBoolean("fromFatsecret"),
-						rs.getInt("countUsed")));
+				foods.add(new Food(rs.getInt("id"), rs.getString("name"), rs
+						.getDouble("calorie"), rs.getDouble("protein"), rs
+						.getDouble("fat"), rs.getDouble("carbohydrate"), rs
+						.getString("serving"), rs.getInt("restaurantID"), rs
+						.getBoolean("fromFatsecret"), rs.getInt("countUsed")));
 			}
 			conn.close();
 		} catch (Exception e) {
@@ -328,14 +307,13 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		return foods;
 	}
 
-
 	@Override
 	public Food getFoodGivenName(String searchQuery) throws DataAccessException {
-		
+
 		Food food = null;
-		try{
+		try {
 			Connection conn = getConnection();
-			
+
 			String query = "SELECT * FROM foodlist WHERE name = ?";
 
 			PreparedStatement pstmt;
@@ -343,7 +321,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 			pstmt.setString(1, searchQuery);
 
 			ResultSet rs = pstmt.executeQuery();
-			
+
 			while (rs.next()) {
 				food = new Food(rs.getInt("id"));
 				food.setName(rs.getString("name"));
@@ -357,9 +335,17 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				food.setCountUsed(rs.getInt("countUsed"));
 			}
 			conn.close();
-		}catch(Exception e){
-			throw new DataAccessException("An error has occured while tyring to access data from the database", e);
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while tyring to access data from the database",
+					e);
 		}
 		return food;
+	}
+
+	@Override
+	public void delete(Food food) {
+		// TODO Auto-generated method stub
+
 	}
 }

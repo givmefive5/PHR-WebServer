@@ -3,12 +3,12 @@ package phr.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.ActivityDao;
 import phr.dao.sqlimpl.ActivityDaoSqlImpl;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.ServiceException;
 import phr.models.Activity;
 import phr.service.ActivityService;
@@ -16,9 +16,9 @@ import phr.service.ActivityService;
 @Service("activityService")
 public class ActivityServiceImpl implements ActivityService {
 
-	//@Autowired
-	//ActivityDao activityDao;
-	
+	// @Autowired
+	// ActivityDao activityDao;
+
 	ActivityDao activityDao = new ActivityDaoSqlImpl();
 
 	@Override
@@ -65,6 +65,12 @@ public class ActivityServiceImpl implements ActivityService {
 		} catch (DataAccessException e) {
 			throw new ServiceException("An error occurred", e);
 		}
+	}
+
+	@Override
+	public void delete(Activity activity) throws ServiceException,
+			EntryNotFoundException {
+		activityDao.delete(activity);
 	}
 
 }

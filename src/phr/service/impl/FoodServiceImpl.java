@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import phr.dao.FoodDao;
 import phr.dao.sqlimpl.FoodDaoSqlImpl;
 import phr.exceptions.DataAccessException;
+import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.FatSecretFetcherException;
 import phr.exceptions.ServiceException;
 import phr.fatsecret.FatSecretFetcher;
@@ -73,6 +74,12 @@ public class FoodServiceImpl implements FoodService {
 		} catch (DataAccessException e) {
 			throw new ServiceException("An error has occurred", e);
 		}
+	}
+
+	@Override
+	public void delete(Food food) throws ServiceException,
+			EntryNotFoundException {
+		foodDao.delete(food);
 	}
 
 }
