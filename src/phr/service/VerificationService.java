@@ -28,15 +28,16 @@ public interface VerificationService {
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) throws ServiceException;
 
-	public void delete(UnverifiedFoodEntry entry)
+	public void delete(String accessToken, UnverifiedFoodEntry entry)
 			throws EntryNotFoundException, ServiceException;
 
-	public void delete(UnverifiedActivityEntry entry)
+	public void delete(String accessToken, UnverifiedActivityEntry entry)
 			throws EntryNotFoundException, ServiceException;
 
-	public void delete(UnverifiedRestaurantEntry entry)
+	public void delete(String accessToken, UnverifiedRestaurantEntry entry)
 			throws EntryNotFoundException, ServiceException;
 
-	public void delete(UnverifiedSportsEstablishmentEntry entry)
+	public void delete(String accessToken,
+			UnverifiedSportsEstablishmentEntry entry)
 			throws EntryNotFoundException, ServiceException;
 }

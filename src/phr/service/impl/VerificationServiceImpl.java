@@ -109,9 +109,10 @@ public class VerificationServiceImpl implements VerificationService {
 	}
 
 	@Override
-	public void delete(UnverifiedFoodEntry entry) throws ServiceException {
+	public void delete(String accessToken, UnverifiedFoodEntry entry)
+			throws ServiceException {
 		try {
-			verificationDao.delete(entry);
+			verificationDao.delete(accessToken, entry);
 		} catch (EntryNotFoundException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -121,9 +122,10 @@ public class VerificationServiceImpl implements VerificationService {
 	}
 
 	@Override
-	public void delete(UnverifiedActivityEntry entry) throws ServiceException {
+	public void delete(String accessToken, UnverifiedActivityEntry entry)
+			throws ServiceException {
 		try {
-			verificationDao.delete(entry);
+			verificationDao.delete(accessToken, entry);
 		} catch (EntryNotFoundException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -133,9 +135,10 @@ public class VerificationServiceImpl implements VerificationService {
 	}
 
 	@Override
-	public void delete(UnverifiedRestaurantEntry entry) throws ServiceException {
+	public void delete(String accessToken, UnverifiedRestaurantEntry entry)
+			throws ServiceException {
 		try {
-			verificationDao.delete(entry);
+			verificationDao.delete(accessToken, entry);
 		} catch (EntryNotFoundException e) {
 			e.printStackTrace();
 			throw new ServiceException(
@@ -145,10 +148,10 @@ public class VerificationServiceImpl implements VerificationService {
 	}
 
 	@Override
-	public void delete(UnverifiedSportsEstablishmentEntry entry)
-			throws ServiceException {
+	public void delete(String accessToken,
+			UnverifiedSportsEstablishmentEntry entry) throws ServiceException {
 		try {
-			verificationDao.delete(entry);
+			verificationDao.delete(accessToken, entry);
 		} catch (EntryNotFoundException e) {
 			e.printStackTrace();
 			throw new ServiceException(

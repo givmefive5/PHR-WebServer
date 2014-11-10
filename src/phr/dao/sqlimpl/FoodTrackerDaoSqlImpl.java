@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import phr.dao.FacebookPostDao;
 import phr.dao.FoodDao;
 import phr.dao.FoodTrackerDao;
 import phr.dao.UserDao;
@@ -32,6 +33,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 	UserDao userDao = new UserDaoSqlImpl();
 	FoodDao foodDao = new FoodDaoSqlImpl();
+	FacebookPostDao facebookPostDao = new FacebookPostDaoSqlImpl();
 
 	@Override
 	public int addReturnsEntryID(FoodTrackerEntry foodTrackerEntry)
@@ -124,6 +126,11 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			EntryNotFoundException {
 
 		try {
+
+			if (object.getFacebookID() != null)
+				facebookPostDao.addDeletedFacebookID(object.getUserID(),
+						object.getFacebookID());
+
 			Connection conn = getConnection();
 			String query = "DELETE FROM foodtracker WHERE id = ?";
 

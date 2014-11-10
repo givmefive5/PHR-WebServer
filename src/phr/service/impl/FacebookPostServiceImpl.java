@@ -21,6 +21,8 @@ public class FacebookPostServiceImpl implements FacebookPostService {
 
 		try {
 			facebookIDList = facebookPostDao.getAllFacebookID(AccessToken);
+			facebookIDList.addAll(facebookPostDao
+					.getAllDeletedFacebokID(AccessToken));
 		} catch (DataAccessException e) {
 			throw new ServiceException(
 					"Error has occured while searching for facebookID", e);

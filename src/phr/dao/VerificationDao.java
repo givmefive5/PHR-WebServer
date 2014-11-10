@@ -27,12 +27,17 @@ public interface VerificationDao {
 	public List<UnverifiedSportsEstablishmentEntry> getAllUnverifiedSportsEstablishmentPosts(
 			String userAccessToken) throws DataAccessException;
 
-	public void delete(UnverifiedFoodEntry entry) throws EntryNotFoundException;
+	public void delete(String accessToken, UnverifiedFoodEntry entry)
+			throws EntryNotFoundException;
 
-	public void delete(UnverifiedActivityEntry entry) throws EntryNotFoundException;
+	public void delete(String accessToken, UnverifiedActivityEntry entry)
+			throws EntryNotFoundException;
 
-	public void delete(UnverifiedRestaurantEntry entry) throws EntryNotFoundException;
+	public void delete(String accessToken, UnverifiedRestaurantEntry entry)
+			throws EntryNotFoundException;
 
-	public void delete(UnverifiedSportsEstablishmentEntry entry) throws EntryNotFoundException;
+	public void delete(String accessToken,
+			UnverifiedSportsEstablishmentEntry entry)
+			throws EntryNotFoundException;
 
 }

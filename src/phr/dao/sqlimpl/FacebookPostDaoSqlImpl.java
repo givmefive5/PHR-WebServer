@@ -91,4 +91,57 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements
 		return latestTimestamp;
 	}
 
+	@Override
+	public List<String> getAllDeletedFacebokID(String AccessToken)
+			throws DataAccessException {
+
+		List<String> facebookIDList = new ArrayList<String>();
+
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT facebookID FROM deletedfbpost "
+					+ "WHERE userID = ?";
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(AccessToken));
+
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				facebookIDList.add(rs.getString("facebookID"));
+			}
+			conn.close();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+
+		return facebookIDList;
+	}
+
+	@Override
+	public void addDeletedFacebookID(int UserID, String FacebookID)
+			throws DataAccessException {
+
+		try {
+			Connection conn = getConnection();
+			String query = "INSERT INTO deletedfbpost(facebookID, userID) VALUES (?, ?) ";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, FacebookID);
+			pstmt.setInt(2, UserID);
+
+			pstmt.executeUpdate();
+
+			conn.close();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+
+	}
+
 }

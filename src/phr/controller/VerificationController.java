@@ -44,7 +44,8 @@ public class VerificationController {
 
 	@RequestMapping("/verification/addNewPosts")
 	public void addNewPosts(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, JSONException, ParseException {
+			HttpServletResponse response) throws IOException, JSONException,
+			ParseException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -60,7 +61,7 @@ public class VerificationController {
 				Date date = dateFormat.parse("03/11/2014");
 				long time = date.getTime();
 				Timestamp startDate = new Timestamp(time);
-				System.out.println("Fetching posts from " +startDate );
+				System.out.println("Fetching posts from " + startDate);
 				verificationService.updateListOfUnverifiedPosts(accessToken,
 						fbAccessToken, startDate);
 
@@ -276,7 +277,7 @@ public class VerificationController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								UnverifiedFoodEntry.class);
-				verificationService.delete(food);
+				verificationService.delete(accessToken, food);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -322,7 +323,7 @@ public class VerificationController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								UnverifiedActivityEntry.class);
-				verificationService.delete(activity);
+				verificationService.delete(accessToken, activity);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -368,7 +369,7 @@ public class VerificationController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								UnverifiedRestaurantEntry.class);
-				verificationService.delete(restaurant);
+				verificationService.delete(accessToken, restaurant);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
@@ -414,7 +415,7 @@ public class VerificationController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("objectToDelete"),
 								UnverifiedSportsEstablishmentEntry.class);
-				verificationService.delete(se);
+				verificationService.delete(accessToken, se);
 
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", null, "Process has been completed");
