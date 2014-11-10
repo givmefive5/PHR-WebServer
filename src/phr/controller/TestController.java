@@ -49,7 +49,7 @@ public class TestController {
 			String accessToken = "d68f1df9-7418-490b-87d1-9eda23d973fd";
 			Timestamp startDate = fbPostService
 					.getLatestPostTimestamp(accessToken);
-			String date_s = " 2013-11-18 00:00:00.0";
+			String date_s = " 2013-11-10 00:00:00.0";
 			SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
 			Date date = dt.parse(date_s);
 			Timestamp timestamp = new Timestamp(date.getTime());

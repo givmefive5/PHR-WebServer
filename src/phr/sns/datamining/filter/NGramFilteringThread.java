@@ -29,7 +29,6 @@ public class NGramFilteringThread extends Thread {
 			for (String ngram : ngramList) {
 				String cleaned = Assist.onlyLettersDigitsAndSpaces(ngram);
 				if (corpus.get(cleaned) != null) {
-					System.out.println(ngram);
 					foundWords.add(corpus.get(cleaned));
 					message = message.replace(ngram, "*");
 					message = message.replaceAll("[*][ *][ *]*", "* ");
