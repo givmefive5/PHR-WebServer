@@ -155,7 +155,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, foodID, servingCount, facebookID status, photo, dateAdded "
+			String query = "SELECT id, foodID, servingCount, facebookID, status, photo, dateAdded "
 					+ " FROM foodtracker WHERE userID = ? ";
 
 			PreparedStatement pstmt;

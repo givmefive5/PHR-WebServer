@@ -156,7 +156,7 @@ public class CheckUpTrackerDaoSqlImpl extends BaseDaoSqlImpl implements CheckUpT
 					String encodedImage = ImageHandler.getEncodedImageFromFile(rs.getString("photo"));
 					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
 				}
-				checkups.add(new CheckUp(rs.getInt("id"), rs.getString("faceboookID"), rs.getTimestamp("dateAdded"), rs
+				checkups.add(new CheckUp(rs.getInt("id"), rs.getString("facebookID"), rs.getTimestamp("dateAdded"), rs
 						.getString("status"), image, rs.getString("purpose"),
 						rs.getString("doctorsName"), rs.getString("notes")));
 			}

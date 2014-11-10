@@ -162,7 +162,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT id, activityID, durationInSeconds, calorieBurnedPerHour, facebookID status, photo, dateAdded "
+			String query = "SELECT id, activityID, durationInSeconds, calorieBurnedPerHour, facebookID, status, photo, dateAdded "
 					+ "FROM activityTracker WHERE userID = ?";
 
 			PreparedStatement pstmt;

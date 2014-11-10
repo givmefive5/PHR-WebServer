@@ -296,6 +296,7 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 						rs.getString("knownHealthProblems"),
 						rs.getString("fbAccessToken"),
 						image);
+				user.setId(rs.getInt("userId"));
 			}
 			
 			conn.close();
@@ -355,6 +356,8 @@ public class UserDaoSqlImpl extends BaseDaoSqlImpl implements UserDao {
 				pstmt.setNull(14, Types.NULL);
 
 			pstmt.setInt(15, user.getId());
+			
+			System.out.println("FULL NAME: " + user.getName());
 			
 			pstmt.executeUpdate();
 			conn.close();
