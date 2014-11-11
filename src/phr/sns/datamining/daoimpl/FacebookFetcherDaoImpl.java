@@ -45,7 +45,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	int foodCount = 0, actCount = 0, restoCount = 0, seCount = 0, unrCount = 0;
 	Facebook facebook;
 
-	File file = new File("perrin.txt");
+	File file = new File("C:/Users/Matthew/Desktop/perrin.txt");
 	BufferedWriter out;
 
 	public FacebookFetcherDaoImpl() {
@@ -63,20 +63,28 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 	private List<Post> getAllPostsFromFB(String userFBAccessToken,
 			Timestamp timestamp) throws DataAccessException {
+		boolean toFetch = true;
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 		try {
 			List<Post> completeList = new ArrayList<>();
 			Reading reading = new Reading();
 			reading.since(new Date(timestamp.getTime()));
+			System.out.println("READING POSTS: " + timestamp);
 			PagableList<Post> feed = facebook.getPosts(reading);
 			Paging<Post> paging = null;
 			do {
 				for (Post post : feed) {
-					completeList.add(post);
+					if (post.getCreatedTime().before(
+							new Date(timestamp.getTime())))
+						toFetch = false;
+
+					if (toFetch == true)
+						completeList.add(post);
 				}
 				paging = feed.getPaging();
 			} while ((paging != null)
-					&& (feed = facebook.fetchNext(paging)) != null);
+					&& (feed = facebook.fetchNext(paging)) != null
+					&& toFetch == true);
 			System.out.println("Number of Posts Retrieved: "
 					+ completeList.size());
 			out.write("Number of Posts Retrieved: " + completeList.size()
@@ -90,21 +98,29 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 	private List<Photo> getAllPhotosFromFB(String userFBAccessToken,
 			Timestamp timestamp) throws DataAccessException {
+		boolean toFetch = true;
 		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
 		try {
 			List<Photo> completeList = new ArrayList<>();
 			// PagableList<Photo> photos = facebook.getPhotos();
 			Reading reading = new Reading();
 			reading.since(new Date(timestamp.getTime()));
+			System.out.println("READING PHOTO: " + timestamp);
 			PagableList<Photo> photos = facebook.getUploadedPhotos(reading);
 			Paging<Photo> paging = null;
 			do {
 				for (Photo photo : photos) {
-					completeList.add(photo);
+					if (photo.getCreatedTime().before(
+							new Date(timestamp.getTime())))
+						toFetch = false;
+
+					if (toFetch == true)
+						completeList.add(photo);
 				}
 				paging = photos.getPaging();
 			} while ((paging != null)
-					&& (photos = facebook.fetchNext(paging)) != null);
+					&& (photos = facebook.fetchNext(paging)) != null
+					&& toFetch == true);
 			System.out.println("Number of Photos Retrieved: "
 					+ completeList.size());
 			out.write("Number of Photos Retrieved: " + completeList.size()

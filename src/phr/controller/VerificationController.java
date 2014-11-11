@@ -3,10 +3,7 @@ package phr.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +24,10 @@ import phr.models.UnverifiedActivityEntry;
 import phr.models.UnverifiedFoodEntry;
 import phr.models.UnverifiedRestaurantEntry;
 import phr.models.UnverifiedSportsEstablishmentEntry;
+import phr.service.FacebookPostService;
 import phr.service.UserService;
 import phr.service.VerificationService;
+import phr.service.impl.FacebookPostServiceImpl;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -42,10 +41,12 @@ public class VerificationController {
 	@Autowired
 	UserService userService;
 
+	FacebookPostService fbPostService = new FacebookPostServiceImpl();
+
 	@RequestMapping("/verification/addNewPosts")
 	public void addNewPosts(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, JSONException,
-			ParseException {
+			HttpServletResponse response) throws IOException, ParseException,
+			JSONException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -57,10 +58,8 @@ public class VerificationController {
 			String username = data.getString("username");
 			if (userService.isValidAccessToken(accessToken, username)) {
 				String fbAccessToken = data.getString("fbAccessToken");
-				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-				Date date = dateFormat.parse("03/11/2014");
-				long time = date.getTime();
-				Timestamp startDate = new Timestamp(time);
+				Timestamp startDate = fbPostService
+						.getLatestPostTimestamp(accessToken);
 				System.out.println("Fetching posts from " + startDate);
 				verificationService.updateListOfUnverifiedPosts(accessToken,
 						fbAccessToken, startDate);

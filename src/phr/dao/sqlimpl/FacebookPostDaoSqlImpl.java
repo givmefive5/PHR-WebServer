@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import phr.dao.FacebookPostDao;
@@ -81,6 +84,13 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			while (rs.next()) {
 				latestTimestamp = rs.getTimestamp("dateAdded");
+			}
+			if (latestTimestamp == null) {
+				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+				Date date = dateFormat.parse("03/11/2014");
+				long time = date.getTime();
+				Timestamp startDate = new Timestamp(time);
+				latestTimestamp = new Timestamp(startDate.getTime());
 			}
 			conn.close();
 		} catch (Exception e) {
