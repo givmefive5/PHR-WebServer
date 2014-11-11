@@ -140,7 +140,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT name, calorie, serving,  restaurantID, fromFatsecret"
+			String query = "SELECT *"
 					+ " FROM foodList WHERE id = ?";
 
 			PreparedStatement pstmt;
@@ -154,6 +154,9 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				food.setServing(rs.getString("serving"));
 				food.setRestaurantID(rs.getInt("restaurantID"));
 				food.setFromFatsecret(rs.getBoolean("fromFatsecret"));
+				food.setProtein(rs.getDouble("protein"));
+				food.setFat(rs.getDouble("fat"));
+				food.setCarbohydrate(rs.getDouble("carbohydrate"));
 			}
 			conn.close();
 		} catch (Exception e) {

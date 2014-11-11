@@ -45,7 +45,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	int foodCount = 0, actCount = 0, restoCount = 0, seCount = 0, unrCount = 0;
 	Facebook facebook;
 
-	File file = new File("C:/Users/Matthew/Desktop/shawn.txt");
+	File file = new File("perrin.txt");
 	BufferedWriter out;
 
 	public FacebookFetcherDaoImpl() {
