@@ -208,6 +208,7 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
+			System.out.println(food.getEntryID());
 			pstmt.setInt(1, food.getEntryID());
 
 			pstmt.executeUpdate();

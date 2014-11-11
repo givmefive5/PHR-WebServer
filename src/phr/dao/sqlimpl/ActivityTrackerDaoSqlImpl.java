@@ -49,7 +49,8 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 					Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, activityTrackerEntry.getActivity().getEntryID());
 			pstmt.setInt(2, activityTrackerEntry.getDurationInSeconds());
-			pstmt.setDouble(3, activityTrackerEntry.getCalorisBurnedPerHour());
+			System.out.println(activityTrackerEntry.getCaloriesBurnedPerHour());
+			pstmt.setDouble(3, activityTrackerEntry.getCaloriesBurnedPerHour());
 			pstmt.setTimestamp(4, activityTrackerEntry.getTimestamp());
 			pstmt.setString(5, activityTrackerEntry.getStatus());
 			pstmt.setInt(6, activityTrackerEntry.getUserID());
@@ -100,7 +101,7 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, activityTrackerEntry.getActivity().getEntryID());
 			pstmt.setInt(2, activityTrackerEntry.getDurationInSeconds());
-			pstmt.setDouble(3, activityTrackerEntry.getCalorisBurnedPerHour());
+			pstmt.setDouble(3, activityTrackerEntry.getCaloriesBurnedPerHour());
 			pstmt.setTimestamp(4, activityTrackerEntry.getTimestamp());
 			pstmt.setString(5, activityTrackerEntry.getStatus());
 			if (activityTrackerEntry.getImage() != null) {

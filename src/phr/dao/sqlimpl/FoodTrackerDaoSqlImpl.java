@@ -47,7 +47,7 @@ public class FoodTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 			pstmt = conn.prepareStatement(query,
 					Statement.RETURN_GENERATED_KEYS);
-			pstmt.setInt(1, foodTrackerEntry.getFood().getEntryID());
+			pstmt.setInt(1, foodDao.addReturnEntryID(foodTrackerEntry.getFood()));
 			pstmt.setDouble(2, foodTrackerEntry.getServingCount());
 			pstmt.setTimestamp(3, foodTrackerEntry.getTimestamp());
 			pstmt.setString(4, foodTrackerEntry.getStatus());
