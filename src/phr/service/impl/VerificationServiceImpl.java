@@ -159,4 +159,43 @@ public class VerificationServiceImpl implements VerificationService {
 		}
 	}
 
+	@Override
+	public UnverifiedFoodEntry getUnverifiedFoodPost(UnverifiedFoodEntry entry)
+			throws ServiceException {
+		try {
+			return verificationDao.getUnverifiedFoodPost(entry);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Unable to perform action", e);
+		}
+	}
+
+	@Override
+	public UnverifiedActivityEntry getUnverifiedActivityPost(
+			UnverifiedActivityEntry entry) throws ServiceException {
+		try {
+			return verificationDao.getUnverifiedActivityPost(entry);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Unable to perform action", e);
+		}	}
+
+	@Override
+	public UnverifiedRestaurantEntry getUnverifiedRestaurantPost(
+			UnverifiedRestaurantEntry entry) throws ServiceException {
+		try {
+			return verificationDao.getUnverifiedRestaurantPost(entry);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Unable to perform action", e);
+		}
+	}
+
+	@Override
+	public UnverifiedSportsEstablishmentEntry getUnverifiedSportsEstablishmentPost(
+			UnverifiedSportsEstablishmentEntry entry) throws ServiceException {
+		try {
+			return verificationDao.getUnverifiedSportsEstablishmentPost(entry);
+		} catch (DataAccessException e) {
+			throw new ServiceException("Unable to perform action", e);
+		}
+	}
+
 }

@@ -567,4 +567,178 @@ public class VerificationDaoImpl extends BaseDaoSqlImpl implements
 					"Object ID not found in the database", e);
 		}
 	}
+
+	@Override
+	public UnverifiedFoodEntry getUnverifiedFoodPost(UnverifiedFoodEntry entry) throws DataAccessException {
+			
+		UnverifiedFoodEntry unverifiedFoodEntry = null;
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM tempfoodtracker WHERE id = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, entry.getEntryID());
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				PHRImage image = null;
+				if (rs.getString("photo") == null)
+					image = null;
+				else {
+					String encodedImage = ImageHandler
+							.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
+				}
+				unverifiedFoodEntry = (
+						new UnverifiedFoodEntry(rs.getInt("id"),
+						new User(rs.getInt("userID")), 
+						rs.getString("facebookID"), 
+						rs.getTimestamp("dateAdded"), 
+						rs.getString("status"), 
+						image, 
+						foodDao.getFood(rs.getInt("foodID")),
+						rs.getDouble("servingSize"), 
+						rs.getString("extractedWord")));
+			}
+			conn.close();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return unverifiedFoodEntry;
+	}
+
+	@Override
+	public UnverifiedActivityEntry getUnverifiedActivityPost( UnverifiedActivityEntry entry) throws DataAccessException {
+		
+		UnverifiedActivityEntry unverifiedActivityEntry = null;
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM tempactivitytracker WHERE id = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, entry.getEntryID());
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				PHRImage image = null;
+				if (rs.getString("photo") == null)
+					image = null;
+				else {
+					String encodedImage = ImageHandler
+							.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
+				}
+
+				unverifiedActivityEntry = new UnverifiedActivityEntry(
+						rs.getInt("id"), 
+						new User(rs.getInt("userID")), 
+						rs.getString("facebookID"), 
+						rs.getTimestamp("dateAdded"), 
+						rs.getString("status"), 
+						image, 
+						activityDao.getActivity(rs.getInt("activityID")), 
+						rs.getInt("durationInSeconds"), 
+						rs.getDouble("calorieBurnedPerHour"), 
+						rs.getString("extractedWord"));
+
+			}
+			conn.close();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return unverifiedActivityEntry;
+	}
+
+	@Override
+	public UnverifiedRestaurantEntry getUnverifiedRestaurantPost( UnverifiedRestaurantEntry entry) throws DataAccessException {
+		
+		UnverifiedRestaurantEntry unverifiedRestaurantEntry = null;
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM temprestaurant WHERE id = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, entry.getEntryID());
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				PHRImage image = null;
+				if (rs.getString("photo") == null)
+					image = null;
+				else {
+					String encodedImage = ImageHandler
+							.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
+				}
+
+				unverifiedRestaurantEntry = new UnverifiedRestaurantEntry(
+						rs.getInt("id"), 
+						new User(rs.getInt("userID")), 
+						rs.getString("facebookID"), 
+						rs.getTimestamp("dateAdded"),
+						rs.getString("status"),
+						image, 
+						rs.getString("extractedWord"), 
+						restaurantDao.getRestaurantGivenRestaurantID(rs.getInt("restaurantID")), 
+						foodDao.getFoodListGivenRestaurantName(rs.getString("extractedWord")));
+			}
+			conn.close();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return unverifiedRestaurantEntry;
+	}
+
+	@Override
+	public UnverifiedSportsEstablishmentEntry getUnverifiedSportsEstablishmentPost(UnverifiedSportsEstablishmentEntry entry)
+			throws DataAccessException {
+		
+		UnverifiedSportsEstablishmentEntry unverifiedSportsEstablishmentEntry = null;
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT * FROM tempsportestablishment WHERE userID = ?";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, entry.getEntryID());
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				PHRImage image = null;
+				if (rs.getString("photo") == null)
+					image = null;
+				else {
+					String encodedImage = ImageHandler
+							.getEncodedImageFromFile(rs.getString("photo"));
+					image = new PHRImage(encodedImage, PHRImageType.IMAGE);
+				}
+
+				unverifiedSportsEstablishmentEntry = new UnverifiedSportsEstablishmentEntry(
+						rs.getInt("id"),
+						new User(rs.getInt("userID")),
+						rs.getString("facebookID"), 
+						rs.getTimestamp("dateAdded"), 
+						rs.getString("status"), 
+						image, 
+						rs.getString("extractedWord"),
+						sportEstablishmentDao.getSportEstablishmentGivenGymID(rs.getInt("gymID")),
+						activityDao.getActivityListGivenGymName(rs.getString("extractedWord")));
+			}
+			conn.close();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+		return unverifiedSportsEstablishmentEntry;
+	}
 }

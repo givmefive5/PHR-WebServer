@@ -36,8 +36,15 @@ public interface VerificationDao {
 	public void delete(String accessToken, UnverifiedRestaurantEntry entry)
 			throws EntryNotFoundException;
 
-	public void delete(String accessToken,
-			UnverifiedSportsEstablishmentEntry entry)
+	public void delete(String accessToken, UnverifiedSportsEstablishmentEntry entry)
 			throws EntryNotFoundException;
+	
+	public UnverifiedFoodEntry getUnverifiedFoodPost( UnverifiedFoodEntry entry) throws DataAccessException;
+			
+	public UnverifiedActivityEntry getUnverifiedActivityPost(UnverifiedActivityEntry entry) throws DataAccessException;
+				
+	public UnverifiedRestaurantEntry getUnverifiedRestaurantPost(UnverifiedRestaurantEntry entry) throws DataAccessException;
+				
+	public UnverifiedSportsEstablishmentEntry getUnverifiedSportsEstablishmentPost(UnverifiedSportsEstablishmentEntry entry) throws DataAccessException;
 
 }
