@@ -20,6 +20,7 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
+import phr.models.ActivityTrackerEntry;
 import phr.models.UnverifiedActivityEntry;
 import phr.models.UnverifiedFoodEntry;
 import phr.models.UnverifiedRestaurantEntry;
@@ -28,6 +29,8 @@ import phr.service.FacebookPostService;
 import phr.service.UserService;
 import phr.service.VerificationService;
 import phr.service.impl.FacebookPostServiceImpl;
+import phr.service.impl.UserServiceImpl;
+import phr.service.impl.VerificationServiceImpl;
 import phr.tools.GSONConverter;
 import phr.tools.JSONParser;
 import phr.tools.JSONResponseCreator;
@@ -35,11 +38,9 @@ import phr.tools.JSONResponseCreator;
 @Controller
 public class VerificationController {
 
-	@Autowired
-	VerificationService verificationService;
+	VerificationService verificationService = new VerificationServiceImpl();
 
-	@Autowired
-	UserService userService;
+	UserService userService = new UserServiceImpl();
 
 	FacebookPostService fbPostService = new FacebookPostServiceImpl();
 
@@ -435,6 +436,186 @@ public class VerificationController {
 		} catch (EntryNotFoundException e) {
 			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
 					"The entry to be deleted was not found in the database + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
+	
+	@RequestMapping("/verification/getFood")
+	public void getFood(HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ParseException,
+			JSONException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				UnverifiedFoodEntry unverifiedFoodEntry = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("object"),
+								UnverifiedFoodEntry.class);
+				UnverifiedFoodEntry complete = verificationService.getUnverifiedFoodPost(unverifiedFoodEntry);
+
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("object", complete);
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", dataForResponse,
+						"Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
+	
+	@RequestMapping("/verification/getRestaurant")
+	public void getRestaurant(HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ParseException,
+			JSONException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				UnverifiedRestaurantEntry unverifiedRestaurantEntry = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("object"),
+								UnverifiedRestaurantEntry.class);
+				UnverifiedRestaurantEntry complete = verificationService.getUnverifiedRestaurantPost(unverifiedRestaurantEntry);
+
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("object", complete);
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", dataForResponse,
+						"Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
+	
+	@RequestMapping("/verification/getActivity")
+	public void getActivity(HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ParseException,
+			JSONException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				UnverifiedActivityEntry unverifiedActivityEntry = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("object"),
+								UnverifiedActivityEntry.class);
+				UnverifiedActivityEntry complete = verificationService.getUnverifiedActivityPost(unverifiedActivityEntry);
+
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("object", complete);
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", dataForResponse,
+						"Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		System.out.println("Response JSON To Be Sent Back To App: "
+				+ jsonResponse);
+		writer.write(jsonResponse.toString());
+	}
+	
+	@RequestMapping("/verification/getSportsEstablishment")
+	public void getSportsEstablishment(HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ParseException,
+			JSONException {
+		PrintWriter writer = response.getWriter();
+		JSONObject jsonResponse = null;
+		try {
+			JSONObject json = GSONConverter.getJSONObjectFromReader(request
+					.getReader());
+			System.out.println("JSON From Request: " + json);
+			JSONObject data = JSONParser.getData(json);
+			String accessToken = data.getString("accessToken");
+			String username = data.getString("username");
+			if (userService.isValidAccessToken(accessToken, username)) {
+				UnverifiedSportsEstablishmentEntry unverifiedSportsEstablishmentEntry = GSONConverter
+						.getGSONObjectGivenJsonObject(
+								data.getJSONObject("object"),
+								UnverifiedSportsEstablishmentEntry.class);
+				UnverifiedSportsEstablishmentEntry complete = verificationService.getUnverifiedSportsEstablishmentPost(unverifiedSportsEstablishmentEntry);
+
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("object", complete);
+				jsonResponse = JSONResponseCreator.createJSONResponse(
+						"success", dataForResponse,
+						"Process has been completed");
+			} else {
+				JSONObject dataForResponse = new JSONObject();
+				dataForResponse.put("isValidAccessToken", "false");
+				jsonResponse = JSONResponseCreator
+						.createJSONResponse("success", dataForResponse,
+								"Access token is invalid, please ask user to log in again.");
+			}
+
+		} catch (JSONException | ServiceException | JSONConverterException
+				| UserServiceException e) {
+			jsonResponse = JSONResponseCreator.createJSONResponse("fail", null,
+					"Process cannot be completed, an error has occured in the web server + "
 							+ e.getMessage());
 			e.printStackTrace();
 		}

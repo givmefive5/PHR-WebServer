@@ -45,7 +45,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 	int foodCount = 0, actCount = 0, restoCount = 0, seCount = 0, unrCount = 0;
 	Facebook facebook;
 
-	File file = new File("C:/Users/Matthew/Desktop/perrin.txt");
+	File file = new File("perrin.txt");
 	BufferedWriter out;
 
 	public FacebookFetcherDaoImpl() {
@@ -71,6 +71,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			reading.since(new Date(timestamp.getTime()));
 			System.out.println("READING POSTS: " + timestamp);
 			PagableList<Post> feed = facebook.getPosts(reading);
+			
 			Paging<Post> paging = null;
 			do {
 				for (Post post : feed) {
@@ -460,8 +461,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			out.write("F: " + foodCount + " A: " + actCount + " R: "
 					+ restoCount + "\t\n");
 			out.write("S: " + seCount + " U: " + unrCount + "\t\n");
-			out.flush();
-			out.close();
+			//out.flush();
+			//out.close();
 			filteredPosts.addAll(filteredPhotos);
 			return filteredPosts;
 		} catch (ImageHandlerException | ServiceException | FacebookException

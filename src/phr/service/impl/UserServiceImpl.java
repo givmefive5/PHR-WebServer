@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import phr.dao.UserDao;
+import phr.dao.sqlimpl.UserDaoSqlImpl;
 import phr.exceptions.DataAccessException;
 import phr.exceptions.UserServiceException;
 import phr.exceptions.UsernameAlreadyExistsException;
@@ -13,8 +14,7 @@ import phr.service.UserService;
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	UserDao userDao;
+	UserDao userDao = new UserDaoSqlImpl();
 
 	@Override
 	public void addUser(User user) throws UsernameAlreadyExistsException,
