@@ -28,5 +28,10 @@
 		Search Using FatSecret:<input type="text" name="searchQuery"/><br>
 		<input type="submit"/>
 	</form>
+	Test6: Test GetTagged
+	<form method="POST" action="test6">
+		Input Access Token:<input type="text" name="userFBAccessToken"/><br>
+		<input type="submit"/>
+	</form>
 </body>
 </html>

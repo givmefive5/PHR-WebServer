@@ -32,6 +32,11 @@ import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.sns.datamining.service.FacebookFetcherService;
 import phr.sns.datamining.serviceimpl.FacebookFetcherServiceImpl;
 import phr.tools.ImageHandler;
+import facebook4j.Facebook;
+import facebook4j.FacebookException;
+import facebook4j.FacebookFactory;
+import facebook4j.Post;
+import facebook4j.auth.AccessToken;
 
 @Controller
 public class TestController {
@@ -46,10 +51,10 @@ public class TestController {
 
 		VerificationService verification = new VerificationServiceImpl();
 		try {
-			String accessToken = "d68f1df9-7418-490b-87d1-9eda23d973fd";
+			String accessToken = "20710184-49c0-45ad-866b-7449631481e1";
 			Timestamp startDate = fbPostService
 					.getLatestPostTimestamp(accessToken);
-			String date_s = " 2013-11-10 00:00:00.0";
+			String date_s = " 2013-11-11 00:00:00.0";
 			SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
 			Date date = dt.parse(date_s);
 			Timestamp timestamp = new Timestamp(date.getTime());
@@ -111,6 +116,27 @@ public class TestController {
 			System.out.println(food.getCalorie() + "kcal " + food.getProtein());
 			System.out.println(food.getServing() + " " + food.getFat() + "g "
 					+ food.getCarbohydrate() + "g");
+
+		}
+	}
+
+	@RequestMapping(value = "/test6")
+	public void test6(@RequestParam String userFBAccessToken)
+			throws SNSException, UnsupportedEncodingException,
+			ClientProtocolException, GeneralSecurityException, IOException,
+			JSONException, ParseException, FacebookException {
+		final String appID = "458502710946706";
+		final String appSecret = "c41ccfbd5ff58c87342f4df5911d2d88";
+		Facebook facebook;
+		facebook = new FacebookFactory().getInstance();
+		facebook.setOAuthAppId(appID, appSecret);
+		String permissions = "email,user_groups,user_status,read_stream, user_photos, user_actions:instapp";
+		facebook.setOAuthPermissions(permissions);
+		facebook.setOAuthAccessToken(new AccessToken(userFBAccessToken, null));
+		List<Post> posts = facebook.getTagged();
+		for (Post p : posts) {
+			if (p.getMessage() != null)
+				System.out.println(p.getMessage());
 
 		}
 	}
