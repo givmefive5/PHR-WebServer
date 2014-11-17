@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,7 +19,6 @@ import phr.exceptions.EntryNotFoundException;
 import phr.exceptions.JSONConverterException;
 import phr.exceptions.ServiceException;
 import phr.exceptions.UserServiceException;
-import phr.models.ActivityTrackerEntry;
 import phr.models.UnverifiedActivityEntry;
 import phr.models.UnverifiedFoodEntry;
 import phr.models.UnverifiedRestaurantEntry;
@@ -443,11 +441,10 @@ public class VerificationController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
-	
+
 	@RequestMapping("/verification/getFood")
-	public void getFood(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ParseException,
-			JSONException {
+	public void getFood(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ParseException, JSONException {
 		PrintWriter writer = response.getWriter();
 		JSONObject jsonResponse = null;
 		try {
@@ -462,10 +459,12 @@ public class VerificationController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("object"),
 								UnverifiedFoodEntry.class);
-				UnverifiedFoodEntry complete = verificationService.getUnverifiedFoodPost(unverifiedFoodEntry);
+				UnverifiedFoodEntry complete = verificationService
+						.getUnverifiedFoodPost(unverifiedFoodEntry);
 
 				JSONObject dataForResponse = new JSONObject();
-				dataForResponse.put("object", complete);
+				dataForResponse.put("object",
+						GSONConverter.convertObjectToJSON(complete));
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataForResponse,
 						"Process has been completed");
@@ -488,7 +487,7 @@ public class VerificationController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
-	
+
 	@RequestMapping("/verification/getRestaurant")
 	public void getRestaurant(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ParseException,
@@ -507,10 +506,12 @@ public class VerificationController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("object"),
 								UnverifiedRestaurantEntry.class);
-				UnverifiedRestaurantEntry complete = verificationService.getUnverifiedRestaurantPost(unverifiedRestaurantEntry);
+				UnverifiedRestaurantEntry complete = verificationService
+						.getUnverifiedRestaurantPost(unverifiedRestaurantEntry);
 
 				JSONObject dataForResponse = new JSONObject();
-				dataForResponse.put("object", complete);
+				dataForResponse.put("object",
+						GSONConverter.convertObjectToJSON(complete));
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataForResponse,
 						"Process has been completed");
@@ -533,7 +534,7 @@ public class VerificationController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
-	
+
 	@RequestMapping("/verification/getActivity")
 	public void getActivity(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ParseException,
@@ -552,10 +553,12 @@ public class VerificationController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("object"),
 								UnverifiedActivityEntry.class);
-				UnverifiedActivityEntry complete = verificationService.getUnverifiedActivityPost(unverifiedActivityEntry);
+				UnverifiedActivityEntry complete = verificationService
+						.getUnverifiedActivityPost(unverifiedActivityEntry);
 
 				JSONObject dataForResponse = new JSONObject();
-				dataForResponse.put("object", complete);
+				dataForResponse.put("object",
+						GSONConverter.convertObjectToJSON(complete));
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataForResponse,
 						"Process has been completed");
@@ -578,7 +581,7 @@ public class VerificationController {
 				+ jsonResponse);
 		writer.write(jsonResponse.toString());
 	}
-	
+
 	@RequestMapping("/verification/getSportsEstablishment")
 	public void getSportsEstablishment(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ParseException,
@@ -597,10 +600,11 @@ public class VerificationController {
 						.getGSONObjectGivenJsonObject(
 								data.getJSONObject("object"),
 								UnverifiedSportsEstablishmentEntry.class);
-				UnverifiedSportsEstablishmentEntry complete = verificationService.getUnverifiedSportsEstablishmentPost(unverifiedSportsEstablishmentEntry);
-
+				UnverifiedSportsEstablishmentEntry complete = verificationService
+						.getUnverifiedSportsEstablishmentPost(unverifiedSportsEstablishmentEntry);
 				JSONObject dataForResponse = new JSONObject();
-				dataForResponse.put("object", complete);
+				dataForResponse.put("object",
+						GSONConverter.convertObjectToJSON(complete));
 				jsonResponse = JSONResponseCreator.createJSONResponse(
 						"success", dataForResponse,
 						"Process has been completed");

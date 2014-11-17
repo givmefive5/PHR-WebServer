@@ -27,21 +27,23 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT facebookID FROM activitytracker UNION "
-					+ "SELECT facebookID FROM bloodpressuretracker UNION "
-					+ "SELECT facebookID FROM bloodsugartracker UNION "
-					+ "SELECT facebookID FROM checkuptracker UNION "
-					+ "SELECT facebookID FROM foodtracker UNION "
-					+ "SELECT facebookID FROM notestracker UNION "
-					+ "SELECT facebookID FROM tempactivitytracker UNION "
-					+ "SELECT facebookID FROM tempfoodtracker UNION "
-					+ "SELECT facebookID FROM temprestaurant UNION "
-					+ "SELECT facebookID FROM tempsportestablishment UNION "
+			String query = "SELECT facebookID FROM activitytracker WHERE userID = ? UNION "
+					+ "SELECT facebookID FROM bloodpressuretracker WHERE userID = ? UNION "
+					+ "SELECT facebookID FROM bloodsugartracker WHERE userID = ? UNION "
+					+ "SELECT facebookID FROM checkuptracker WHERE userID = ? UNION "
+					+ "SELECT facebookID FROM foodtracker WHERE userID = ? UNION "
+					+ "SELECT facebookID FROM notestracker WHERE userID = ? UNION "
+					+ "SELECT facebookID FROM tempactivitytracker WHERE userID =? UNION "
+					+ "SELECT facebookID FROM tempfoodtracker WHERE userID = ? UNION "
+					+ "SELECT facebookID FROM temprestaurant WHERE userID = ? UNION "
+					+ "SELECT facebookID FROM tempsportestablishment WHERE userID = ? UNION "
 					+ "SELECT facebookID FROM weighttracker "
 					+ "WHERE userID = ?";
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(accessToken));
+			Integer id = userDao.getUserIDGivenAccessToken(accessToken);
+			for (int i = 1; i <= 11; i++)
+				pstmt.setInt(i, id);
 
 			ResultSet rs = pstmt.executeQuery();
 
@@ -65,26 +67,30 @@ public class FacebookPostDaoSqlImpl extends BaseDaoSqlImpl implements
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT dateAdded FROM activitytracker UNION "
-					+ "SELECT dateAdded FROM bloodpressuretracker UNION "
-					+ "SELECT dateAdded FROM bloodsugartracker UNION "
-					+ "SELECT dateAdded FROM checkuptracker UNION "
-					+ "SELECT dateAdded FROM foodtracker UNION "
-					+ "SELECT dateAdded FROM notestracker UNION "
-					+ "SELECT dateAdded FROM tempactivitytracker UNION "
-					+ "SELECT dateAdded FROM tempfoodtracker UNION "
-					+ "SELECT dateAdded FROM temprestaurant UNION "
+			String query = "SELECT dateAdded FROM activitytracker WHERE userID = ? AND facebookID IS NOT NULL UNION  "
+					+ "SELECT dateAdded FROM bloodpressuretracker WHERE userID = ? AND facebookID IS NOT NULL UNION "
+					+ "SELECT dateAdded FROM bloodsugartracker WHERE userID = ? AND facebookID IS NOT NULL UNION "
+					+ "SELECT dateAdded FROM checkuptracker WHERE userID = ? AND facebookID IS NOT NULL UNION "
+					+ "SELECT dateAdded FROM foodtracker WHERE userID = ? AND facebookID IS NOT NULL UNION "
+					+ "SELECT dateAdded FROM notestracker WHERE userID = ? AND facebookID IS NOT NULL UNION "
+					+ "SELECT dateAdded FROM tempactivitytracker WHERE userID = ? AND facebookID IS NOT NULL UNION "
+					+ "SELECT dateAdded FROM tempfoodtracker WHERE userID = ? AND facebookID IS NOT NULL UNION "
+					+ "SELECT dateAdded FROM temprestaurant WHERE userID = ? AND facebookID IS NOT NULL UNION "
 					+ "SELECT dateAdded FROM weighttracker "
-					+ "WHERE userID = ? " + "ORDER BY dateAdded DESC LIMIT 1";
+					+ "WHERE userID = ? AND facebookID IS NOT NULL "
+					+ "ORDER BY dateAdded DESC LIMIT 1";
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, userDao.getUserIDGivenAccessToken(accessToken));
+			Integer id = userDao.getUserIDGivenAccessToken(accessToken);
+			for (int i = 1; i <= 10; i++)
+				pstmt.setInt(i, id);
 
 			ResultSet rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 				latestTimestamp = rs.getTimestamp("dateAdded");
 			}
+			System.out.println("Latest Timestamp from DB" + latestTimestamp);
 			if (latestTimestamp == null) {
 				DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 				Date date = dateFormat.parse("03/11/2014");

@@ -71,7 +71,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			reading.since(new Date(timestamp.getTime()));
 			System.out.println("READING POSTS: " + timestamp);
 			PagableList<Post> feed = facebook.getPosts(reading);
-			
+
 			Paging<Post> paging = null;
 			do {
 				for (Post post : feed) {
@@ -85,6 +85,23 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 				paging = feed.getPaging();
 			} while ((paging != null)
 					&& (feed = facebook.fetchNext(paging)) != null
+					&& toFetch == true);
+
+			PagableList<Post> tagged = facebook.getTagged(reading);
+
+			Paging<Post> taggedPaging = null;
+			do {
+				for (Post post : tagged) {
+					if (post.getCreatedTime().before(
+							new Date(timestamp.getTime())))
+						toFetch = false;
+
+					if (toFetch == true)
+						completeList.add(post);
+				}
+				taggedPaging = tagged.getPaging();
+			} while ((taggedPaging != null)
+					&& (tagged = facebook.fetchNext(taggedPaging)) != null
 					&& toFetch == true);
 			System.out.println("Number of Posts Retrieved: "
 					+ completeList.size());
@@ -461,8 +478,8 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			out.write("F: " + foodCount + " A: " + actCount + " R: "
 					+ restoCount + "\t\n");
 			out.write("S: " + seCount + " U: " + unrCount + "\t\n");
-			//out.flush();
-			//out.close();
+			// out.flush();
+			// out.close();
 			filteredPosts.addAll(filteredPhotos);
 			return filteredPosts;
 		} catch (ImageHandlerException | ServiceException | FacebookException
