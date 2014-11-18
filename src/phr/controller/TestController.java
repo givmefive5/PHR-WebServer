@@ -25,8 +25,10 @@ import phr.exceptions.ServiceException;
 import phr.fatsecret.FatSecretFetcher;
 import phr.models.Food;
 import phr.service.FacebookPostService;
+import phr.service.FoodService;
 import phr.service.VerificationService;
 import phr.service.impl.FacebookPostServiceImpl;
+import phr.service.impl.FoodServiceImpl;
 import phr.service.impl.VerificationServiceImpl;
 import phr.sns.datamining.filter.KeywordsExtractor;
 import phr.sns.datamining.service.FacebookFetcherService;
@@ -137,6 +139,20 @@ public class TestController {
 		for (Post p : posts) {
 			if (p.getMessage() != null)
 				System.out.println(p.getMessage());
+
+		}
+	}
+
+	@RequestMapping(value = "/test7")
+	public void test7(@RequestParam String searchQuery)
+			throws FatSecretFetcherException, ServiceException {
+		FoodService foodService = new FoodServiceImpl();
+		List<Food> foods = foodService.search(searchQuery);
+		for (Food food : foods) {
+			System.out.println(food.getName());
+			System.out.println(food.getCalorie() + "kcal " + food.getProtein());
+			System.out.println(food.getServing() + " " + food.getFat() + "g "
+					+ food.getCarbohydrate() + "g");
 
 		}
 	}

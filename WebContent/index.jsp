@@ -33,5 +33,11 @@
 		Input Access Token:<input type="text" name="userFBAccessToken"/><br>
 		<input type="submit"/>
 	</form>
+	
+	Test7: FoodSearch
+	<form method="POST" action="test7">
+		Search :<input type="text" name="searchQuery"/><br>
+		<input type="submit"/>
+	</form>
 </body>
 </html>

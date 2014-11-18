@@ -72,6 +72,7 @@ public class FatSecretFetcher {
 		try {
 			Long timestamp = getTimeStamp();
 			String uniqueString = UUIDGenerator.generateUniqueString();
+			query = query.replace(" ", "%20");
 			String params = "format=json&method=foods.search&oauth_consumer_key="
 					+ consumerKey
 					+ "&oauth_nonce="
