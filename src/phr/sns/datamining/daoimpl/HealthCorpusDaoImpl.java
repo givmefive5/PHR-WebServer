@@ -21,7 +21,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 		List<String> foodList = new ArrayList<>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT DISTINCT name FROM foodlist";
+			String query = "SELECT DISTINCT name FROM foodlist WHERE countUsed > 1";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -39,8 +39,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 		return foodList;
 	}
 
-	@Override
-	public List<String> getActivityWords() throws DataAccessException {
+	private List<String> getActivityTenses() throws DataAccessException {
 
 		List<String> activityList = new ArrayList<String>();
 
@@ -55,6 +54,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 			while (rs.next()) {
 				activityList.add(rs.getString("wordTenses"));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -77,6 +77,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 			while (rs.next()) {
 				restaurantList.add(rs.getString("name"));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -102,6 +103,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 			while (rs.next()) {
 				sportEstablishmemtList.add(rs.getString("name"));
 			}
+			conn.close();
 		} catch (Exception e) {
 			throw new DataAccessException(
 					"An error has occured while trying to access data from the database",
@@ -109,6 +111,32 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 		}
 
 		return sportEstablishmemtList;
+	}
+
+	@Override
+	public List<String> getActivityWords() throws DataAccessException {
+		List<String> activityList = new ArrayList<String>();
+
+		try {
+			Connection conn = getConnection();
+			String query = "SELECT DISTINCT name FROM activitylist WHERE countUsed > 1";
+
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				activityList.add(rs.getString("name"));
+			}
+			conn.close();
+		} catch (Exception e) {
+			throw new DataAccessException(
+					"An error has occured while trying to access data from the database",
+					e);
+		}
+
+		activityList.addAll(getActivityTenses());
+		return activityList;
 	}
 
 }

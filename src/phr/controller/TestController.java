@@ -51,10 +51,10 @@ public class TestController {
 
 		VerificationService verification = new VerificationServiceImpl();
 		try {
-			String accessToken = "20710184-49c0-45ad-866b-7449631481e1";
+			String accessToken = "2f839900-1703-49b0-9a5d-52b40a5bde90";
 			Timestamp startDate = fbPostService
 					.getLatestPostTimestamp(accessToken);
-			String date_s = " 2013-11-11 00:00:00.0";
+			String date_s = " 2014-11-17 00:00:00.0";
 			SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
 			Date date = dt.parse(date_s);
 			Timestamp timestamp = new Timestamp(date.getTime());

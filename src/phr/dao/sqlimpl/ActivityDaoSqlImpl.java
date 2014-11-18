@@ -204,12 +204,12 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT MET FROM activityList WHERE name = ?";
+			String query = "SELECT act.MET FROM activitylist act LEFT outer JOIN activitycorpus corpus ON act.id = corpus.activityID WHERE wordTenses = ? OR act.name = ?";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, activityName);
-
+			pstmt.setString(2, activityName);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				MET = rs.getDouble("MET");
@@ -285,12 +285,12 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 		Activity activity = null;
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT act.* FROM activitylist act JOIN activitycorpus corpus ON act.id = corpus.activityID WHERE wordTenses = ?";
+			String query = "SELECT act.* FROM activitylist act LEFT outer JOIN  activitycorpus corpus ON act.id = corpus.activityID WHERE wordTenses = ? OR act.name = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, searchQuery);
-
+			pstmt.setString(2, searchQuery);
 			ResultSet rs = pstmt.executeQuery();
 
 			while (rs.next()) {
