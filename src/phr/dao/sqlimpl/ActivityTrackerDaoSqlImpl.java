@@ -94,8 +94,8 @@ public class ActivityTrackerDaoSqlImpl extends BaseDaoSqlImpl implements
 
 		try {
 			Connection conn = getConnection();
-			String query = "UPDATE activitytracker SET activityID = ?, durationInSeconds = ?,  calorieBurnedPerHour = ?, dateAdded =? , status = ?, photo = ?)"
-					+ " WHERE id = ?";
+			String query = "UPDATE activitytracker SET activityID = ?, durationInSeconds = ?,  calorieBurnedPerHour = ?, dateAdded =? , status = ?, photo = ? "
+					+ "WHERE id = ?";
 			PreparedStatement pstmt;
 
 			pstmt = conn.prepareStatement(query);

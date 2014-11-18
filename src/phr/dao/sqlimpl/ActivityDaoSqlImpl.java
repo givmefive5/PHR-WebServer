@@ -40,7 +40,7 @@ public class ActivityDaoSqlImpl extends BaseDaoSqlImpl implements ActivityDao {
 						Statement.RETURN_GENERATED_KEYS);
 				pstmt.setString(1, activity.getName());
 				pstmt.setDouble(2, activity.getMET());
-				pstmt.setInt(3, 0);
+				pstmt.setInt(3, 1);
 
 				pstmt.executeUpdate();
 
