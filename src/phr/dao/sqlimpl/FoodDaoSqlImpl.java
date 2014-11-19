@@ -19,21 +19,19 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 
 	@Override
 	public int addReturnEntryID(Food food) throws DataAccessException {
-
+		
 		if (food.getEntryID() != null) {
 			incrementCountUsed(food);
 			return food.getEntryID();
 		}
 		int entryID = foodEntryExists(food);
 		if (entryID != -1) {
-
+			food.setEntryID(entryID);
 			incrementCountUsed(food);
-
 			return entryID;
 		} else {
 
 			try {
-
 				Connection conn = getConnection();
 				String query = "INSERT INTO foodlist(name, calorie, protein, fat, carbohydrate, serving, restaurantID, fromFatsecret, countUsed) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -47,13 +45,14 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				pstmt.setDouble(4, food.getFat());
 				pstmt.setDouble(5, food.getCarbohydrate());
 				pstmt.setString(6, food.getServing());
-				System.out.println(food.getRestaurantID());
+				
 				if (food.getRestaurantID() == null)
 					pstmt.setNull(7, Types.NULL);
 				else
 					pstmt.setInt(7, food.getRestaurantID());
 				pstmt.setBoolean(8, food.getFromFatsecret());
-				pstmt.setInt(9, 0);
+				
+				pstmt.setInt(9, 1);
 
 				pstmt.executeUpdate();
 
@@ -78,22 +77,22 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		try {
 			Connection conn = getConnection();
 			String query = "SELECT * FROM foodlist WHERE "
-					+ "name = ?, calorie = ?, protein = ?, fat = ?, carbohydrate = ?, serving = ?";
+					+ "name = ? AND calorie = ? AND protein = ? AND fat = ? AND carbohydrate = ? AND serving = ?";
 			PreparedStatement pstmt;
 
-			pstmt = conn.prepareStatement(query,
-					Statement.RETURN_GENERATED_KEYS);
+			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, food.getName());
 			pstmt.setDouble(2, food.getCalorie());
-			pstmt.setDouble(3, food.getFat());
-			pstmt.setDouble(4, food.getCarbohydrate());
-			pstmt.setString(5, food.getServing());
+			pstmt.setDouble(3, food.getProtein());
+			pstmt.setDouble(4, food.getFat());
+			pstmt.setDouble(5, food.getCarbohydrate());
+			pstmt.setString(6, food.getServing());
 
-			ResultSet rs = pstmt.getGeneratedKeys();
+			ResultSet rs = pstmt.executeQuery();
 
 			int entryID = -1;
 			if (rs.next())
-				entryID = rs.getInt(1);
+				entryID = rs.getInt("id");
 			conn.close();
 			return entryID;
 
@@ -200,14 +199,13 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 	}
 
 	public void incrementCountUsed(Food food) throws DataAccessException {
-
+		
 		try {
 			Connection conn = getConnection();
 			String query = "UPDATE foodlist SET countUsed = countUsed + 1 WHERE id = ? ";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			System.out.println(food.getEntryID());
 			pstmt.setInt(1, food.getEntryID());
 
 			pstmt.executeUpdate();
@@ -285,8 +283,8 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 		try {
 			Connection conn = getConnection();
 
-			String query = "SELECT * FROM foodlist WHERE calorie != null AND "
-					+ "protein != null AND fat != null AND carbohydrate != null AND name LIKE ?"
+			String query = "SELECT * FROM foodlist WHERE calorie is not null AND "
+					+ "protein is not null AND fat is not null AND carbohydrate is not null AND name LIKE ?"
 					+ "ORDER BY countUsed DESC";
 
 			PreparedStatement pstmt;
