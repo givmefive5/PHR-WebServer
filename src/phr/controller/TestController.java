@@ -53,7 +53,7 @@ public class TestController {
 
 		VerificationService verification = new VerificationServiceImpl();
 		try {
-			String accessToken = "2f839900-1703-49b0-9a5d-52b40a5bde90";
+			String accessToken = "97f54f49-24c6-4f98-b382-e95c2cc055eb";
 			Timestamp startDate = fbPostService
 					.getLatestPostTimestamp(accessToken);
 			String date_s = " 2014-11-17 00:00:00.0";

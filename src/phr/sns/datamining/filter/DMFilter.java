@@ -116,6 +116,8 @@ public class DMFilter {
 			for (String corpusWord : corpus) {
 				String lowerCaseCorpusWord = Assist.cleanWord(corpusWord);
 				if (lowerCaseHashtag.contains(lowerCaseCorpusWord)) {
+					System.out.println(lowerCaseHashtag + " "
+							+ lowerCaseCorpusWord);
 					foundWords.add(corpusWord);
 					lowerCaseHashtag = lowerCaseHashtag.replace(
 							lowerCaseCorpusWord, "*");
@@ -148,6 +150,7 @@ public class DMFilter {
 
 	private List<String> getHashtagsFromMessage(String message) {
 		String[] tokens = message.split(" ");
+
 		List<String> hashtags = new ArrayList<>();
 		for (String s : tokens) {
 			if (s.length() > 0 && s.charAt(0) == '#')

@@ -8,7 +8,7 @@ public class Assist {
 
 	public static String cleanWord(String word) {
 		word = word.toLowerCase();
-		word = word.replaceAll("[^a-zA-Z0-9]", "");
+		word = word.replaceAll("[^a-zA-Z0-9#]", "");
 
 		return word;
 	}
