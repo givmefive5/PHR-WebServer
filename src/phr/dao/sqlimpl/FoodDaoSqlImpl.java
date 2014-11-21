@@ -47,7 +47,6 @@ public class FoodDaoSqlImpl extends BaseDaoSqlImpl implements FoodDao {
 				pstmt.setDouble(4, food.getFat());
 				pstmt.setDouble(5, food.getCarbohydrate());
 				pstmt.setString(6, food.getServing());
-				System.out.println(food.getRestaurantID());
 				if (food.getRestaurantID() == null)
 					pstmt.setNull(7, Types.NULL);
 				else

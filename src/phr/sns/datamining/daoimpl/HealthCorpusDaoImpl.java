@@ -21,7 +21,7 @@ public class HealthCorpusDaoImpl extends BaseDaoSqlImpl implements
 		List<String> foodList = new ArrayList<>();
 		try {
 			Connection conn = getConnection();
-			String query = "SELECT DISTINCT name FROM foodlist WHERE countUsed > 1";
+			String query = "SELECT DISTINCT name FROM foodlist WHERE countUsed > 1 OR fromMunchpunch = \"YES\"";
 
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
