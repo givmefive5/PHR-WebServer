@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import phr.exceptions.DataAccessException;
 import phr.exceptions.ImageHandlerException;
-import phr.exceptions.ServiceException;
 import phr.models.FBPost;
 import phr.models.FBPostType;
 import phr.models.PHRImage;
@@ -74,13 +73,16 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 
 			Paging<Post> paging = null;
 			do {
+
 				for (Post post : feed) {
+					toFetch = true;
 					if (post.getCreatedTime().before(
 							new Date(timestamp.getTime())))
 						toFetch = false;
 
-					if (toFetch == true)
+					if (toFetch == true) {
 						completeList.add(post);
+					}
 				}
 				paging = feed.getPaging();
 			} while ((paging != null)
@@ -92,12 +94,17 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			Paging<Post> taggedPaging = null;
 			do {
 				for (Post post : tagged) {
+					toFetch = true;
+					// System.out.println(post.getMessage() + " "
+					// + post.getCreatedTime() + " "
+					// + new Date(timestamp.getTime()));
 					if (post.getCreatedTime().before(
 							new Date(timestamp.getTime())))
 						toFetch = false;
 
-					if (toFetch == true)
+					if (toFetch == true) {
 						completeList.add(post);
+					}
 				}
 				taggedPaging = tagged.getPaging();
 			} while ((taggedPaging != null)
@@ -149,20 +156,6 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 					"An error has occured while retrieving photos", e);
 		}
 
-	}
-
-	private List<FBPost> getAllPosts(String userFBAccessToken,
-			Timestamp timestamp) throws DataAccessException {
-		List<Post> feed = getAllPostsFromFB(userFBAccessToken, timestamp);
-		List<FBPost> filteredPosts = new ArrayList<>();
-		try {
-			filteredPosts = filterPostsList(feed);
-		} catch (ImageHandlerException | FacebookException e) {
-			throw new DataAccessException(
-					"An error has occured while retrieving posts", e);
-		}
-
-		return filteredPosts;
 	}
 
 	private List<FBPost> filterPostsList(List<Post> feed)
@@ -288,6 +281,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 							out.write("Class: UNRELATED" + "\t\n");
 							unrCount++;
 						}
+
 					}
 				}
 			}
@@ -439,9 +433,9 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 		List<Post> newFeed = new ArrayList<>();
 		try {
 			FacebookPostService fbPostService = new FacebookPostServiceImpl();
-			List<String> idsInDb = fbPostService
-					.getAllFacebookID(userAccessToken);
-
+			// List<String> idsInDb = fbPostService
+			// .getAllFacebookID(userAccessToken);
+			List<String> idsInDb = new ArrayList<>();
 			for (Post p : feed) {
 				if (p != null) {
 					Date dateLastUpdated = p.getUpdatedTime();
@@ -482,8 +476,7 @@ public class FacebookFetcherDaoImpl implements FacebookFetcherDao {
 			// out.close();
 			filteredPosts.addAll(filteredPhotos);
 			return filteredPosts;
-		} catch (ImageHandlerException | ServiceException | FacebookException
-				| IOException e) {
+		} catch (ImageHandlerException | FacebookException | IOException e) {
 			throw new DataAccessException(
 					"An error has occured while retrieving posts", e);
 		}

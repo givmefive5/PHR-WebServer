@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,14 +55,14 @@ public class TestController {
 		VerificationService verification = new VerificationServiceImpl();
 		try {
 			String accessToken = "97f54f49-24c6-4f98-b382-e95c2cc055eb";
-			Timestamp startDate = fbPostService
-					.getLatestPostTimestamp(accessToken);
-			String date_s = " 2014-11-17 00:00:00.0";
-			SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-			Date date = dt.parse(date_s);
-			Timestamp timestamp = new Timestamp(date.getTime());
+			// Timestamp startDate = fbPostService
+			// .getLatestPostTimestamp(accessToken);
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			Date date = dateFormat.parse("20/11/2014");
+			long time = date.getTime();
+			new Timestamp(time);
 			verification.updateListOfUnverifiedPosts(accessToken,
-					userFBAccessToken, timestamp);
+					userFBAccessToken, new Timestamp(time));
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
